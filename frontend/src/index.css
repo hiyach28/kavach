@@ -81,3 +81,39 @@ input:focus, textarea:focus, select:focus, button:focus {
   background-color: rgba(232, 163, 61, 0.25);
   color: var(--text-primary);
 }
+
+/* ── Entrance animations ── */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.25s ease both;
+}
+
+/* Smooth tab content transition */
+.tab-content-enter {
+  animation: fadeInUp 0.2s ease both;
+}
+
+/* Pulse dot for live indicators */
+@keyframes softPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.4; }
+}
+
+.animate-soft-pulse {
+  animation: softPulse 2s ease-in-out infinite;
+}
