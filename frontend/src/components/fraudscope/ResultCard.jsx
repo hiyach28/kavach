@@ -69,7 +69,7 @@ export default function ResultCard({ caseData }) {
           <span className="text-lg">{meta.icon}</span>
           <div>
             <span className="font-mono text-[9px] text-text-secondary uppercase tracking-widest block">CLASSIFICATION VERDICT</span>
-            <h3 className={`font-condensed text-sm font-bold tracking-wider ${meta.color}`}>{meta.label}</h3>
+            <h3 className={`font-sans text-sm font-bold tracking-wider ${meta.color}`}>{meta.label}</h3>
           </div>
         </div>
         {reporting_portal && (
@@ -77,7 +77,7 @@ export default function ResultCard({ caseData }) {
             href={reporting_portal}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-3 py-1.5 font-condensed font-bold text-[10px] tracking-wider bg-accent-signal/20 hover:bg-accent-signal/30 text-accent-signal border border-accent-signal/40 rounded transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
+            className="px-3 py-1.5 font-sans font-bold text-[10px] tracking-wider bg-accent-signal/20 hover:bg-accent-signal/30 text-accent-signal border border-accent-signal/40 rounded transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
           >
             Report to Govt Portal →
           </a>
@@ -141,7 +141,7 @@ export default function ResultCard({ caseData }) {
         {/* ── Red Flags ── */}
         {red_flags && red_flags.length > 0 && (
           <div className="space-y-2">
-            <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase block">
+            <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase block">
               ⚑ Scam Indicator Flags ({red_flags.length})
             </span>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

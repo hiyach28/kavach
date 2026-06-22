@@ -32,7 +32,7 @@ export default function NetworkXPage() {
       <div className="p-6 border-b border-border-hairline bg-bg-surface flex items-center justify-between flex-shrink-0">
         <div className="flex flex-col">
           <span className="font-mono text-[9px] text-text-secondary uppercase tracking-widest font-bold">MODULE_02</span>
-          <h2 className="font-condensed text-xl font-bold tracking-wider text-text-primary uppercase mt-0.5">NETWORKX // INFRASTRUCTURE GRAPH CLUSTERING</h2>
+          <h2 className="font-sans text-xl font-bold tracking-wider text-text-primary uppercase mt-0.5">NETWORKX // INFRASTRUCTURE GRAPH CLUSTERING</h2>
         </div>
         <div className="flex items-center space-x-2 font-mono text-[9px] text-text-secondary">
           <span>ALGORITHM:</span>
@@ -56,7 +56,7 @@ export default function NetworkXPage() {
         {/* Right (In-Page): Campaign Lists */}
         <div className="w-full lg:w-72 flex-shrink-0 bg-bg-surface/30 border-t lg:border-t-0 border-border-hairline p-4 overflow-y-auto flex flex-col space-y-4">
           <div className="flex flex-col space-y-1">
-            <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">DETECTED_RING_CAMPAIGNS</span>
+            <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">DETECTED_RING_CAMPAIGNS</span>
             <p className="text-[10px] text-text-secondary leading-snug">
               Communities automatically aggregated based on shared telecom endpoints, bank codes, or UPI payment handles.
             </p>

@@ -24,7 +24,7 @@ export default function StatusBar() {
     <div className="h-12 w-full bg-bg-surface border-b border-border-hairline flex items-center justify-between px-6 select-none z-10">
       {/* Title / Logo */}
       <div className="flex items-center space-x-3">
-        <span className="font-condensed text-lg font-bold tracking-widest text-accent-signal">KAVACH</span>
+        <span className="font-sans text-lg font-bold tracking-widest text-accent-signal">KAVACH</span>
         <span className="h-4 w-px bg-border-hairline"></span>
         <span className="font-mono text-xs text-text-secondary uppercase tracking-wider">Investigator's Terminal</span>
       </div>

@@ -8,7 +8,7 @@ export default function DistrictTooltip({ x, y, data }) {
       className="absolute z-50 pointer-events-none bg-bg-surface border border-border-hairline rounded shadow-lg p-3 min-w-[180px]"
       style={{ left: x, top: y }}
     >
-      <div className="font-condensed text-sm font-bold text-text-primary mb-1.5">{data.name}</div>
+      <div className="font-sans text-sm font-bold text-text-primary mb-1.5">{data.name}</div>
       <div className="font-mono text-[9px] text-text-secondary mb-2">{data.state}</div>
       <div className="space-y-1">
         <div className="flex justify-between font-mono text-[10px]">

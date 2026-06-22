@@ -2,29 +2,12 @@ import React from 'react';
 import { useCase } from '../context/CaseContext';
 import Choropleth from '../components/crimemap/Choropleth';
 
-// India flag as inline SVG (guaranteed visible, no external dependency)
+// India flag as robust emoji, guaranteed visible
 function IndiaFlag({ size = 32 }) {
   return (
-    <svg width={size * 1.5} height={size} viewBox="0 0 90 60" xmlns="http://www.w3.org/2000/svg" style={{ flexShrink: 0, borderRadius: 2 }}>
-      {/* Saffron */}
-      <rect width="90" height="20" fill="#FF9933" />
-      {/* White */}
-      <rect y="20" width="90" height="20" fill="#FFFFFF" />
-      {/* Green */}
-      <rect y="40" width="90" height="20" fill="#138808" />
-      {/* Ashoka Chakra (Navy Blue) */}
-      <circle cx="45" cy="30" r="8" fill="none" stroke="#000080" strokeWidth="1.2" />
-      {/* 24 spokes — simplified */}
-      {Array.from({ length: 24 }).map((_, i) => {
-        const angle  = (i / 24) * Math.PI * 2;
-        const x1 = 45 + 4 * Math.cos(angle);
-        const y1 = 30 + 4 * Math.sin(angle);
-        const x2 = 45 + 8 * Math.cos(angle);
-        const y2 = 30 + 8 * Math.sin(angle);
-        return <line key={i} x1={x1} y1={y1} x2={x2} y2={y2} stroke="#000080" strokeWidth="0.6" />;
-      })}
-      <circle cx="45" cy="30" r="1.5" fill="#000080" />
-    </svg>
+    <span style={{ fontSize: size, lineHeight: 1 }} role="img" aria-label="India Flag">
+      🇮🇳
+    </span>
   );
 }
 
@@ -102,6 +85,7 @@ export default function CrimeMapPage() {
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2 min-w-0">
                       <span className="font-mono text-[9px] text-text-secondary flex-shrink-0">#{rank + 1}</span>
+                      <IndiaFlag size={12} />
                       <span className="font-semibold text-sm text-text-primary truncate">{district.name}</span>
                     </div>
                     <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded border flex-shrink-0 ${priorityColor}`}>

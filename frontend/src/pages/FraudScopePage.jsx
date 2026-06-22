@@ -5,13 +5,11 @@ import ResultCard from '../components/fraudscope/ResultCard';
 import EvidenceTrace from '../components/fraudscope/EvidenceTrace';
 
 export default function FraudScopePage() {
-  const { classifyCase, activeCase, cases } = useCase();
+  const { classifyCase, activeCase, cases, clearActiveCase } = useCase();
   const [loading, setLoading]               = useState(false);
   const [error, setError]                   = useState(null);
-  // classifiedResult: only populated after an explicit "Run Verdict Analysis" click
   const [classifiedResult, setClassifiedResult] = useState(null);
 
-  // When activeCase is cleared (e.g. after Confirm Scam), also clear our local result
   useEffect(() => {
     if (!activeCase) {
       setClassifiedResult(null);
@@ -21,11 +19,10 @@ export default function FraudScopePage() {
   const handleClassify = async (text) => {
     setLoading(true);
     setError(null);
-    setClassifiedResult(null); // clear any previous result while loading
+    setClassifiedResult(null);
     try {
       await classifyCase(text);
-      // After classifyCase, activeCase in context is updated; we mark results as ready
-      setClassifiedResult(true); // sentinel: results are ready to display
+      setClassifiedResult(true);
     } catch (err) {
       setError(err.message || 'Classification failed. Please try again.');
     } finally {
@@ -33,7 +30,11 @@ export default function FraudScopePage() {
     }
   };
 
-  // Determine whether to show results: only if an explicit analysis was run this session
+  const handleClear = () => {
+    setClassifiedResult(null);
+    clearActiveCase();
+  };
+
   const showResults = !loading && classifiedResult && activeCase;
 
   return (
@@ -61,7 +62,6 @@ export default function FraudScopePage() {
         </div>
       </div>
 
-      {/* How it works — only shown when no result has been submitted yet */}
       {!classifiedResult && !loading && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
@@ -96,7 +96,6 @@ export default function FraudScopePage() {
         </div>
       )}
 
-      {/* Error */}
       {error && (
         <div className="border border-sev-critical/40 bg-sev-critical/10 text-sev-critical p-4 rounded font-mono text-xs flex items-start gap-2">
           <span className="font-bold flex-shrink-0">[FAIL]</span>
@@ -104,10 +103,8 @@ export default function FraudScopePage() {
         </div>
       )}
 
-      {/* Input Panel */}
-      <ClassifierInput onSubmit={handleClassify} isLoading={loading} />
+      <ClassifierInput onSubmit={handleClassify} isLoading={loading} onClear={handleClear} />
 
-      {/* Loading Skeleton */}
       {loading && (
         <div className="space-y-3 animate-pulse">
           <div className="h-40 bg-bg-surface border border-border-hairline rounded-lg" />
@@ -115,7 +112,6 @@ export default function FraudScopePage() {
         </div>
       )}
 
-      {/* Results — only shown after explicit button click */}
       {showResults && (
         <div className="space-y-4" style={{ animation: 'fadeInUp 0.35s ease both' }}>
           <ResultCard caseData={activeCase} />

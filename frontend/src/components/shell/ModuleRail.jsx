@@ -35,7 +35,7 @@ export default function ModuleRail() {
                   {item.number}
                 </span>
                 <div className="flex flex-col">
-                  <span className="font-condensed text-sm font-semibold tracking-wider">
+                  <span className="font-sans text-sm font-semibold tracking-wider">
                     {item.label}
                   </span>
                   <span className="font-mono text-[9px] text-text-secondary uppercase tracking-tight">
