@@ -38,7 +38,13 @@ export const CaseProvider = ({ children }) => {
       setCases(casesData);
       setCampaigns(campaignsData);
       setDistricts(districtsData);
-      // NOTE: We do NOT auto-select a case on load — FraudScope should start empty
+
+      // Default active case is the most recent one if not set
+      if (!activeCase && casesData.length > 0) {
+        // Find most recent case
+        const sorted = [...casesData].sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+        handleSelectCase(sorted[0]);
+      }
     } catch (err) {
       console.error("Failed to load initial data", err);
     } finally {
@@ -128,23 +134,15 @@ export const CaseProvider = ({ children }) => {
     }
   };
 
-  // Clear active case (called after investigator confirms/clears a case)
-  const clearActiveCase = () => {
-    setActiveCase(null);
-    setActiveCampaign(null);
-  };
-
-  // Submit feedback — on 'confirmed', also clear the active dossier so results reset
+  // Submit feedback
   const submitFeedback = async (caseId, feedbackType) => {
     try {
       await apiClient.submitFeedback(caseId, feedbackType);
       // Refresh case list
       const casesData = await apiClient.getCases();
       setCases(casesData);
-      // After confirming or clearing, close the dossier so FraudScope resets
-      if (feedbackType === 'confirmed' || feedbackType === 'false_positive') {
-        clearActiveCase();
-      } else if (activeCase && activeCase.id === parseInt(caseId)) {
+      // Update currently active case status if matches
+      if (activeCase && activeCase.id === parseInt(caseId)) {
         setActiveCase(prev => ({ ...prev, status: feedbackType }));
       }
     } catch (err) {
@@ -168,7 +166,6 @@ export const CaseProvider = ({ children }) => {
       selectDistrict: handleSelectDistrict,
       classifyCase: classifyCaseText,
       submitFeedback,
-      clearActiveCase,
       refreshData: fetchData
     }}>
       {children}

@@ -15,7 +15,7 @@ async function runOCR(imageFile, onProgress) {
   return text.trim();
 }
 
-export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
+export default function ClassifierInput({ onSubmit, isLoading }) {
   const [inputMode, setInputMode] = useState('text'); // 'text' | 'image'
   const [text, setText] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -110,17 +110,16 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
     setStatusLog([]);
     setOcrProgress(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
-    if (onClear) onClear();
   };
 
   return (
     <div className="border border-border-hairline rounded bg-bg-surface overflow-hidden">
       {/* Panel Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-border-hairline bg-bg-base/30">
-        <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">
+        <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">
           EVIDENCE_SUBMISSION_TERMINAL
         </span>
-        <span className="font-mono text-[13px] text-sev-verified uppercase tracking-tight bg-sev-verified/10 px-2 py-0.5 border border-sev-verified/20 rounded">
+        <span className="font-mono text-[9px] text-sev-verified uppercase tracking-tight bg-sev-verified/10 px-2 py-0.5 border border-sev-verified/20 rounded">
           ● PII_GUARD: ACTIVE
         </span>
       </div>
@@ -129,21 +128,21 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
       <div className="flex border-b border-border-hairline">
         <button
           onClick={() => setInputMode('text')}
-          className={`flex-1 py-2.5 font-sans text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'text'
+          className={`flex-1 py-2.5 font-condensed text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'text'
               ? 'text-accent-signal border-b-2 border-accent-signal bg-accent-signal/5'
               : 'text-text-secondary hover:text-text-primary border-b-2 border-transparent'
             }`}
         >
-          ✎ Text / Transcript
+           Text / Transcript
         </button>
         <button
           onClick={() => setInputMode('image')}
-          className={`flex-1 py-2.5 font-sans text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'image'
+          className={`flex-1 py-2.5 font-condensed text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'image'
               ? 'text-mod-network border-b-2 border-mod-network bg-mod-network/5'
               : 'text-text-secondary hover:text-text-primary border-b-2 border-transparent'
             }`}
         >
-          ⬛ Screenshot / Image
+           Screenshot / Image
         </button>
       </div>
 
@@ -154,37 +153,32 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
             <div className="relative">
               <textarea
                 value={text}
-                onChange={(e) => {
-                  setText(e.target.value);
-                  if (e.target.value.trim() === '' && onClear) {
-                    onClear();
-                  }
-                }}
+                onChange={(e) => setText(e.target.value)}
                 placeholder={`Paste call transcript, SMS, WhatsApp message, or UPI payment request here…\n\nExample: "I received a call from someone claiming to be a CBI officer saying my Aadhaar is linked to money laundering..."`}
                 rows={7}
                 disabled={isLoading}
                 className="w-full bg-bg-base border border-border-hairline rounded p-4 text-sm text-text-primary placeholder:text-text-secondary/40 font-mono focus:border-accent-signal transition-colors leading-relaxed resize-none"
               />
               {text.length > 0 && (
-                <span className="absolute bottom-2 right-3 font-mono text-[13px] text-text-secondary/50">
+                <span className="absolute bottom-2 right-3 font-mono text-[9px] text-text-secondary/50">
                   {text.length} chars
                 </span>
               )}
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p className="text-xs text-text-secondary max-w-md leading-relaxed">
-                📋 Phone numbers and Aadhaar IDs are automatically masked client-side before any analysis.
+              <p className="text-[10px] text-text-secondary max-w-md leading-relaxed">
+                 Phone numbers and Aadhaar IDs are automatically masked client-side before any analysis.
               </p>
               <button
                 type="submit"
                 disabled={!text.trim() || isLoading}
-                className={`px-6 py-2.5 rounded font-sans font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${!text.trim() || isLoading
+                className={`px-6 py-2.5 rounded font-condensed font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${!text.trim() || isLoading
                     ? 'bg-bg-base border-border-hairline text-text-secondary/40 cursor-not-allowed'
                     : 'bg-accent-signal/20 hover:bg-accent-signal/30 text-accent-signal border-accent-signal/40 hover:scale-[1.02] active:scale-[0.98]'
                   }`}
               >
-                {isLoading ? '⟳ ANALYZING...' : '▶ RUN VERDICT ANALYSIS'}
+                {isLoading ? ' ANALYZING...' : ' RUN VERDICT ANALYSIS'}
               </button>
             </div>
           </form>
@@ -205,16 +199,16 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                     : 'border-border-hairline hover:border-mod-network/60 hover:bg-mod-network/5'
                   }`}
               >
-                <div className="text-4xl select-none">📸</div>
+                <div className="text-4xl select-none"></div>
                 <div className="text-center space-y-1">
-                  <p className="font-sans font-bold text-sm text-text-primary tracking-wide">
+                  <p className="font-condensed font-bold text-sm text-text-primary tracking-wide">
                     {isDragging ? 'Drop screenshot here' : 'Upload Screenshot or Image'}
                   </p>
-                  <p className="font-mono text-xs text-text-secondary">
+                  <p className="font-mono text-[10px] text-text-secondary">
                     Drag & drop or click to browse — PNG, JPG, WEBP supported
                   </p>
                 </div>
-                <span className="font-mono text-[13px] text-mod-network/70 uppercase tracking-widest">
+                <span className="font-mono text-[9px] text-mod-network/70 uppercase tracking-widest">
                   OCR text extraction will run in-browser
                 </span>
                 <input
@@ -237,11 +231,11 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                   <button
                     type="button"
                     onClick={clearImage}
-                    className="absolute top-2 right-2 bg-bg-surface/90 border border-border-hairline text-text-secondary hover:text-sev-critical hover:border-sev-critical/40 rounded px-2 py-1 font-mono text-[13px] transition-all"
+                    className="absolute top-2 right-2 bg-bg-surface/90 border border-border-hairline text-text-secondary hover:text-sev-critical hover:border-sev-critical/40 rounded px-2 py-1 font-mono text-[9px] transition-all"
                   >
-                    ✕ REMOVE
+                     REMOVE
                   </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-bg-base/80 px-3 py-1.5 font-mono text-[13px] text-text-secondary truncate">
+                  <div className="absolute bottom-0 left-0 right-0 bg-bg-base/80 px-3 py-1.5 font-mono text-[9px] text-text-secondary truncate">
                     {imageFile?.name} · {(imageFile?.size / 1024).toFixed(1)} KB
                   </div>
                 </div>
@@ -249,7 +243,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                 {/* OCR Progress Bar */}
                 {ocrProgress !== null && ocrProgress < 100 && (
                   <div className="space-y-1.5">
-                    <div className="flex justify-between font-mono text-[13px] text-text-secondary">
+                    <div className="flex justify-between font-mono text-[9px] text-text-secondary">
                       <span>OCR SCAN PROGRESS</span>
                       <span>{ocrProgress}%</span>
                     </div>
@@ -263,18 +257,18 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                 )}
 
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs text-text-secondary leading-relaxed">
-                    🔍 Text will be extracted via OCR, then de-identified and classified.
+                  <p className="text-[10px] text-text-secondary leading-relaxed">
+                     Text will be extracted via OCR, then de-identified and classified.
                   </p>
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className={`px-6 py-2.5 rounded font-sans font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${isLoading
+                    className={`px-6 py-2.5 rounded font-condensed font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${isLoading
                         ? 'bg-bg-base border-border-hairline text-text-secondary/40 cursor-not-allowed'
                         : 'bg-mod-network/20 hover:bg-mod-network/30 text-mod-network border-mod-network/40 hover:scale-[1.02] active:scale-[0.98]'
                       }`}
                   >
-                    {isLoading ? '⟳ SCANNING...' : '▶ SCAN & CLASSIFY'}
+                    {isLoading ? ' SCANNING...' : ' SCAN & CLASSIFY'}
                   </button>
                 </div>
               </div>
@@ -284,7 +278,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
 
         {/* ─── Status Log Terminal ─── */}
         {statusLog.length > 0 && (
-          <div className="p-3 bg-bg-base border border-border-hairline rounded font-mono text-xs leading-loose space-y-0.5 select-none">
+          <div className="p-3 bg-bg-base border border-border-hairline rounded font-mono text-[10px] leading-loose space-y-0.5 select-none">
             {statusLog.map((log, idx) => (
               <div key={idx} className="flex items-start space-x-2 animate-fade-in">
                 <span className="text-accent-signal flex-shrink-0">›</span>
@@ -300,7 +294,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                   <span className="h-1 w-1 bg-mod-network rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                   <span className="h-1 w-1 bg-mod-network rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </span>
-                <span className="text-text-secondary text-xs animate-pulse">PROCESSING INFERENCE STREAM...</span>
+                <span className="text-text-secondary text-[8px] animate-pulse">PROCESSING INFERENCE STREAM...</span>
               </div>
             )}
           </div>
