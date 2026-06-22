@@ -163,6 +163,39 @@ def get_case(case_id: int, db: Session = Depends(get_db)):
         )
     )
 
+@router.get("/cases")
+def get_all_cases(db: Session = Depends(get_db)):
+    cases = db.query(Case).all()
+    result = []
+    for case in cases:
+        result.append({
+            "id": case.id,
+            "audit_id": case.audit_id,
+            "fraud_type": case.fraud_type,
+            "risk_score": case.risk_score,
+            "confidence": case.confidence,
+            "verdict": case.verdict,
+            "district": case.district,
+            "campaign_id": case.campaign_id,
+            "status": case.status,
+            "created_at": case.created_at
+        })
+    return {"success": True, "data": result}
+
+from pydantic import BaseModel
+class FeedbackRequest(BaseModel):
+    case_id: int
+    verdict: str
+
+@router.post("/feedback")
+def submit_feedback(request: FeedbackRequest, db: Session = Depends(get_db)):
+    case = db.query(Case).filter(Case.id == request.case_id).first()
+    if not case:
+        raise HTTPException(status_code=404, detail="Case not found")
+    case.status = request.verdict
+    db.commit()
+    return {"success": True, "data": {"caseId": case.id, "status": case.status}}
+
 @router.get("/audit/{audit_id}")
 def get_audit(audit_id: str, db: Session = Depends(get_db)):
     """Simple viewable audit log requirement C.6"""

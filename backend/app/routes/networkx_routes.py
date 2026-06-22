@@ -42,7 +42,12 @@ def get_graph(db: Session = Depends(get_db)):
         id=camp.id,
         label=camp.label,
         case_count=camp.case_count,
-        total_estimated_loss=camp.total_estimated_loss
+        total_estimated_loss=camp.total_estimated_loss,
+        cross_jurisdiction=camp.cross_jurisdiction,
+        primary_target_infra_id=camp.primary_target_infra_id,
+        primary_target_betweenness=camp.primary_target_betweenness,
+        pct_connectivity_lost=camp.pct_connectivity_lost,
+        fractures_network=camp.fractures_network
     ) for camp in campaigns_db]
     
     return GraphResponse(

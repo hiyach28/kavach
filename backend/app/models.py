@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, Text
+from sqlalchemy import Column, Integer, String, Float, ForeignKey, DateTime, Date, Text, Boolean
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql import func
 from app.database import Base
@@ -10,6 +10,11 @@ class Campaign(Base):
     case_count = Column(Integer, default=0)
     total_estimated_loss = Column(Integer, default=0)
     last_clustered_at = Column(DateTime)
+    cross_jurisdiction = Column(Boolean, default=False)
+    primary_target_infra_id = Column(Integer, ForeignKey("infra_nodes.id"), nullable=True)
+    primary_target_betweenness = Column(Float, nullable=True)
+    pct_connectivity_lost = Column(Float, nullable=True)
+    fractures_network = Column(Boolean, default=False)
     
     cases = relationship("Case", back_populates="campaign")
 

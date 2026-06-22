@@ -67,11 +67,21 @@ def recluster_campaigns(db: Session):
              campaign_aggregates[comm_id]["loss"] += (case.risk_score * 1000)
 
     # Update campaigns
+    from app.services.network_intelligence import compute_takedown_brief
     for comm_id, agg in campaign_aggregates.items():
         camp = db.query(Campaign).filter(Campaign.id == comm_id).first()
         if camp:
             camp.case_count = agg["count"]
             camp.total_estimated_loss = agg["loss"]
             camp.last_clustered_at = datetime.now(timezone.utc)
+            
+            # Compute takedown metrics
+            brief = compute_takedown_brief(db, camp.id)
+            if brief:
+                camp.cross_jurisdiction = brief["cross_jurisdiction"]
+                camp.primary_target_infra_id = brief["primary_target_infra_id"]
+                camp.primary_target_betweenness = brief["primary_target_betweenness"]
+                camp.pct_connectivity_lost = brief["pct_connectivity_lost"]
+                camp.fractures_network = brief["fractures_network"]
             
     db.commit()

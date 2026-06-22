@@ -1,3 +1,4 @@
+# pyrefly: ignore [missing-import]
 from pydantic import BaseModel
 from typing import List, Optional, Any, Dict
 
@@ -47,6 +48,11 @@ class CampaignSchema(BaseModel):
     label: str
     case_count: int
     total_estimated_loss: int
+    cross_jurisdiction: Optional[bool] = False
+    primary_target_infra_id: Optional[int] = None
+    primary_target_betweenness: Optional[float] = None
+    pct_connectivity_lost: Optional[float] = None
+    fractures_network: Optional[bool] = False
 
 class GraphData(BaseModel):
     nodes: List[NodeSchema]
