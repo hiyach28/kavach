@@ -44,10 +44,10 @@ export default function FraudScopePage() {
       <div className="flex items-start justify-between border-b border-border-hairline pb-4">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <span className="font-mono text-[9px] text-text-secondary uppercase tracking-widest bg-bg-surface border border-border-hairline px-2 py-0.5 rounded">
+            <span className="font-mono text-[13px] text-text-secondary uppercase tracking-widest bg-bg-surface border border-border-hairline px-2 py-0.5 rounded">
               MODULE 01
             </span>
-            <span className="font-mono text-[9px] text-sev-verified">● ONLINE</span>
+            <span className="font-mono text-[13px] text-sev-verified">● ONLINE</span>
           </div>
           <h2 className="text-2xl font-bold tracking-wide text-text-primary">
             FraudScope
@@ -56,7 +56,7 @@ export default function FraudScopePage() {
             Submit a complaint transcript, SMS, WhatsApp message, or screenshot — the system will classify the cybercrime type, extract evidence indicators, and cluster it into known fraud campaigns.
           </p>
         </div>
-        <div className="hidden md:flex flex-col items-end gap-1 font-mono text-[9px] text-text-secondary">
+        <div className="hidden md:flex flex-col items-end gap-1 font-mono text-[13px] text-text-secondary">
           <span>TOTAL CASES: <span className="text-text-primary font-bold">{cases.length}</span></span>
           <span>ENGINE: <span className="text-accent-signal">MOCK v1.0</span></span>
         </div>
@@ -87,9 +87,9 @@ export default function FraudScopePage() {
             <div key={item.step} className="flex gap-3 p-4 bg-bg-surface border border-border-hairline rounded-lg">
               <div className="text-2xl flex-shrink-0">{item.icon}</div>
               <div>
-                <div className="font-mono text-[9px] text-text-secondary mb-0.5">STEP {item.step}</div>
+                <div className="font-mono text-[13px] text-text-secondary mb-0.5">STEP {item.step}</div>
                 <div className="font-semibold text-sm text-text-primary mb-1">{item.title}</div>
-                <p className="text-[11px] text-text-secondary leading-snug">{item.desc}</p>
+                <p className="text-[13px] text-text-secondary leading-snug">{item.desc}</p>
               </div>
             </div>
           ))}

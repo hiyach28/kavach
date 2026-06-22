@@ -53,7 +53,7 @@ function OverviewPage() {
             Real-time cybercrime intelligence dashboard for Indian Police forces.
           </p>
         </div>
-        <div className="hidden md:flex items-center gap-1.5 font-mono text-[9px] text-sev-verified bg-sev-verified/10 border border-sev-verified/20 px-3 py-1.5 rounded">
+        <div className="hidden md:flex items-center gap-1.5 font-mono text-[13px] text-sev-verified bg-sev-verified/10 border border-sev-verified/20 px-3 py-1.5 rounded">
           <span className="h-1.5 w-1.5 rounded-full bg-sev-verified animate-pulse" />
           SYSTEM ONLINE
         </div>
@@ -65,27 +65,27 @@ function OverviewPage() {
           <div className="flex items-center gap-3 min-w-0">
             <span className="h-2.5 w-2.5 rounded-full bg-sev-critical animate-pulse flex-shrink-0" />
             <div className="min-w-0">
-              <span className="font-mono text-[9px] text-sev-critical/80 uppercase tracking-widest block mb-0.5">
+              <span className="font-mono text-[13px] text-sev-critical/80 uppercase tracking-widest block mb-0.5">
                 ⚠ Highest Priority District
               </span>
               <div className="flex items-center gap-2 flex-wrap">
                 <span className="text-base font-bold text-text-primary">{topDistrict.name}</span>
-                <span className="font-mono text-[10px] text-text-secondary">{topDistrict.state}</span>
+                <span className="font-mono text-xs text-text-secondary">{topDistrict.state}</span>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-5 flex-shrink-0">
             <div className="text-right">
-              <span className="font-mono text-[9px] text-text-secondary block">PRIORITY</span>
+              <span className="font-mono text-[13px] text-text-secondary block">PRIORITY</span>
               <span className="font-mono text-xl font-bold text-sev-critical">{topDistrict.priority_score}</span>
             </div>
             <div className="text-right">
-              <span className="font-mono text-[9px] text-text-secondary block">COMPLAINTS</span>
+              <span className="font-mono text-[13px] text-text-secondary block">COMPLAINTS</span>
               <span className="font-mono text-xl font-bold text-text-primary">{topDistrict.complaint_count}</span>
             </div>
             <button
               onClick={() => setActiveTab('crimemap')}
-              className="py-1.5 px-3 font-mono text-[9px] text-sev-critical border border-sev-critical/30 hover:bg-sev-critical/10 rounded transition-all whitespace-nowrap"
+              className="py-1.5 px-3 font-mono text-[13px] text-sev-critical border border-sev-critical/30 hover:bg-sev-critical/10 rounded transition-all whitespace-nowrap"
             >
               View Map →
             </button>
@@ -102,9 +102,9 @@ function OverviewPage() {
           { label: 'Manual Review',    value: pendingCount,     sub: 'awaiting analyst',   color: 'text-sev-high',     accent: 'border-sev-high/30' },
         ].map((m, i) => (
           <div key={i} className={`bg-bg-surface border ${m.accent} rounded-lg p-4 space-y-1.5`}>
-            <span className="font-mono text-[9px] text-text-secondary uppercase tracking-widest block">{m.label}</span>
+            <span className="font-mono text-[13px] text-text-secondary uppercase tracking-widest block">{m.label}</span>
             <span className={`font-mono text-3xl font-bold ${m.color} block leading-none`}>{m.value}</span>
-            <span className="font-mono text-[9px] text-text-secondary">{m.sub}</span>
+            <span className="font-mono text-[13px] text-text-secondary">{m.sub}</span>
           </div>
         ))}
       </div>
@@ -125,7 +125,7 @@ function OverviewPage() {
               <span className="text-xl flex-shrink-0">{a.icon}</span>
               <div>
                 <div className="font-semibold text-sm text-text-primary mb-0.5">{a.title}</div>
-                <p className="text-[11px] text-text-secondary leading-snug">{a.desc}</p>
+                <p className="text-[13px] text-text-secondary leading-snug">{a.desc}</p>
               </div>
             </div>
           </button>
@@ -135,12 +135,12 @@ function OverviewPage() {
       {/* ── Recent Cases (full-width) ── */}
       <div className="bg-bg-surface border border-border-hairline rounded-lg overflow-hidden">
         <div className="px-5 py-3 border-b border-border-hairline bg-bg-base/30 flex items-center justify-between">
-          <span className="font-mono text-[10px] font-bold tracking-widest text-text-secondary uppercase">
+          <span className="font-mono text-xs font-bold tracking-widest text-text-secondary uppercase">
             Recent Classified Cases
           </span>
           <button
             onClick={() => setActiveTab('fraudscope')}
-            className="font-mono text-[9px] text-accent-signal hover:underline uppercase tracking-wider"
+            className="font-mono text-[13px] text-accent-signal hover:underline uppercase tracking-wider"
           >
             + New Case →
           </button>
@@ -163,15 +163,15 @@ function OverviewPage() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
                     <span className="font-mono text-xs text-text-primary font-semibold">Case #{c.id}</span>
-                    <span className="font-mono text-[9px] text-text-secondary">{c.district || 'Unknown'}</span>
+                    <span className="font-mono text-[13px] text-text-secondary">{c.district || 'Unknown'}</span>
                   </div>
-                  <p className="text-[11px] text-text-secondary truncate">{c.raw_text_deidentified}</p>
+                  <p className="text-[13px] text-text-secondary truncate">{c.raw_text_deidentified}</p>
                 </div>
                 <div className="flex flex-col items-end gap-1 flex-shrink-0">
-                  <span className={`font-mono text-[9px] px-1.5 py-0.5 rounded border ${badge.cls}`}>
+                  <span className={`font-mono text-[13px] px-1.5 py-0.5 rounded border ${badge.cls}`}>
                     {badge.label}
                   </span>
-                  <span className="font-mono text-[8px] text-text-secondary">
+                  <span className="font-mono text-xs text-text-secondary">
                     {new Date(c.created_at).toLocaleDateString('en-IN')}
                   </span>
                 </div>
@@ -184,12 +184,12 @@ function OverviewPage() {
       {/* ── Active Fraud Ring Campaigns (BELOW cases — scrollable) ── */}
       <div className="bg-bg-surface border border-border-hairline rounded-lg overflow-hidden">
         <div className="px-5 py-3 border-b border-border-hairline bg-bg-base/30 flex items-center justify-between">
-          <span className="font-mono text-[10px] font-bold tracking-widest text-text-secondary uppercase">
+          <span className="font-mono text-xs font-bold tracking-widest text-text-secondary uppercase">
             Active Fraud Ring Campaigns
           </span>
           <button
             onClick={() => setActiveTab('network')}
-            className="font-mono text-[9px] text-mod-network hover:underline uppercase tracking-wider"
+            className="font-mono text-[13px] text-mod-network hover:underline uppercase tracking-wider"
           >
             Inspect Graph →
           </button>
@@ -199,7 +199,7 @@ function OverviewPage() {
             <div key={camp.id} className="px-5 py-4 flex items-center gap-6">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2 mb-1">
-                  <span className="font-mono text-[9px] text-mod-network bg-mod-network/10 border border-mod-network/20 px-1.5 py-0.5 rounded uppercase tracking-widest">
+                  <span className="font-mono text-[13px] text-mod-network bg-mod-network/10 border border-mod-network/20 px-1.5 py-0.5 rounded uppercase tracking-widest">
                     Campaign #{camp.id}
                   </span>
                 </div>
@@ -209,11 +209,11 @@ function OverviewPage() {
               </div>
               <div className="flex items-center gap-5 flex-shrink-0 font-mono text-xs">
                 <div className="text-right">
-                  <span className="text-[9px] text-text-secondary block">CASES</span>
+                  <span className="text-[13px] text-text-secondary block">CASES</span>
                   <span className="text-text-primary font-bold">{camp.case_count}</span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[9px] text-text-secondary block">EST. LOSS</span>
+                  <span className="text-[13px] text-text-secondary block">EST. LOSS</span>
                   <span className="text-sev-critical font-bold">₹{(camp.total_estimated_loss / 10000000).toFixed(1)}Cr</span>
                 </div>
               </div>

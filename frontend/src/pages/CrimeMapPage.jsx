@@ -26,15 +26,15 @@ export default function CrimeMapPage() {
           <IndiaFlag size={28} />
           <div>
             <div className="flex items-center gap-2">
-              <span className="font-mono text-[9px] text-text-secondary uppercase tracking-widest">MODULE_03</span>
-              <span className="font-mono text-[9px] text-sev-verified">● LIVE</span>
+              <span className="font-mono text-[13px] text-text-secondary uppercase tracking-widest">MODULE_03</span>
+              <span className="font-mono text-[13px] text-sev-verified">● LIVE</span>
             </div>
             <h2 className="text-base font-bold tracking-wide text-text-primary">
               CrimeMap — Priority District Choropleth
             </h2>
           </div>
         </div>
-        <div className="flex items-center gap-3 font-mono text-[9px] text-text-secondary">
+        <div className="flex items-center gap-3 font-mono text-[13px] text-text-secondary">
           <span>DISTRICTS_INDEXED:</span>
           <span className="text-mod-enforce font-bold text-sm">{districts.length}</span>
         </div>
@@ -55,9 +55,9 @@ export default function CrimeMapPage() {
           <div className="px-4 pt-4 pb-3 border-b border-border-hairline flex-shrink-0">
             <div className="flex items-center gap-2 mb-1">
               <IndiaFlag size={16} />
-              <span className="font-mono text-[9px] font-bold tracking-widest text-text-secondary uppercase">Cities with Most Threats</span>
+              <span className="font-mono text-[13px] font-bold tracking-widest text-text-secondary uppercase">Cities with Most Threats</span>
             </div>
-            <p className="text-[10px] text-text-secondary leading-snug">
+            <p className="text-xs text-text-secondary leading-snug">
               Ranked by complaint volume, financial impact, and campaign density.
             </p>
           </div>
@@ -84,16 +84,16 @@ export default function CrimeMapPage() {
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <div className="flex items-center gap-2 min-w-0">
-                      <span className="font-mono text-[9px] text-text-secondary flex-shrink-0">#{rank + 1}</span>
+                      <span className="font-mono text-[13px] text-text-secondary flex-shrink-0">#{rank + 1}</span>
                       <IndiaFlag size={12} />
                       <span className="font-semibold text-sm text-text-primary truncate">{district.name}</span>
                     </div>
-                    <span className={`font-mono text-[10px] px-1.5 py-0.5 rounded border flex-shrink-0 ${priorityColor}`}>
+                    <span className={`font-mono text-xs px-1.5 py-0.5 rounded border flex-shrink-0 ${priorityColor}`}>
                       P{district.priority_score || 0}
                     </span>
                   </div>
-                  <div className="font-mono text-[9px] text-text-secondary mb-1.5">{district.state}</div>
-                  <div className="flex items-center justify-between font-mono text-[9px] text-text-secondary">
+                  <div className="font-mono text-[13px] text-text-secondary mb-1.5">{district.state}</div>
+                  <div className="flex items-center justify-between font-mono text-[13px] text-text-secondary">
                     <span>{district.complaint_count} complaints</span>
                     <span>₹{((district.estimated_loss || 0) / 10000000).toFixed(1)}Cr</span>
                   </div>
@@ -108,7 +108,7 @@ export default function CrimeMapPage() {
                     />
                   </div>
                   {district.campaigns_count > 0 && (
-                    <div className="mt-1.5 font-mono text-[9px] text-mod-network">
+                    <div className="mt-1.5 font-mono text-[13px] text-mod-network">
                       {district.campaigns_count} active campaign{district.campaigns_count > 1 ? 's' : ''}
                     </div>
                   )}

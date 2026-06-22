@@ -33,7 +33,7 @@ export default function StatusBar() {
       <div className="flex items-center space-x-8">
         {/* Metric 1 */}
         <div className="flex items-center space-x-2">
-          <span className="font-mono text-[10px] text-text-secondary uppercase tracking-wider">ACTIVE_CASES:</span>
+          <span className="font-mono text-xs text-text-secondary uppercase tracking-wider">ACTIVE_CASES:</span>
           <span className="font-mono text-sm font-semibold text-text-primary px-1.5 py-0.5 bg-bg-base border border-border-hairline rounded">
             {cases.length}
           </span>
@@ -41,7 +41,7 @@ export default function StatusBar() {
 
         {/* Metric 2 */}
         <div className="flex items-center space-x-2">
-          <span className="font-mono text-[10px] text-text-secondary uppercase tracking-wider">CAMPAIGNS:</span>
+          <span className="font-mono text-xs text-text-secondary uppercase tracking-wider">CAMPAIGNS:</span>
           <span className="font-mono text-sm font-semibold text-mod-network px-1.5 py-0.5 bg-bg-base border border-border-hairline rounded">
             {campaigns.length}
           </span>
@@ -49,17 +49,17 @@ export default function StatusBar() {
 
         {/* Metric 3 */}
         <div className="flex items-center space-x-2">
-          <span className="font-mono text-[10px] text-text-secondary uppercase tracking-wider">TOP_PRIORITY:</span>
+          <span className="font-mono text-xs text-text-secondary uppercase tracking-wider">TOP_PRIORITY:</span>
           <span className="font-mono text-sm font-semibold text-sev-critical px-1.5 py-0.5 bg-bg-base border border-border-hairline rounded flex items-center space-x-1.5">
             <span className="h-1.5 w-1.5 rounded-full bg-sev-critical animate-pulse"></span>
             <span>{topDistrict.toUpperCase()}</span>
-            {topScore > 0 && <span className="text-[10px] text-text-secondary">({topScore})</span>}
+            {topScore > 0 && <span className="text-xs text-text-secondary">({topScore})</span>}
           </span>
         </div>
       </div>
 
       {/* Timestamp */}
-      <div className="hidden md:flex items-center space-x-2 font-mono text-[10px] text-text-secondary">
+      <div className="hidden md:flex items-center space-x-2 font-mono text-xs text-text-secondary">
         <span className="h-2 w-2 rounded-full bg-sev-verified"></span>
         <span>SECURE_CONN_ESTABLISHED</span>
       </div>

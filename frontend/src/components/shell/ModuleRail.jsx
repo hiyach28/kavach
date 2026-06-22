@@ -38,7 +38,7 @@ export default function ModuleRail() {
                   <span className="font-sans text-sm font-semibold tracking-wider">
                     {item.label}
                   </span>
-                  <span className="font-mono text-[9px] text-text-secondary uppercase tracking-tight">
+                  <span className="font-mono text-[13px] text-text-secondary uppercase tracking-tight">
                     {item.desc}
                   </span>
                 </div>
@@ -49,10 +49,10 @@ export default function ModuleRail() {
       </div>
 
       {/* Terminal Branding Footer */}
-      <div className="p-6 border-t border-border-hairline font-mono text-[10px] text-text-secondary space-y-1.5 bg-bg-base/20">
+      <div className="p-6 border-t border-border-hairline font-mono text-xs text-text-secondary space-y-1.5 bg-bg-base/20">
         <div>SYSTEM: <span className="text-text-primary">ONLINE</span></div>
         <div>SEC_GRADE: <span className="text-mod-network font-semibold">CONFIDENTIAL</span></div>
-        <div className="text-[9px] opacity-75">POLICE ANALYST TERMINAL v0.1</div>
+        <div className="text-[13px] opacity-75">POLICE ANALYST TERMINAL v0.1</div>
       </div>
     </div>
   );

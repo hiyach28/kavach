@@ -56,7 +56,7 @@ export default function EvidenceTrace({ rawText, redFlags }) {
   return (
     <div className="bg-bg-surface border border-border-hairline rounded-lg overflow-hidden">
       <div className="px-5 py-3 border-b border-border-hairline bg-bg-base/30">
-        <span className="font-sans text-[10px] font-bold tracking-widest text-text-secondary uppercase">
+        <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">
           EVIDENCE TRACE (DE-IDENTIFIED)
         </span>
       </div>
