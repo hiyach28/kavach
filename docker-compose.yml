@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    environment:
+      - GEMINI_API_KEY=${GEMINI_API_KEY:-placeholder}
+      - DATABASE_URL=sqlite:///./kavach.db
+
+  # We will uncomment the frontend block once we initialize the React app
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
