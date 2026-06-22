@@ -32,21 +32,21 @@ export default function CampaignCard({ campaign, isActive, onSelect }) {
       className={`border rounded p-4 cursor-pointer transition-all duration-200 space-y-3 bg-bg-surface ${getCampaignBorder(id)}`}
     >
       <div className="flex items-center justify-between">
-        <span className="font-condensed text-xs font-bold text-text-primary truncate pr-2">
+        <span className="font-sans text-xs font-bold text-text-primary truncate pr-2">
           {label.split(' — ')[1]}
         </span>
-        <span className={`font-mono text-[8px] font-bold tracking-wider px-1.5 py-0.5 border rounded uppercase flex-shrink-0 ${getCampaignBadgeColor(id)}`}>
+        <span className={`font-mono text-xs font-bold tracking-wider px-1.5 py-0.5 border rounded uppercase flex-shrink-0 ${getCampaignBadgeColor(id)}`}>
           CAMPAIGN_{id}
         </span>
       </div>
 
       <div className="grid grid-cols-2 gap-4 text-left border-t border-border-hairline/50 pt-2 font-mono">
         <div className="space-y-0.5">
-          <span className="text-[8px] text-text-secondary uppercase block">MEMBER_CASES</span>
+          <span className="text-xs text-text-secondary uppercase block">MEMBER_CASES</span>
           <span className="text-xs font-bold text-text-primary">{case_count} cases</span>
         </div>
         <div className="space-y-0.5">
-          <span className="text-[8px] text-text-secondary uppercase block">EST_FIN_LOSS</span>
+          <span className="text-xs text-text-secondary uppercase block">EST_FIN_LOSS</span>
           <span className="text-xs font-bold text-sev-critical">₹{lossInRupees}</span>
         </div>
       </div>

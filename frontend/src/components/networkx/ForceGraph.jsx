@@ -131,8 +131,8 @@ export default function ForceGraph({ graphData }) {
 
       {/* Floating Graph Legend */}
       <div className="absolute top-4 left-4 bg-bg-surface/90 border border-border-hairline p-4 rounded text-xs select-none space-y-2 z-10">
-        <span className="font-condensed text-[10px] font-bold text-text-secondary tracking-wider block">CAMPAIGN_CLUSTERS</span>
-        <div className="space-y-1.5 font-mono text-[9px] text-text-primary">
+        <span className="font-sans text-xs font-bold text-text-secondary tracking-wider block">CAMPAIGN_CLUSTERS</span>
+        <div className="space-y-1.5 font-mono text-[13px] text-text-primary">
           <div className="flex items-center space-x-2">
             <span className="h-2 w-2 rounded-full bg-sev-critical"></span>
             <span>Pune Arrest Ring (C1)</span>
@@ -150,7 +150,7 @@ export default function ForceGraph({ graphData }) {
             <span>Unclustered Node</span>
           </div>
         </div>
-        <div className="pt-2 border-t border-border-hairline font-mono text-[8px] text-text-secondary">
+        <div className="pt-2 border-t border-border-hairline font-mono text-xs text-text-secondary">
           Node radius correlates with case connectivity degree.
         </div>
       </div>

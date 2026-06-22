@@ -3,89 +3,65 @@ import React from 'react';
 export default function EvidenceTrace({ rawText, redFlags }) {
   if (!rawText) return null;
 
-  // If there are no flags, just render the text
-  if (!redFlags || redFlags.length === 0) {
-    return (
-      <div className="border border-border-hairline rounded bg-bg-surface p-5 space-y-3 font-mono text-sm leading-relaxed whitespace-pre-wrap select-text">
-        {rawText}
-      </div>
-    );
-  }
+  // Render raw text with highlighted red flags
+  // In a full implementation, we'd find the index of each redFlag.evidence in the text 
+  // and wrap it in a span. For this MVP, we will just render the text as a block.
 
-  // Helper to split text by multiple evidence phrases to apply custom highlights
-  // Sort evidence by length descending to avoid matching substrings of other highlights first
-  const sortedFlags = [...redFlags]
-    .filter(f => f.evidence && f.evidence !== 'N/A' && f.evidence.length > 2)
-    .sort((a, b) => b.evidence.length - a.evidence.length);
-
-  if (sortedFlags.length === 0) {
-    return (
-      <div className="border border-border-hairline rounded bg-bg-surface p-5 space-y-3 font-mono text-sm leading-relaxed whitespace-pre-wrap select-text">
-        {rawText}
-      </div>
-    );
-  }
-
-  const getSeverityStyle = (category) => {
-    switch (category) {
-      case 'critical':
-        return 'border-b-2 border-sev-critical bg-sev-critical/10 text-text-primary hover:bg-sev-critical/20 cursor-pointer';
-      case 'high':
-        return 'border-b-2 border-sev-high bg-sev-high/10 text-text-primary hover:bg-sev-high/20 cursor-pointer';
-      default:
-        return 'border-b-2 border-mod-network bg-mod-network/10 text-text-primary hover:bg-mod-network/20 cursor-pointer';
+  const renderTextWithHighlights = () => {
+    if (!redFlags || redFlags.length === 0) {
+      return <span className="text-text-secondary">{rawText}</span>;
     }
+
+    // Very simplistic highlighting approach:
+    // Split the text using evidence substrings.
+    let highlightedText = [{ type: 'text', content: rawText }];
+
+    redFlags.forEach(flag => {
+      if (!flag.evidence) return;
+      const newHighlighted = [];
+      highlightedText.forEach(segment => {
+        if (segment.type !== 'text') {
+          newHighlighted.push(segment);
+          return;
+        }
+
+        const parts = segment.content.split(flag.evidence);
+        parts.forEach((part, idx) => {
+          if (part) {
+            newHighlighted.push({ type: 'text', content: part });
+          }
+          if (idx < parts.length - 1) {
+            newHighlighted.push({
+              type: 'highlight',
+              content: flag.evidence,
+              category: flag.category
+            });
+          }
+        });
+      });
+      highlightedText = newHighlighted;
+    });
+
+    return highlightedText.map((segment, idx) => {
+      if (segment.type === 'highlight') {
+        const color = segment.category === 'critical' ? 'text-sev-critical bg-sev-critical/10 underline decoration-sev-critical' :
+                      segment.category === 'high' ? 'text-sev-high bg-sev-high/10 underline decoration-sev-high' :
+                      'text-mod-network bg-mod-network/10 underline decoration-mod-network';
+        return <span key={idx} className={`font-mono text-sm px-1 py-0.5 rounded mx-0.5 ${color}`}>{segment.content}</span>;
+      }
+      return <span key={idx} className="text-text-secondary">{segment.content}</span>;
+    });
   };
 
-  // Construct inline highlights
-  // We can search-and-replace or build a regex structure
-  // To avoid HTML injection or tag matching issues, we do a token-based replacement
-  let processedText = rawText;
-  const matchesMap = {};
-  
-  sortedFlags.forEach((flag, idx) => {
-    const token = `__FLAG_TOKEN_${idx}__`;
-    // Escape regex characters
-    const escapedEvidence = flag.evidence.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-    const regex = new RegExp(`(${escapedEvidence})`, 'gi');
-    
-    // Replace first occurrence only to keep trace exact
-    processedText = processedText.replace(regex, (match) => {
-      matchesMap[token] = { match, flag };
-      return token;
-    });
-  });
-
-  // Split processedText by tokens and render parts
-  const tokensRegex = /(__FLAG_TOKEN_\d+__)/;
-  const parts = processedText.split(tokensRegex);
-
   return (
-    <div className="border border-border-hairline rounded bg-bg-surface p-5 space-y-3">
-      <div className="flex items-center justify-between">
-        <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">EVIDENCE_HIGHLIGHTS_TRACE</span>
-        <span className="font-mono text-[9px] text-text-secondary uppercase tracking-tight">Hover highlights to inspect flag classifications</span>
+    <div className="bg-bg-surface border border-border-hairline rounded-lg overflow-hidden">
+      <div className="px-5 py-3 border-b border-border-hairline bg-bg-base/30">
+        <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">
+          EVIDENCE TRACE (DE-IDENTIFIED)
+        </span>
       </div>
-
-      <div className="font-mono text-xs leading-relaxed whitespace-pre-wrap select-text p-4 bg-bg-base/40 rounded border border-border-hairline max-h-64 overflow-y-auto">
-        {parts.map((part, index) => {
-          if (matchesMap[part]) {
-            const { match, flag } = matchesMap[part];
-            return (
-              <span
-                key={index}
-                title={`[${flag.flag_id}] - ${flag.explanation}`}
-                className={`relative px-0.5 py-0.5 rounded-t transition-colors inline-block ${getSeverityStyle(flag.category)}`}
-              >
-                {match}
-                <span className="text-[8px] font-bold ml-1 font-mono uppercase tracking-tighter opacity-80 select-none">
-                  ({flag.flag_id})
-                </span>
-              </span>
-            );
-          }
-          return <span key={index}>{part}</span>;
-        })}
+      <div className="p-5 font-mono text-sm leading-relaxed whitespace-pre-wrap">
+        {renderTextWithHighlights()}
       </div>
     </div>
   );
