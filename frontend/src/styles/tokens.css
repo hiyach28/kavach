@@ -1,0 +1,32 @@
+:root {
+  /* Colors */
+  --bg-base: #14181D;
+  --bg-surface: #1C2229;
+  --border-hairline: #2A3038;
+  --text-primary: #E8EAED;
+  --text-secondary: #8B939E;
+  --accent-signal: #E8A33D;
+
+  /* Severity Colors */
+  --sev-critical: #E24B4A;
+  --sev-high: #BA7517;
+  --sev-verified: #4FA66B;
+  --mod-network: #3FB6C7;
+  --mod-enforce: #C99A3B;
+}
+
+/* Base custom resets/utils that rely on tokens */
+.bg-base { background-color: var(--bg-base); }
+.bg-surface { background-color: var(--bg-surface); }
+.border-hairline { border-color: var(--border-hairline); }
+.text-primary { color: var(--text-primary); }
+.text-secondary { color: var(--text-secondary); }
+.text-signal { color: var(--accent-signal); }
+
+.border-sev-critical { border-color: var(--sev-critical); }
+.border-sev-high { border-color: var(--sev-high); }
+.border-sev-verified { border-color: var(--sev-verified); }
+
+.text-sev-critical { color: var(--sev-critical); }
+.text-sev-high { color: var(--sev-high); }
+.text-sev-verified { color: var(--sev-verified); }
