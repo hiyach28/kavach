@@ -1,158 +1,189 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import * as d3 from 'd3';
 import { useCase } from '../../context/CaseContext';
+import { apiClient } from '../../api/client';
 
 export default function ForceGraph({ graphData }) {
   const svgRef = useRef(null);
-  const { selectCase, activeCase } = useCase();
+  const containerRef = useRef(null);
+  const { activeCase, cases, selectCase } = useCase();
+  const [error, setError] = useState(null);
+
+  // Load full case from API and set as active
+  const handleNodeClick = async (nodeId) => {
+    try {
+      // nodeId is "case_12" — extract numeric id
+      const numId = parseInt(nodeId.replace('case_', ''), 10);
+      const res = await fetch(`/api/cases/${numId}`);
+      const json = await res.json();
+      if (json.success && json.data) {
+        // Merge with cases list to get raw_text
+        const base = cases.find(c => c.id === numId) || {};
+        selectCase({ ...base, ...json.data, id: numId });
+      }
+    } catch (e) {
+      console.error('Failed to load case node', e);
+    }
+  };
 
   useEffect(() => {
-    if (!svgRef.current || !graphData || !graphData.nodes) return;
+    if (!svgRef.current || !containerRef.current) return;
+    if (!graphData || !graphData.nodes || graphData.nodes.length === 0) return;
 
-    const width = svgRef.current.clientWidth || 600;
-    const height = svgRef.current.clientHeight || 500;
+    setError(null);
 
-    // Clear previous SVG contents
-    const svg = d3.select(svgRef.current);
-    svg.selectAll('*').remove();
+    try {
+      const width = containerRef.current.clientWidth || 800;
+      const height = containerRef.current.clientHeight || 600;
 
-    // Color mapper for Campaign clusters
-    const getCampaignColor = (campId) => {
-      switch (campId) {
-        case 1: return '#E24B4A'; // Campaign A - red
-        case 2: return '#3FB6C7'; // Campaign B - cyan
-        case 3: return '#E8A33D'; // Campaign C - amber
-        default: return '#8B939E'; // Unclustered - grey
-      }
-    };
+      const svg = d3.select(svgRef.current)
+        .attr('width', width)
+        .attr('height', height);
+      svg.selectAll('*').remove();
 
-    // Deep copy data to prevent D3 from mutating React props directly
-    const nodes = graphData.nodes.map(d => ({ ...d }));
-    const links = graphData.links.map(d => ({ ...d }));
+      // Zoom layer
+      const g = svg.append('g');
+      svg.call(
+        d3.zoom()
+          .scaleExtent([0.3, 3])
+          .on('zoom', (event) => g.attr('transform', event.transform))
+      );
 
-    // Define simulation forces
-    const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(80))
-      .force("charge", d3.forceManyBody().strength(-150))
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide().radius(d => (d.degree || 1) * 3 + 12));
+      // Color mapper from group string e.g. "campaign_2"
+      const PALETTE = ['#E24B4A', '#3FB6C7', '#E8A33D', '#7B61FF', '#4ADE80', '#F97316'];
+      const getCampaignColor = (group) => {
+        if (!group || group === 'unclustered') return '#8B939E';
+        const id = parseInt(group.replace('campaign_', ''), 10);
+        if (isNaN(id)) return '#8B939E';
+        return PALETTE[id % PALETTE.length];
+      };
 
-    // Render connecting links
-    const link = svg.append("g")
-      .attr("class", "links-layer")
-      .selectAll("line")
-      .data(links)
-      .enter()
-      .append("line")
-      .attr("class", "link")
-      .attr("stroke", "#2A3038")
-      .attr("stroke-width", 1.5)
-      .attr("stroke-opacity", 0.6);
+      const nodes = graphData.nodes.map(d => ({ ...d }));
 
-    // Create container for nodes
-    const nodeGroup = svg.append("g")
-      .attr("class", "nodes-layer")
-      .selectAll("g")
-      .data(nodes)
-      .enter()
-      .append("g")
-      .attr("class", "node-group")
-      .call(d3.drag()
-        .on("start", dragstarted)
-        .on("drag", dragged)
-        .on("end", dragended)
-      )
-      .on("click", (event, d) => {
-        selectCase(d);
+      // Extract string IDs defensively — D3 mutates source/target to node objects after first render
+      const nodeIds = new Set(nodes.map(n => n.id));
+      const safeLinks = (graphData.links || [])
+        .map(d => ({
+          source: typeof d.source === 'object' && d.source !== null ? d.source.id : d.source,
+          target: typeof d.target === 'object' && d.target !== null ? d.target.id : d.target,
+          type: d.type,
+        }))
+        .filter(d => d.source && d.target && nodeIds.has(d.source) && nodeIds.has(d.target));
+
+      const simulation = d3.forceSimulation(nodes)
+        .force('link', d3.forceLink(safeLinks).id(d => d.id).distance(90))
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+        .force('collision', d3.forceCollide().radius(d => (d.degree || 1) * 3 + 14));
+
+      const link = g.append('g')
+        .selectAll('line')
+        .data(safeLinks)
+        .enter().append('line')
+        .attr('stroke', d => d.type === 'semantic' ? '#57606a' : '#3A4048')
+        .attr('stroke-width', d => d.type === 'semantic' ? 1 : 1.5)
+        .attr('stroke-opacity', d => d.type === 'semantic' ? 0.5 : 0.7)
+        .attr('stroke-dasharray', d => d.type === 'semantic' ? '4,4' : 'none');
+
+      const nodeGroup = g.append('g')
+        .selectAll('g')
+        .data(nodes)
+        .enter().append('g')
+        .style('cursor', 'pointer')
+        .call(d3.drag()
+          .on('start', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x; d.fy = d.y;
+          })
+          .on('drag', (event, d) => { d.fx = event.x; d.fy = event.y; })
+          .on('end', (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null; d.fy = null;
+          })
+        )
+        .on('click', (event, d) => {
+          event.stopPropagation();
+          handleNodeClick(d.id);
+        });
+
+      const circle = nodeGroup.append('circle')
+        .attr('fill', d => getCampaignColor(d.group))
+        .attr('stroke', d => activeCase && `case_${activeCase.id}` === d.id ? '#E8EAED' : '#14181D')
+        .attr('stroke-width', d => activeCase && `case_${activeCase.id}` === d.id ? 2.5 : 1)
+        .attr('r', 0);
+
+      circle.transition().duration(600).delay((d, i) => i * 20)
+        .attr('r', d => (d.degree || 1) * 2.5 + 8);
+
+      nodeGroup.append('text')
+        .attr('dx', d => (d.degree || 1) * 2.5 + 12)
+        .attr('dy', '.35em')
+        .attr('font-family', 'IBM Plex Mono, monospace')
+        .attr('font-size', '8px')
+        .attr('fill', '#8B939E')
+        .text(d => `#${d.id.replace('case_', '')}`)
+        .attr('pointer-events', 'none');
+
+      simulation.on('tick', () => {
+        link
+          .attr('x1', d => d.source.x).attr('y1', d => d.source.y)
+          .attr('x2', d => d.target.x).attr('y2', d => d.target.y);
+        nodeGroup.attr('transform', d => `translate(${d.x ?? 0},${d.y ?? 0})`);
       });
 
-    // Append circular nodes
-    const node = nodeGroup.append("circle")
-      .attr("class", "node")
-      .attr("fill", d => getCampaignColor(d.campaign_id))
-      .attr("stroke", d => activeCase && d.id === activeCase.id ? "#E8EAED" : "#14181D")
-      .attr("stroke-width", d => activeCase && d.id === activeCase.id ? 2.5 : 1)
-      // Node sizing based on degree connectivity
-      .attr("r", 0); // start at 0 for enter animation
-
-    // Enter animation: nodes scale up and transition in color
-    node.transition()
-      .duration(800)
-      .delay((d, i) => i * 30)
-      .attr("r", d => (d.degree || 1) * 2.5 + 8);
-
-    // Append text tags inside/beside nodes for terminal identifier look
-    nodeGroup.append("text")
-      .attr("dx", d => (d.degree || 1) * 2.5 + 12)
-      .attr("dy", ".35em")
-      .attr("font-family", "IBM Plex Mono, monospace")
-      .attr("font-size", "8px")
-      .attr("fill", "#8B939E")
-      .text(d => `c_${d.id}`)
-      .attr("pointer-events", "none");
-
-    // Simulation tick callback
-    simulation.on("tick", () => {
-      link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
-
-      nodeGroup.attr("transform", d => `translate(${d.x}, ${d.y})`);
-    });
-
-    // Drag helper callbacks
-    function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart();
-      d.fx = d.x;
-      d.fy = d.y;
+      return () => simulation.stop();
+    } catch (err) {
+      console.error('ForceGraph render error:', err);
+      setError(err.message);
     }
-
-    function dragged(event, d) {
-      d.fx = event.x;
-      d.fy = event.y;
-    }
-
-    function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0);
-      d.fx = null;
-      d.fy = null;
-    }
-
-    // Cleanup simulation on unmount
-    return () => simulation.stop();
   }, [graphData, activeCase]);
 
-  return (
-    <div className="relative w-full h-full bg-bg-base flex flex-col justify-end">
-      {/* SVG Canvas */}
-      <svg ref={svgRef} className="w-full h-full absolute inset-0"></svg>
+  if (error) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-bg-base">
+        <div className="font-mono text-xs text-sev-critical border border-sev-critical/30 bg-sev-critical/10 p-4 rounded max-w-sm text-center">
+          <div className="font-bold mb-1">[GRAPH_RENDER_ERROR]</div>
+          <div className="text-text-secondary">{error}</div>
+        </div>
+      </div>
+    );
+  }
 
-      {/* Floating Graph Legend */}
-      <div className="absolute top-4 left-4 bg-bg-surface/90 border border-border-hairline p-4 rounded text-xs select-none space-y-2 z-10">
+  if (!graphData || !graphData.nodes || graphData.nodes.length === 0) {
+    return (
+      <div className="w-full h-full flex items-center justify-center bg-bg-base">
+        <span className="font-mono text-xs text-text-secondary animate-pulse">NO_GRAPH_DATA</span>
+      </div>
+    );
+  }
+
+  return (
+    <div ref={containerRef} className="relative w-full h-full bg-bg-base overflow-hidden">
+      <svg ref={svgRef} className="w-full h-full" />
+
+      {/* Legend */}
+      <div className="absolute top-4 left-4 bg-bg-surface/90 border border-border-hairline p-3 rounded text-xs select-none space-y-2 z-10 pointer-events-none">
         <span className="font-condensed text-[10px] font-bold text-text-secondary tracking-wider block">CAMPAIGN_CLUSTERS</span>
         <div className="space-y-1.5 font-mono text-[9px] text-text-primary">
+          {(graphData.campaigns || []).map((camp, i) => (
+            <div key={camp.id} className="flex items-center space-x-2">
+              <span className="h-2 w-2 rounded-full flex-shrink-0" style={{ background: ['#E24B4A','#3FB6C7','#E8A33D','#7B61FF','#4ADE80','#F97316'][camp.id % 6] }} />
+              <span className="truncate max-w-[140px]">{camp.label?.split(' — ')[1] || camp.label} ({camp.case_count})</span>
+            </div>
+          ))}
           <div className="flex items-center space-x-2">
-            <span className="h-2 w-2 rounded-full bg-sev-critical"></span>
-            <span>Pune Arrest Ring (C1)</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="h-2 w-2 rounded-full bg-mod-network"></span>
-            <span>Jamtara UPI Spoofing (C2)</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="h-2 w-2 rounded-full bg-accent-signal"></span>
-            <span>Mumbai Investment (C3)</span>
-          </div>
-          <div className="flex items-center space-x-2">
-            <span className="h-2 w-2 rounded-full bg-text-secondary"></span>
-            <span>Unclustered Node</span>
+            <span className="h-2 w-2 rounded-full bg-text-secondary flex-shrink-0" />
+            <span>Unclustered</span>
           </div>
         </div>
         <div className="pt-2 border-t border-border-hairline font-mono text-[8px] text-text-secondary">
-          Node radius correlates with case connectivity degree.
+          Scroll to zoom · Drag to pan · Click node to inspect
         </div>
+      </div>
+
+      {/* Node count badge */}
+      <div className="absolute top-4 right-4 font-mono text-[9px] text-text-secondary bg-bg-surface/80 border border-border-hairline px-2 py-1 rounded">
+        {graphData.nodes.length} nodes · {graphData.links?.length || 0} edges
       </div>
     </div>
   );

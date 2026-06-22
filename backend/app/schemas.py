@@ -7,6 +7,8 @@ class RedFlagSchema(BaseModel):
     category: str
     evidence: str
     explanation: str
+    confidence_score: Optional[int] = None
+    mha_ncrb_citation: Optional[str] = None
 
 class CaseResponseData(BaseModel):
     case_id: int
@@ -16,7 +18,9 @@ class CaseResponseData(BaseModel):
     confidence: Optional[float]
     verdict: Optional[str]
     reporting_portal: Optional[str]
+    reasoning_trace: Optional[str] = None
     status: str
+    latency_ms: Optional[int] = None
     red_flags: List[RedFlagSchema] = []
 
 class BaseResponse(BaseModel):
@@ -64,6 +68,7 @@ class GraphResponse(BaseResponse):
 
 class DistrictStatSchema(BaseModel):
     name: str
+    state: Optional[str] = None
     priority_score: float
     complaint_count: int
     estimated_loss: int

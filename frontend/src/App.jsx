@@ -63,10 +63,10 @@ function OverviewPage() {
       {/* ── Metric Cards ── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: 'Total Cases', value: cases.length, sub: 'indexed complaints', color: 'text-text-primary', accent: 'border-border-hairline' },
-          { label: 'Critical Threats', value: criticalCount, sub: 'risk score ≥ 70', color: 'text-sev-critical', accent: 'border-sev-critical/30' },
-          { label: 'Active Campaigns', value: campaigns.length, sub: 'fraud ring clusters', color: 'text-mod-network', accent: 'border-mod-network/30' },
-          { label: 'Manual Review', value: pendingCount, sub: 'awaiting analyst', color: 'text-sev-high', accent: 'border-sev-high/30' },
+          { label: 'Total Cybercrimes (NCRB 2023)', value: "86,420", sub: 'cases registered nationally', color: 'text-text-primary', accent: 'border-border-hairline' },
+          { label: 'Total Digital Arrest Losses', value: "₹1,935 Cr", sub: 'MHA figures for 2024', color: 'text-sev-critical', accent: 'border-sev-critical/30' },
+          { label: 'Indexed Campaigns', value: campaigns.length, sub: 'tracked fraud rings in local DB', color: 'text-mod-network', accent: 'border-mod-network/30' },
+          { label: 'Manual Review', value: pendingCount, sub: 'awaiting analyst locally', color: 'text-sev-high', accent: 'border-sev-high/30' },
         ].map((m, i) => (
           <div key={i} className={`bg-bg-surface border ${m.accent} rounded p-4 space-y-2`}>
             <span className="font-mono text-[9px] text-text-secondary uppercase tracking-widest block">{m.label}</span>

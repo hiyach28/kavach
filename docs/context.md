@@ -26,3 +26,8 @@ This document tracks the phased execution of the Kavach Backend build.
 - **Status:** Completed
 - **Components:** `seed_cases.py`, `seed_districts.py`, `main.py` routing.
 - **Goal:** Mock data injection and final wiring.
+
+## Phase 6: UI Stabilization & Bug Fixes ✅
+- **Status:** Completed
+- **Components:** `ForceGraph.jsx`, `FraudScopePage.jsx`, `DossierPanel.jsx`, `CrimeMapPage.jsx`.
+- **Outcome:** Resolved D3 link mutation crash, added `raw_text_deidentified` pass-through to API, built nested district case view, implemented strict null checks on mock data schemas, and added status badges for classification verdicts.

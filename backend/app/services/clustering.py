@@ -1,8 +1,18 @@
 import networkx as nx
 import community as community_louvain
+import json
+import numpy as np
 from sqlalchemy.orm import Session
-from app.models import Case, Campaign, CaseInfraLink
+from app.models import Case, Campaign, CaseInfraLink, CaseSemanticLink
 from datetime import datetime, timezone
+
+def cosine_similarity(v1, v2):
+    dot_product = np.dot(v1, v2)
+    norm_v1 = np.linalg.norm(v1)
+    norm_v2 = np.linalg.norm(v2)
+    if norm_v1 == 0 or norm_v2 == 0:
+        return 0.0
+    return dot_product / (norm_v1 * norm_v2)
 
 def recluster_campaigns(db: Session):
     """
@@ -24,13 +34,46 @@ def recluster_campaigns(db: Session):
     for link in infra_links:
         infra_to_cases.setdefault(link.infra_node_id, []).append(link.case_id)
         
-    # Add edges between cases sharing an infra node
+    # Add infra edges between cases sharing an infra node
     for infra_id, c_ids in infra_to_cases.items():
         if len(c_ids) > 1:
             for i in range(len(c_ids)):
                 for j in range(i + 1, len(c_ids)):
-                    G.add_edge(c_ids[i], c_ids[j])
-                    
+                    G.add_edge(c_ids[i], c_ids[j], type='infra')
+
+    # Add semantic edges based on embeddings
+    # 1. Parse embeddings
+    case_embeddings = {}
+    for case in cases:
+        if case.embedding:
+            try:
+                emb = json.loads(case.embedding)
+                if emb and len(emb) > 0:
+                    case_embeddings[case.id] = np.array(emb)
+            except:
+                pass
+
+    # Clear old semantic links
+    db.query(CaseSemanticLink).delete()
+    
+    # 2. Compute similarity
+    case_ids = list(case_embeddings.keys())
+    for i in range(len(case_ids)):
+        for j in range(i + 1, len(case_ids)):
+            c1 = case_ids[i]
+            c2 = case_ids[j]
+            sim = cosine_similarity(case_embeddings[c1], case_embeddings[c2])
+            if sim > 0.85:
+                # Add to NetworkX graph to allow semantic clustering
+                if not G.has_edge(c1, c2):
+                    G.add_edge(c1, c2, type='semantic')
+                # Save to DB for frontend visualization
+                db.add(CaseSemanticLink(
+                    source_case_id=c1,
+                    target_case_id=c2,
+                    similarity_score=float(sim)
+                ))
+    
     if len(G.nodes) == 0:
         return
         

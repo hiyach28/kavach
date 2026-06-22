@@ -1,4 +1,5 @@
 import uuid
+import time
 import json
 import hashlib
 from fastapi import APIRouter, Depends, HTTPException
@@ -7,13 +8,14 @@ from app.database import get_db
 from app.schemas import ClassifyRequest, ClassifyResponse, CaseResponseData, RedFlagSchema
 from app.models import Case, AuditLog, CaseRedFlag, InfraNode, CaseInfraLink
 from app.deidentify import deidentify_text
-from app.llm_client import classify_text_gemini
+from app.llm_client import classify_text_gemini, get_embedding
 from app.services.clustering import recluster_campaigns
 
 router = APIRouter()
 
 @router.post("/classify", response_model=ClassifyResponse)
 def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
+    start_time = time.time()
     audit_id = str(uuid.uuid4())
     
     # 1. De-identify
@@ -30,6 +32,8 @@ def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
     
     # 2. LLM Classification
     llm_result = classify_text_gemini(safe_text)
+    
+    latency_ms = int((time.time() - start_time) * 1000)
     
     if not llm_result:
         # Fallback graceful degradation
@@ -53,7 +57,9 @@ def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
                 case_id=case.id,
                 audit_id=audit_id,
                 status="needs_manual_review",
-                red_flags=[]
+                reasoning_trace=None,
+                red_flags=[],
+                latency_ms=latency_ms
             )
         )
         
@@ -64,6 +70,11 @@ def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
         response_payload=llm_result.model_dump_json()
     ))
     
+    # 2.5 Generate Embedding
+    embedding = get_embedding(safe_text)
+    embedding_str = json.dumps(embedding) if embedding else None
+
+    # 3. Create Case
     case = Case(
         audit_id=audit_id,
         raw_text_deidentified=safe_text,
@@ -73,7 +84,9 @@ def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
         confidence=llm_result.confidence,
         verdict=llm_result.verdict,
         reporting_portal=llm_result.reporting_portal,
-        status="classified"
+        reasoning_trace=llm_result.reasoning_trace,
+        status="classified",
+        embedding=embedding_str
     )
     db.add(case)
     db.commit()
@@ -87,14 +100,18 @@ def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
             flag_id=flag.flag_id,
             category=flag.category,
             evidence=flag.evidence,
-            explanation=flag.explanation
+            explanation=flag.explanation,
+            confidence_score=flag.confidence_score,
+            mha_ncrb_citation=flag.mha_ncrb_citation
         )
         db.add(rf)
         red_flag_schemas.append(RedFlagSchema(
             flag_id=flag.flag_id,
             category=flag.category,
             evidence=flag.evidence,
-            explanation=flag.explanation
+            explanation=flag.explanation,
+            confidence_score=flag.confidence_score,
+            mha_ncrb_citation=flag.mha_ncrb_citation
         ))
         
     # Extract Infrastructure dynamically from the PII token map
@@ -130,7 +147,9 @@ def classify_text(request: ClassifyRequest, db: Session = Depends(get_db)):
             confidence=case.confidence,
             verdict=case.verdict,
             reporting_portal=case.reporting_portal,
+            reasoning_trace=case.reasoning_trace,
             status=case.status,
+            latency_ms=latency_ms,
             red_flags=red_flag_schemas
         )
     )
@@ -145,7 +164,9 @@ def get_case(case_id: int, db: Session = Depends(get_db)):
         flag_id=rf.flag_id,
         category=rf.category,
         evidence=rf.evidence,
-        explanation=rf.explanation
+        explanation=rf.explanation,
+        confidence_score=rf.confidence_score,
+        mha_ncrb_citation=rf.mha_ncrb_citation
     ) for rf in case.red_flags]
     
     return ClassifyResponse(
@@ -158,6 +179,7 @@ def get_case(case_id: int, db: Session = Depends(get_db)):
             confidence=case.confidence,
             verdict=case.verdict,
             reporting_portal=case.reporting_portal,
+            reasoning_trace=case.reasoning_trace,
             status=case.status,
             red_flags=rfs
         )
@@ -178,7 +200,9 @@ def get_all_cases(db: Session = Depends(get_db)):
             "district": case.district,
             "campaign_id": case.campaign_id,
             "status": case.status,
-            "created_at": case.created_at
+            "created_at": case.created_at,
+            "raw_text_deidentified": case.raw_text_deidentified,
+            "reporting_portal": case.reporting_portal,
         })
     return {"success": True, "data": result}
 

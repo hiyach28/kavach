@@ -1,7 +1,7 @@
 export const apiClient = {
   // Fetch graph nodes & links for D3
   async getGraph() {
-    const res = await fetch('/api/network/graph');
+    const res = await fetch('/api/graph');
     if (!res.ok) throw new Error('Failed to fetch graph data');
     const json = await res.json();
     return json.data;
@@ -9,7 +9,7 @@ export const apiClient = {
 
   // Fetch districts list with calculated priority scores
   async getDistricts() {
-    const res = await fetch('/api/crimemap/districts');
+    const res = await fetch('/api/districts');
     if (!res.ok) throw new Error('Failed to fetch district stats');
     const json = await res.json();
     return json.data;
@@ -24,7 +24,7 @@ export const apiClient = {
 
   // Fetch cases (optional list, maybe not strictly needed if graph provides nodes)
   async getCases() {
-    const res = await fetch('/api/fraudscope/cases');
+    const res = await fetch('/api/cases');
     if (!res.ok) throw new Error('Failed to fetch cases');
     const json = await res.json();
     return json.data;
@@ -32,7 +32,7 @@ export const apiClient = {
 
   // Classify new case
   async classifyCase(text) {
-    const res = await fetch('/api/fraudscope/classify', {
+    const res = await fetch('/api/classify', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -46,7 +46,7 @@ export const apiClient = {
 
   // Officer feedback loop
   async submitFeedback(caseId, verdict) {
-    const res = await fetch('/api/fraudscope/feedback', {
+    const res = await fetch('/api/feedback', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -60,8 +60,8 @@ export const apiClient = {
 
   // Audit log retriever
   async getAuditLogs(auditId) {
-    const res = await fetch(`/api/fraudscope/audit/${auditId}`);
-    if (!res.ok) return []; // Fallback empty if not implemented
+    const res = await fetch(`/api/audit/${auditId}`);
+    if (!res.ok) return [];
     const json = await res.json();
     return json.data;
   }

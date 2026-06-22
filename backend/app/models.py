@@ -29,10 +29,12 @@ class Case(Base):
     confidence = Column(Float)
     verdict = Column(String)
     reporting_portal = Column(String)
+    reasoning_trace = Column(Text)
     district = Column(String, index=True)
     campaign_id = Column(Integer, ForeignKey("campaigns.id"))
     status = Column(String, default="classified", nullable=False)
     created_at = Column(DateTime, default=func.now(), nullable=False)
+    embedding = Column(Text, nullable=True) # JSON serialized list of floats
     
     campaign = relationship("Campaign", back_populates="cases")
     red_flags = relationship("CaseRedFlag", back_populates="case")
@@ -46,6 +48,8 @@ class CaseRedFlag(Base):
     category = Column(String, nullable=False)
     evidence = Column(String, nullable=False)
     explanation = Column(String, nullable=False)
+    confidence_score = Column(Integer)
+    mha_ncrb_citation = Column(String)
     
     case = relationship("Case", back_populates="red_flags")
 
@@ -92,6 +96,17 @@ class CaseFeedback(Base):
     marked_by = Column(String)
     verdict = Column(String, nullable=False)
     created_at = Column(DateTime, default=func.now(), nullable=False)
+
+class CaseSemanticLink(Base):
+    __tablename__ = "case_semantic_links"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    source_case_id = Column(Integer, ForeignKey("cases.id"))
+    target_case_id = Column(Integer, ForeignKey("cases.id"))
+    similarity_score = Column(Float)
+    
+    # We don't necessarily need strict SQLAlchemy relationships here for the MVP graph, 
+    # as we query this table directly to build the D3 graph.
 
 class AuditLog(Base):
     __tablename__ = "audit_log"

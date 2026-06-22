@@ -10,8 +10,11 @@ class LLMRedFlag(BaseModel):
     category: str = Field(description="critical, high, or medium")
     evidence: str
     explanation: str
+    confidence_score: int = Field(description="0-100 score indicating confidence in this specific flag")
+    mha_ncrb_citation: str = Field(description="Specific citation from MHA or NCRB advisories (e.g., 'MHA Advisory: Digital Arrest Impersonation')")
 
 class LLMFraudVerdict(BaseModel):
+    reasoning_trace: str = Field(description="Step-by-step reasoning trace analyzing the text before making a verdict")
     fraud_type: str = Field(description="digital_arrest, upi_spoofing, otp_sim_swap, investment_fraud, job_loan_scam, courier_parcel, legitimate, needs_manual_review")
     risk_score: int = Field(description="0-100")
     confidence: float = Field(description="0.0-1.0")
@@ -33,6 +36,9 @@ def classify_text_gemini(deidentified_text: str) -> Optional[LLMFraudVerdict]:
         You are an expert fraud analysis system for Indian cybercrime.
         Analyze the following de-identified text and classify the fraud type, extracting key evidence.
         IMPORTANT: The text has had PII replaced with tokens like [PHONE_1]. You MUST include these tokens directly in your 'evidence' string exactly as they appear if they are part of a red flag.
+        
+        Provide a detailed `reasoning_trace` first to explain your thought process. 
+        For each red flag you find, assign a `confidence_score` and an `mha_ncrb_citation` referencing real MHA/NCRB patterns, especially for "Digital Arrest" scams.
         
         Text:
         {deidentified_text}
@@ -74,3 +80,16 @@ def classify_text_gemini(deidentified_text: str) -> Optional[LLMFraudVerdict]:
         print(f"Gemini API Error: {e}")
         # Requirements mandate degrading gracefully to 'needs_manual_review'
         return None
+
+def get_embedding(text: str) -> list[float]:
+    """Generates an embedding for the given text using Gemini."""
+    try:
+        client = genai.Client(api_key=settings.GEMINI_API_KEY)
+        response = client.models.embed_content(
+            model='text-embedding-004',
+            contents=text,
+        )
+        return response.embeddings[0].values
+    except Exception as e:
+        print(f"Embedding failed: {e}")
+        return []

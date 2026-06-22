@@ -13,7 +13,9 @@ export default function DistrictTooltip({ x, y, data }) {
       <div className="space-y-1">
         <div className="flex justify-between font-mono text-[10px]">
           <span className="text-text-secondary">COMPLAINTS</span>
-          <span className="text-text-primary font-semibold">{data.complaint_count || 0}</span>
+          <span className="text-text-primary font-semibold">
+            {data.complaint_count || 0} {data.trend === 'rising' ? '📈' : '📉'}
+          </span>
         </div>
         <div className="flex justify-between font-mono text-[10px]">
           <span className="text-text-secondary">EST. LOSS</span>

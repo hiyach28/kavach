@@ -57,7 +57,7 @@ const getSeverityDot = (category) => {
 export default function ResultCard({ caseData }) {
   if (!caseData) return null;
 
-  const { fraud_type, risk_score, confidence, verdict, red_flags, reporting_portal, district, campaign_id, infra } = caseData;
+  const { fraud_type, risk_score, confidence, verdict, red_flags, reporting_portal, district, campaign_id, infra, reasoning_trace, latency_ms } = caseData;
   const meta = FRAUD_TYPE_META[fraud_type] || { label: fraud_type?.replace(/_/g, ' ').toUpperCase(), icon: '', color: 'text-text-primary' };
   const riskStyle = getRiskStyle(risk_score);
 
@@ -72,16 +72,23 @@ export default function ResultCard({ caseData }) {
             <h3 className={`font-condensed text-sm font-bold tracking-wider ${meta.color}`}>{meta.label}</h3>
           </div>
         </div>
-        {reporting_portal && (
-          <a
-            href={reporting_portal}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="px-3 py-1.5 font-condensed font-bold text-[10px] tracking-wider bg-accent-signal/20 hover:bg-accent-signal/30 text-accent-signal border border-accent-signal/40 rounded transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
-          >
-            Report to Govt Portal →
-          </a>
-        )}
+        <div className="flex items-center gap-3">
+          {latency_ms && (
+            <span className="font-mono text-[9px] text-text-secondary bg-bg-base/50 px-2 py-1 rounded border border-border-hairline hidden md:inline-block">
+              ⚡ {(latency_ms / 1000).toFixed(2)}s
+            </span>
+          )}
+          {reporting_portal && (
+            <a
+              href={reporting_portal}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-3 py-1.5 font-condensed font-bold text-[10px] tracking-wider bg-accent-signal/20 hover:bg-accent-signal/30 text-accent-signal border border-accent-signal/40 rounded transition-all duration-200 hover:scale-[1.02] whitespace-nowrap"
+            >
+              Report to Govt Portal →
+            </a>
+          )}
+        </div>
       </div>
 
       <div className="p-5 space-y-5">
@@ -138,6 +145,18 @@ export default function ResultCard({ caseData }) {
           </div>
         </div>
 
+        {/* ── Reasoning Trace (Auditability) ── */}
+        {reasoning_trace && (
+          <div className="space-y-1.5">
+            <span className="font-condensed text-[10px] font-bold tracking-widest text-text-secondary uppercase block">
+               AI Reasoning Trace
+            </span>
+            <div className="p-3 bg-bg-base/30 border border-border-hairline rounded text-[11px] font-mono text-text-secondary leading-relaxed max-h-40 overflow-y-auto whitespace-pre-wrap">
+              {reasoning_trace}
+            </div>
+          </div>
+        )}
+
         {/* ── Red Flags ── */}
         {red_flags && red_flags.length > 0 && (
           <div className="space-y-2">
@@ -161,6 +180,18 @@ export default function ResultCard({ caseData }) {
                     "{flag.evidence}"
                   </div>
                   <p className="text-[11px] text-text-secondary leading-snug">{flag.explanation}</p>
+                  
+                  {/* Additional Metrics */}
+                  <div className="flex items-center justify-between pt-1 mt-1 border-t border-border-hairline/50">
+                    <span className="font-mono text-[9px] text-text-secondary">
+                      CONF: <span className={flag.confidence_score >= 80 ? 'text-sev-critical font-bold' : 'text-text-primary'}>{flag.confidence_score || 'N/A'}%</span>
+                    </span>
+                    {flag.mha_ncrb_citation && (
+                      <span className="font-mono text-[9px] text-text-secondary max-w-[150px] truncate" title={flag.mha_ncrb_citation}>
+                        REF: {flag.mha_ncrb_citation}
+                      </span>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>

@@ -52,6 +52,17 @@ export const CaseProvider = ({ children }) => {
     }
   };
 
+  const fetchDistricts = async (fraudType = null) => {
+    try {
+      const qs = fraudType ? `?fraud_type=${fraudType}` : '';
+      const response = await fetch(`/api/districts${qs}`);
+      const data = await response.json();
+      setDistricts(data.data);
+    } catch (err) {
+      console.error("Failed to fetch filtered districts", err);
+    }
+  };
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -166,7 +177,8 @@ export const CaseProvider = ({ children }) => {
       selectDistrict: handleSelectDistrict,
       classifyCase: classifyCaseText,
       submitFeedback,
-      refreshData: fetchData
+      refreshData: fetchData,
+      fetchDistricts
     }}>
       {children}
     </CaseContext.Provider>

@@ -15,17 +15,19 @@ def seed_districts():
     db.query(District).delete()
     db.commit()
 
+    # Using NCRB 2023 Cybercrime statistics as a baseline (Total ~86,420 cases)
+    # Total estimated loss roughly represents the ₹1,935 crore reported by MHA for digital arrests/major fraud
     districts_data = [
-        {"name": "Mumbai", "state": "Maharashtra", "complaints": 120, "prior": 100, "loss": 5000000},
-        {"name": "Delhi", "state": "Delhi", "complaints": 200, "prior": 250, "loss": 8000000},
-        {"name": "Bangalore", "state": "Karnataka", "complaints": 150, "prior": 85, "loss": 7000000},
-        {"name": "Jamtara", "state": "Jharkhand", "complaints": 40, "prior": 15, "loss": 10000000}, 
-        {"name": "Pune", "state": "Maharashtra", "complaints": 80, "prior": 80, "loss": 2000000},
-        {"name": "Hyderabad", "state": "Telangana", "complaints": 110, "prior": 90, "loss": 4500000},
-        {"name": "Chennai", "state": "Tamil Nadu", "complaints": 95, "prior": 95, "loss": 3000000},
-        {"name": "Kolkata", "state": "West Bengal", "complaints": 105, "prior": 130, "loss": 2500000},
-        {"name": "Ahmedabad", "state": "Gujarat", "complaints": 70, "prior": 50, "loss": 6000000},
-        {"name": "Jaipur", "state": "Rajasthan", "complaints": 65, "prior": 60, "loss": 1500000},
+        {"name": "Bengaluru", "state": "Karnataka", "complaints": 15489, "prior": 14200, "loss": 4500000000},
+        {"name": "Hyderabad", "state": "Telangana", "complaints": 12236, "prior": 11500, "loss": 3200000000},
+        {"name": "Noida", "state": "Uttar Pradesh", "complaints": 6794, "prior": 6100, "loss": 1800000000},
+        {"name": "Mumbai", "state": "Maharashtra", "complaints": 4800, "prior": 4300, "loss": 2500000000},
+        {"name": "Delhi", "state": "Delhi", "complaints": 3500, "prior": 3200, "loss": 1200000000},
+        {"name": "Pune", "state": "Maharashtra", "complaints": 2800, "prior": 2900, "loss": 850000000},
+        {"name": "Patna", "state": "Bihar", "complaints": 3100, "prior": 2800, "loss": 500000000},
+        {"name": "Jamtara", "state": "Jharkhand", "complaints": 850, "prior": 600, "loss": 1500000000}, 
+        {"name": "Chennai", "state": "Tamil Nadu", "complaints": 2100, "prior": 1950, "loss": 900000000},
+        {"name": "Kolkata", "state": "West Bengal", "complaints": 2600, "prior": 2800, "loss": 1100000000},
     ]
 
     for d in districts_data:
