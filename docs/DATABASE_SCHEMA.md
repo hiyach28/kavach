@@ -64,6 +64,11 @@ AuditLog (append-only, references Case by audit_id)
 | label | TEXT | human-readable, e.g. "Campaign A — Mumbai mule ring" |
 | case_count | INTEGER | denormalized, updated on re-clustering |
 | total_estimated_loss | INTEGER | paise, denormalized |
+| cross_jurisdiction | BOOLEAN | true if cases span >1 district — escalation flag |
+| primary_target_infra_id | INTEGER FK → infra_nodes.id | the top-ranked takedown target by betweenness centrality |
+| primary_target_betweenness | REAL | centrality score backing the recommendation |
+| pct_connectivity_lost | REAL | collapse-impact: % of case-to-case links lost if primary_target is removed |
+| fractures_network | BOOLEAN | true if removing primary_target splits the ring into more sub-components |
 | last_clustered_at | TIMESTAMP | |
 
 ### `districts`

@@ -4,7 +4,7 @@ This file orients any AI coding agent (Claude Code, etc.) working in this reposi
 
 ## What this project is
 
-KAVACH is a three-module fraud-intelligence platform: **FraudScope** (classifies a single piece of suspicious text via Gemini API into a structured fraud verdict), **NetworkX** (clusters classified cases into fraud-ring graphs via shared infrastructure + script similarity), **CrimeMap** (aggregates cases geospatially into an enforcement-priority ranking). The product's core value is the *chain* — one case flowing through all three modules — not any module in isolation. Never build or change a module in a way that breaks that chain.
+KAVACH is a three-module fraud-intelligence platform: **FraudScope** (classifies a single piece of suspicious text via Claude API into a structured fraud verdict), **NetworkX** (clusters classified cases into fraud-ring graphs via shared infrastructure + script similarity), **CrimeMap** (aggregates cases geospatially into an enforcement-priority ranking). The product's core value is the *chain* — one case flowing through all three modules — not any module in isolation. Never build or change a module in a way that breaks that chain.
 
 Related docs (read the relevant one before touching that area):
 - `ARCHITECTURE.md` — system design, data flow, scalability roadmap
@@ -16,15 +16,15 @@ Related docs (read the relevant one before touching that area):
 ## Tech stack (do not introduce alternatives without discussion)
 
 - Backend: Python, FastAPI, SQLAlchemy, Pydantic v2, SQLite (dev) → Postgres (prod path)
-- LLM: gemini, structured JSON output only
+- LLM: Anthropic API, model `claude-sonnet-4-6`, structured JSON output only
 - Graph: `networkx` + `python-louvain` for community detection
 - Frontend: React, Tailwind (core utility classes only, no Tailwind compiler plugins), D3 v7 for graph + choropleth
 - Containerization: Docker, single `docker-compose.yml` for local dev (backend + frontend + db)
 
 ## Hard rules — never violate these
 
-1. **Never send raw PII to the Gemini API.** All phone numbers, Aadhaar-like 12-digit numbers, and bank account fragments must pass through the de-identification step (see `ARCHITECTURE.md` §Data Flow) before any LLM call. This is a legal/safety requirement, not a style preference.
-2. **Never trust raw LLM output.** Every Gemini response must be validated against the Pydantic schema in `app/schemas.py` before it touches the database or the frontend. On validation failure, retry once, then degrade to `needs_manual_review` — never silently pass through unvalidated text.
+1. **Never send raw PII to the Claude API.** All phone numbers, Aadhaar-like 12-digit numbers, and bank account fragments must pass through the de-identification step (see `ARCHITECTURE.md` §Data Flow) before any LLM call. This is a legal/safety requirement, not a style preference.
+2. **Never trust raw LLM output.** Every Claude response must be validated against the Pydantic schema in `app/schemas.py` before it touches the database or the frontend. On validation failure, retry once, then degrade to `needs_manual_review` — never silently pass through unvalidated text.
 3. **Every classification must produce an `audit_id` and be persisted, including failures.** Auditability is a headline feature of this product — code that classifies without logging breaks the pitch, not just the code.
 4. **Don't build UI that looks like a chat interface.** No chat bubbles, no centered single-column "assistant is typing" patterns. See `FRONTEND_PLAN.md` for the actual design direction — this is intentional and load-bearing for the product's positioning.
 5. **Field names in code must match `DATABASE_SCHEMA.md` exactly.** If you need a new field, add it to that file in the same change, don't let schema drift happen silently.

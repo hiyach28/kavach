@@ -29,6 +29,14 @@ Status legend: `[MVP]` required for the core demo chain, `[P1]` strongly recomme
 | 2.5 | New-node addition is animated (scale + color transition) rather than an instant re-render | P1 |
 | 2.6 | A second edge type based on text/script similarity (embedding distance) links cases that share no infrastructure but reuse the same script | P2 |
 | 2.7 | Campaign cards summarize case count and total estimated financial loss per cluster | P1 |
+| 2.8 | **Takedown Brief**: for each campaign, compute betweenness centrality on the infra-node projection and surface the single highest-value target node (the "bridge" holding sub-rings together), not just a flat list of equally-weighted nodes | MVP |
+| 2.9 | Takedown Brief includes a quantified collapse-impact figure: % of case-to-case connectivity lost and whether the network fractures into more isolated sub-rings if the top target is removed | MVP |
+| 2.10 | Takedown Brief flags cross-jurisdiction campaigns (cases spanning >1 district) for escalation above local-station level | P1 |
+| 2.11 | "Export Brief" produces a structured summary (campaign id, ranked targets + recommended action, collapse impact, evidence case ids, total loss) suitable for handing to an investigating officer | P1 |
+
+**Why 2.8-2.9 are MVP, not P1:** this is the feature that justifies NetworkX existing as a module at all. Without it, the graph is a visualization with no decision attached — judges and real users will ask "what do I do with this" the moment they see a node graph, and a ranked, quantified target is the only credible answer. See `network_intelligence.py` for the reference implementation and a worked example showing a master account bridging two phone-spoof sub-groups that a flat cluster view would hide.
+
+**Acceptance criteria for 2.8-2.9:** given a campaign where one infra node connects two otherwise-disconnected sub-groups of cases (as in the `network_intelligence.py` demo), the system must rank that node first by betweenness centrality, and `collapse_impact` must report `fractures_network: true` with `pct_connectivity_lost` > 0 — a campaign with no bridging structure (e.g. a single infra node shared by all cases, no sub-groups) is expected to show a high `case_reach` target but no fracture.
 
 **Acceptance criteria for 2.3:** Submitting a case containing an infrastructure value (e.g. a UPI handle) already present in a seeded campaign results in that case's node appearing connected to that campaign within one page refresh, with no manual intervention.
 
