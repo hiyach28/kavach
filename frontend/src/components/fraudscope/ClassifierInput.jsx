@@ -120,7 +120,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
         <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">
           EVIDENCE_SUBMISSION_TERMINAL
         </span>
-        <span className="font-mono text-[9px] text-sev-verified uppercase tracking-tight bg-sev-verified/10 px-2 py-0.5 border border-sev-verified/20 rounded">
+        <span className="font-mono text-[13px] text-sev-verified uppercase tracking-tight bg-sev-verified/10 px-2 py-0.5 border border-sev-verified/20 rounded">
           ● PII_GUARD: ACTIVE
         </span>
       </div>
@@ -166,14 +166,14 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                 className="w-full bg-bg-base border border-border-hairline rounded p-4 text-sm text-text-primary placeholder:text-text-secondary/40 font-mono focus:border-accent-signal transition-colors leading-relaxed resize-none"
               />
               {text.length > 0 && (
-                <span className="absolute bottom-2 right-3 font-mono text-[9px] text-text-secondary/50">
+                <span className="absolute bottom-2 right-3 font-mono text-[13px] text-text-secondary/50">
                   {text.length} chars
                 </span>
               )}
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-              <p className="text-[10px] text-text-secondary max-w-md leading-relaxed">
+              <p className="text-xs text-text-secondary max-w-md leading-relaxed">
                 📋 Phone numbers and Aadhaar IDs are automatically masked client-side before any analysis.
               </p>
               <button
@@ -210,11 +210,11 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                   <p className="font-sans font-bold text-sm text-text-primary tracking-wide">
                     {isDragging ? 'Drop screenshot here' : 'Upload Screenshot or Image'}
                   </p>
-                  <p className="font-mono text-[10px] text-text-secondary">
+                  <p className="font-mono text-xs text-text-secondary">
                     Drag & drop or click to browse — PNG, JPG, WEBP supported
                   </p>
                 </div>
-                <span className="font-mono text-[9px] text-mod-network/70 uppercase tracking-widest">
+                <span className="font-mono text-[13px] text-mod-network/70 uppercase tracking-widest">
                   OCR text extraction will run in-browser
                 </span>
                 <input
@@ -237,11 +237,11 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                   <button
                     type="button"
                     onClick={clearImage}
-                    className="absolute top-2 right-2 bg-bg-surface/90 border border-border-hairline text-text-secondary hover:text-sev-critical hover:border-sev-critical/40 rounded px-2 py-1 font-mono text-[9px] transition-all"
+                    className="absolute top-2 right-2 bg-bg-surface/90 border border-border-hairline text-text-secondary hover:text-sev-critical hover:border-sev-critical/40 rounded px-2 py-1 font-mono text-[13px] transition-all"
                   >
                     ✕ REMOVE
                   </button>
-                  <div className="absolute bottom-0 left-0 right-0 bg-bg-base/80 px-3 py-1.5 font-mono text-[9px] text-text-secondary truncate">
+                  <div className="absolute bottom-0 left-0 right-0 bg-bg-base/80 px-3 py-1.5 font-mono text-[13px] text-text-secondary truncate">
                     {imageFile?.name} · {(imageFile?.size / 1024).toFixed(1)} KB
                   </div>
                 </div>
@@ -249,7 +249,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                 {/* OCR Progress Bar */}
                 {ocrProgress !== null && ocrProgress < 100 && (
                   <div className="space-y-1.5">
-                    <div className="flex justify-between font-mono text-[9px] text-text-secondary">
+                    <div className="flex justify-between font-mono text-[13px] text-text-secondary">
                       <span>OCR SCAN PROGRESS</span>
                       <span>{ocrProgress}%</span>
                     </div>
@@ -263,7 +263,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                 )}
 
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-[10px] text-text-secondary leading-relaxed">
+                  <p className="text-xs text-text-secondary leading-relaxed">
                     🔍 Text will be extracted via OCR, then de-identified and classified.
                   </p>
                   <button
@@ -284,7 +284,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
 
         {/* ─── Status Log Terminal ─── */}
         {statusLog.length > 0 && (
-          <div className="p-3 bg-bg-base border border-border-hairline rounded font-mono text-[10px] leading-loose space-y-0.5 select-none">
+          <div className="p-3 bg-bg-base border border-border-hairline rounded font-mono text-xs leading-loose space-y-0.5 select-none">
             {statusLog.map((log, idx) => (
               <div key={idx} className="flex items-start space-x-2 animate-fade-in">
                 <span className="text-accent-signal flex-shrink-0">›</span>
@@ -300,7 +300,7 @@ export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
                   <span className="h-1 w-1 bg-mod-network rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
                   <span className="h-1 w-1 bg-mod-network rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
                 </span>
-                <span className="text-text-secondary text-[8px] animate-pulse">PROCESSING INFERENCE STREAM...</span>
+                <span className="text-text-secondary text-xs animate-pulse">PROCESSING INFERENCE STREAM...</span>
               </div>
             )}
           </div>
