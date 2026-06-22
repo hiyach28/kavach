@@ -15,7 +15,7 @@ async function runOCR(imageFile, onProgress) {
   return text.trim();
 }
 
-export default function ClassifierInput({ onSubmit, isLoading }) {
+export default function ClassifierInput({ onSubmit, isLoading, onClear }) {
   const [inputMode, setInputMode] = useState('text'); // 'text' | 'image'
   const [text, setText] = useState('');
   const [imageFile, setImageFile] = useState(null);
@@ -110,13 +110,14 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
     setStatusLog([]);
     setOcrProgress(null);
     if (fileInputRef.current) fileInputRef.current.value = '';
+    if (onClear) onClear();
   };
 
   return (
     <div className="border border-border-hairline rounded bg-bg-surface overflow-hidden">
       {/* Panel Header */}
       <div className="flex items-center justify-between px-5 py-3 border-b border-border-hairline bg-bg-base/30">
-        <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">
+        <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">
           EVIDENCE_SUBMISSION_TERMINAL
         </span>
         <span className="font-mono text-[9px] text-sev-verified uppercase tracking-tight bg-sev-verified/10 px-2 py-0.5 border border-sev-verified/20 rounded">
@@ -128,7 +129,7 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
       <div className="flex border-b border-border-hairline">
         <button
           onClick={() => setInputMode('text')}
-          className={`flex-1 py-2.5 font-condensed text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'text'
+          className={`flex-1 py-2.5 font-sans text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'text'
               ? 'text-accent-signal border-b-2 border-accent-signal bg-accent-signal/5'
               : 'text-text-secondary hover:text-text-primary border-b-2 border-transparent'
             }`}
@@ -137,7 +138,7 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
         </button>
         <button
           onClick={() => setInputMode('image')}
-          className={`flex-1 py-2.5 font-condensed text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'image'
+          className={`flex-1 py-2.5 font-sans text-xs font-bold tracking-wider uppercase transition-all duration-150 ${inputMode === 'image'
               ? 'text-mod-network border-b-2 border-mod-network bg-mod-network/5'
               : 'text-text-secondary hover:text-text-primary border-b-2 border-transparent'
             }`}
@@ -153,7 +154,12 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
             <div className="relative">
               <textarea
                 value={text}
-                onChange={(e) => setText(e.target.value)}
+                onChange={(e) => {
+                  setText(e.target.value);
+                  if (e.target.value.trim() === '' && onClear) {
+                    onClear();
+                  }
+                }}
                 placeholder={`Paste call transcript, SMS, WhatsApp message, or UPI payment request here…\n\nExample: "I received a call from someone claiming to be a CBI officer saying my Aadhaar is linked to money laundering..."`}
                 rows={7}
                 disabled={isLoading}
@@ -173,7 +179,7 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
               <button
                 type="submit"
                 disabled={!text.trim() || isLoading}
-                className={`px-6 py-2.5 rounded font-condensed font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${!text.trim() || isLoading
+                className={`px-6 py-2.5 rounded font-sans font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${!text.trim() || isLoading
                     ? 'bg-bg-base border-border-hairline text-text-secondary/40 cursor-not-allowed'
                     : 'bg-accent-signal/20 hover:bg-accent-signal/30 text-accent-signal border-accent-signal/40 hover:scale-[1.02] active:scale-[0.98]'
                   }`}
@@ -201,7 +207,7 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
               >
                 <div className="text-4xl select-none">📸</div>
                 <div className="text-center space-y-1">
-                  <p className="font-condensed font-bold text-sm text-text-primary tracking-wide">
+                  <p className="font-sans font-bold text-sm text-text-primary tracking-wide">
                     {isDragging ? 'Drop screenshot here' : 'Upload Screenshot or Image'}
                   </p>
                   <p className="font-mono text-[10px] text-text-secondary">
@@ -263,7 +269,7 @@ export default function ClassifierInput({ onSubmit, isLoading }) {
                   <button
                     type="submit"
                     disabled={isLoading}
-                    className={`px-6 py-2.5 rounded font-condensed font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${isLoading
+                    className={`px-6 py-2.5 rounded font-sans font-bold text-xs tracking-wider border transition-all duration-200 whitespace-nowrap ${isLoading
                         ? 'bg-bg-base border-border-hairline text-text-secondary/40 cursor-not-allowed'
                         : 'bg-mod-network/20 hover:bg-mod-network/30 text-mod-network border-mod-network/40 hover:scale-[1.02] active:scale-[0.98]'
                       }`}

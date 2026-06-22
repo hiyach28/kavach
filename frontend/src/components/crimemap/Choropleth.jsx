@@ -124,7 +124,7 @@ export default function Choropleth() {
 
       {/* Legend */}
       <div className="absolute top-4 left-4 bg-bg-surface/90 border border-border-hairline p-4 rounded text-xs select-none space-y-2 z-10">
-        <span className="font-condensed text-[10px] font-bold text-text-secondary tracking-wider block">PRIORITY_SCALING</span>
+        <span className="font-sans text-[10px] font-bold text-text-secondary tracking-wider block">PRIORITY_SCALING</span>
         <div className="flex items-center space-x-1">
           <span className="text-[9px] font-mono text-text-secondary">LOW</span>
           <div className="h-2 w-24 bg-gradient-to-r from-[#BA7517] to-[#E24B4A] border border-border-hairline rounded"></div>

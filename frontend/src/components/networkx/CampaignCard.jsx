@@ -32,7 +32,7 @@ export default function CampaignCard({ campaign, isActive, onSelect }) {
       className={`border rounded p-4 cursor-pointer transition-all duration-200 space-y-3 bg-bg-surface ${getCampaignBorder(id)}`}
     >
       <div className="flex items-center justify-between">
-        <span className="font-condensed text-xs font-bold text-text-primary truncate pr-2">
+        <span className="font-sans text-xs font-bold text-text-primary truncate pr-2">
           {label.split(' — ')[1]}
         </span>
         <span className={`font-mono text-[8px] font-bold tracking-wider px-1.5 py-0.5 border rounded uppercase flex-shrink-0 ${getCampaignBadgeColor(id)}`}>

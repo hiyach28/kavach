@@ -74,7 +74,7 @@ export default function DossierPanel() {
       {/* Header */}
       <div className="p-4 border-b border-border-hairline bg-bg-base/30 flex items-center justify-between">
         <div className="flex flex-col">
-          <span className="font-condensed text-xs font-bold text-accent-signal tracking-widest">DOSSIER_FILE</span>
+          <span className="font-sans text-xs font-bold text-accent-signal tracking-widest">DOSSIER_FILE</span>
           <span className="font-mono text-sm font-semibold tracking-wider">CASE #{activeCase.id}</span>
         </div>
         {getStatusBadge(activeCase.status)}
@@ -107,14 +107,14 @@ export default function DossierPanel() {
           )}
           <div className="flex-1 min-w-0">
             <div className="font-mono text-[9px] text-text-secondary uppercase">LLM_VERDICT_CONFIDENCE: {(activeCase.confidence * 100).toFixed(0)}%</div>
-            <h4 className="font-condensed text-xs font-bold text-text-primary uppercase tracking-wider mt-0.5">{activeCase.fraud_type.replace('_', ' ')}</h4>
+            <h4 className="font-sans text-xs font-bold text-text-primary uppercase tracking-wider mt-0.5">{activeCase.fraud_type.replace('_', ' ')}</h4>
             <p className="text-xs text-text-primary leading-snug mt-1 italic">{activeCase.verdict}</p>
           </div>
         </div>
 
         {/* Red Flags List */}
         <div className="space-y-2">
-          <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">EVIDENCE_RED_FLAGS ({activeCase.red_flags?.length || 0})</span>
+          <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">EVIDENCE_RED_FLAGS ({activeCase.red_flags?.length || 0})</span>
           
           {activeCase.red_flags && activeCase.red_flags.length > 0 ? (
             <div className="space-y-2">
@@ -142,7 +142,7 @@ export default function DossierPanel() {
 
         {/* Extracted Infrastructure Hashing */}
         <div className="space-y-2">
-          <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">LINKED_INFRASTRUCTURE</span>
+          <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">LINKED_INFRASTRUCTURE</span>
           
           {activeCase.infra && activeCase.infra.length > 0 ? (
             <div className="grid grid-cols-1 gap-1.5">
@@ -165,7 +165,7 @@ export default function DossierPanel() {
         {/* Audit Log Tracking */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-condensed text-xs font-bold tracking-widest text-text-secondary uppercase">AUDIT_LOG_TRACKING</span>
+            <span className="font-sans text-xs font-bold tracking-widest text-text-secondary uppercase">AUDIT_LOG_TRACKING</span>
             {loadingLogs && <span className="font-mono text-[8px] text-text-secondary uppercase animate-pulse">FETCHING...</span>}
           </div>
           
@@ -211,18 +211,18 @@ export default function DossierPanel() {
           <button
             onClick={() => submitFeedback(activeCase.id, 'confirmed')}
             disabled={activeCase.status === 'confirmed'}
-            className={`py-2 px-3 rounded font-condensed font-bold text-xs tracking-wider border transition-all duration-200 ${
+            className={`py-2 px-3 rounded font-sans font-bold text-xs tracking-wider border transition-all duration-200 ${
               activeCase.status === 'confirmed'
                 ? 'bg-sev-critical/10 text-sev-critical/60 border-sev-critical/30 cursor-not-allowed'
                 : 'bg-sev-critical/20 hover:bg-sev-critical/30 text-sev-critical border-sev-critical/40'
             }`}
           >
-            CONFIRM SCAM
+            CONFIRM THREAT
           </button>
           <button
             onClick={() => submitFeedback(activeCase.id, 'false_positive')}
             disabled={activeCase.status === 'false_positive'}
-            className={`py-2 px-3 rounded font-condensed font-bold text-xs tracking-wider border transition-all duration-200 ${
+            className={`py-2 px-3 rounded font-sans font-bold text-xs tracking-wider border transition-all duration-200 ${
               activeCase.status === 'false_positive'
                 ? 'bg-sev-verified/10 text-sev-verified/60 border-sev-verified/30 cursor-not-allowed'
                 : 'bg-sev-verified/20 hover:bg-sev-verified/30 text-sev-verified border-sev-verified/40'
