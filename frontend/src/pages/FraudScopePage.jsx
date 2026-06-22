@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCase } from '../context/CaseContext';
 import ClassifierInput from '../components/fraudscope/ClassifierInput';
 import ResultCard from '../components/fraudscope/ResultCard';
@@ -6,22 +6,35 @@ import EvidenceTrace from '../components/fraudscope/EvidenceTrace';
 
 export default function FraudScopePage() {
   const { classifyCase, activeCase, cases } = useCase();
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-  const [hasSubmitted, setHasSubmitted] = useState(false);
+  const [loading, setLoading]               = useState(false);
+  const [error, setError]                   = useState(null);
+  // classifiedResult: only populated after an explicit "Run Verdict Analysis" click
+  const [classifiedResult, setClassifiedResult] = useState(null);
+
+  // When activeCase is cleared (e.g. after Confirm Scam), also clear our local result
+  useEffect(() => {
+    if (!activeCase) {
+      setClassifiedResult(null);
+    }
+  }, [activeCase]);
 
   const handleClassify = async (text) => {
     setLoading(true);
     setError(null);
-    setHasSubmitted(true);
+    setClassifiedResult(null); // clear any previous result while loading
     try {
       await classifyCase(text);
+      // After classifyCase, activeCase in context is updated; we mark results as ready
+      setClassifiedResult(true); // sentinel: results are ready to display
     } catch (err) {
       setError(err.message || 'Classification failed. Please try again.');
     } finally {
       setLoading(false);
     }
   };
+
+  // Determine whether to show results: only if an explicit analysis was run this session
+  const showResults = !loading && classifiedResult && activeCase;
 
   return (
     <div className="flex-1 overflow-y-auto p-6 space-y-6 bg-bg-base">
@@ -35,10 +48,10 @@ export default function FraudScopePage() {
             </span>
             <span className="font-mono text-[9px] text-sev-verified">● ONLINE</span>
           </div>
-          <h2 className="font-condensed text-2xl font-bold tracking-wider text-text-primary uppercase">
+          <h2 className="text-2xl font-bold tracking-wide text-text-primary">
             FraudScope
           </h2>
-          <p className="text-xs text-text-secondary mt-1 max-w-lg">
+          <p className="text-xs text-text-secondary mt-1 max-w-lg leading-relaxed">
             Submit a complaint transcript, SMS, WhatsApp message, or screenshot — the system will classify the cybercrime type, extract evidence indicators, and cluster it into known fraud campaigns.
           </p>
         </div>
@@ -48,8 +61,8 @@ export default function FraudScopePage() {
         </div>
       </div>
 
-      {/* How it works — only shown when no submission yet */}
-      {!hasSubmitted && !activeCase && (
+      {/* How it works — only shown when no result has been submitted yet */}
+      {!classifiedResult && !loading && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
           {[
             {
@@ -71,11 +84,11 @@ export default function FraudScopePage() {
               desc: 'Cases sharing infrastructure (UPI handles, phone numbers) are linked into ring campaigns.',
             },
           ].map(item => (
-            <div key={item.step} className="flex gap-3 p-4 bg-bg-surface border border-border-hairline rounded">
+            <div key={item.step} className="flex gap-3 p-4 bg-bg-surface border border-border-hairline rounded-lg">
               <div className="text-2xl flex-shrink-0">{item.icon}</div>
               <div>
                 <div className="font-mono text-[9px] text-text-secondary mb-0.5">STEP {item.step}</div>
-                <div className="font-condensed font-bold text-sm text-text-primary mb-1">{item.title}</div>
+                <div className="font-semibold text-sm text-text-primary mb-1">{item.title}</div>
                 <p className="text-[11px] text-text-secondary leading-snug">{item.desc}</p>
               </div>
             </div>
@@ -97,13 +110,13 @@ export default function FraudScopePage() {
       {/* Loading Skeleton */}
       {loading && (
         <div className="space-y-3 animate-pulse">
-          <div className="h-40 bg-bg-surface border border-border-hairline rounded" />
-          <div className="h-24 bg-bg-surface border border-border-hairline rounded" />
+          <div className="h-40 bg-bg-surface border border-border-hairline rounded-lg" />
+          <div className="h-24 bg-bg-surface border border-border-hairline rounded-lg" />
         </div>
       )}
 
-      {/* Results */}
-      {!loading && activeCase && (
+      {/* Results — only shown after explicit button click */}
+      {showResults && (
         <div className="space-y-4" style={{ animation: 'fadeInUp 0.35s ease both' }}>
           <ResultCard caseData={activeCase} />
           {activeCase.raw_text_deidentified && (
