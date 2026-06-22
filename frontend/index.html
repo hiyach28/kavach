@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>KAVACH — Investigator's Terminal</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              'bg-base': '#14181D',
+              'bg-surface': '#1C2229',
+              'border-hairline': '#2A3038',
+              'text-primary': '#E8EAED',
+              'text-secondary': '#8B939E',
+              'accent-signal': '#E8A33D',
+              'sev-critical': '#E24B4A',
+              'sev-high': '#BA7517',
+              'sev-verified': '#4FA66B',
+              'mod-network': '#3FB6C7',
+              'mod-enforce': '#C99A3B'
+            },
+            fontFamily: {
+              sans: ['Inter', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+              condensed: ['"IBM Plex Sans Condensed"', '"Archivo Narrow"', 'sans-serif'],
+              mono: ['"IBM Plex Mono"', '"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'Menlo', 'Monaco', 'Consolas', 'monospace']
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      /* Smooth transitions and basic global styles override */
+      body {
+        background-color: #14181D;
+        color: #E8EAED;
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body class="bg-bg-base text-text-primary font-sans antialiased selection:bg-accent-signal/25 selection:text-text-primary">
+    <div id="root" class="min-h-screen flex flex-col"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
