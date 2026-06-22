@@ -20,12 +20,3 @@ docker-compose up --build
 
 Environment variables needed (see `.env.example`): `ANTHROPIC_API_KEY`, `DATABASE_URL`, `CORS_ORIGINS`.
 
-## Documentation
-
-- `ARCHITECTURE.md`
-- `AGENTS.md`
-- `DATABASE_SCHEMA.md`
-- `FEATURE_REQUIREMENTS.md`
-- `FRONTEND_PLAN.md`
-- `GUIDELINES.md`
-- `PROJECT_STRUCTURE.md`
