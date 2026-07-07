@@ -6,9 +6,9 @@
 ## Phase 0 — Foundations
 | ID | Feature | Status | Tests | Notes |
 |---|---|---|---|---|
-| F00 | Repo structure + tooling + pre-commit | pending | — | |
-| F01 | CI (lint, type, test, bandit, pip-audit, secret scan) | pending | — | |
-| F02 | Full docker-compose (api, worker, pg+pgvector, redis, frontend) | pending | — | |
+| F00 | Repo structure + tooling + pre-commit | implemented | pytest 3/3, ruff clean | fresh history 2026-07-08 |
+| F01 | CI (lint, type, test, bandit, pip-audit, secret scan) | in_progress | — | workflow written; needs first green run on GitHub after push |
+| F02 | Full docker-compose (api, worker, pg+pgvector, redis, frontend) | in_progress | — | written; needs `docker compose up` verification on dev machine |
 | F03 | `make smoke` skeleton + fresh-clone script | pending | — | grows every phase |
 
 ## Phase 1 — Secure Core
