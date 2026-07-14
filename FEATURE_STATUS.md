@@ -1,3 +1,4 @@
+
 # FEATURE_STATUS.md — Living Registry (single source of truth)
 
 > **This file is the ONLY authority on implemented vs pending.** Claude must read it at session start, update it at session end, and never claim a feature exists unless its row says `implemented`. Statuses: `pending` → `in_progress` → `implemented` (code+tests+smoke green) → `demo_ready` (verified in demo flow). `blocked(reason)` allowed.
@@ -25,10 +26,10 @@
 | ID | Feature | Status | Tests | Notes |
 |---|---|---|---|---|
 | F20 | Async Case Intake | implemented | test_cases.py (stubbed) | Basic endpoint and Arq queue integration added |
-| F21 | LLM client (mock/replay/live + fallback chain + budget) | pending | — | key policy doc 06 §3 |
-| F22 | Entity extraction + hashed graph | pending | — | |
-| F23 | Embeddings + pgvector ANN | pending | — | |
-| F24 | Incremental clustering | pending | — | ARI ≥0.95 vs full |
+| F21 | LLM client (mock/replay/live + fallback chain + budget) | implemented | test_llm_client.py (11 tests) | mock/rules/live modes; server-side validation; RulesOnlyClassifier fallback |
+| F22 | Entity extraction + hashed graph | implemented | test_entity_extractor.py (12 tests) | normalise→SHA-256→upsert; report_count atomic increment |
+| F23 | Embeddings + pgvector ANN | implemented | test_embeddings_and_clustering.py | mock=deterministic hash; top_k_similar via pgvector <=> |
+| F24 | Incremental clustering | implemented | test_embeddings_and_clustering.py (10 tests) | Louvain; stable-ID reconcile; 2k-node cap; deferred path |
 | F25 | Takedown brief engine | pending | — | |
 | F26 | Batch import + dataset fetch/prep scripts | pending | — | doc 05 §1 |
 | F27 | Synthetic seed generator (demo/test/load profiles) | pending | — | ground-truth manifest |
