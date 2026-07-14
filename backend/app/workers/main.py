@@ -4,7 +4,7 @@ from arq.connections import RedisSettings
 from app.config import settings
 
 
-async def ping(ctx: dict) -> str:  # smoke-test job
+async def ping(ctx: dict[str, object]) -> str:  # smoke-test job
     return "pong"
 
 

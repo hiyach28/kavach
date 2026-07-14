@@ -39,7 +39,7 @@ async def health_deep() -> dict[str, str]:
     except Exception as exc:  # noqa: BLE001 — health endpoint reports, never raises
         logger.warning("health: postgres check failed: %s", exc)
     try:
-        r = aioredis.from_url(settings.REDIS_URL)
+        r = aioredis.from_url(settings.REDIS_URL)  # type: ignore[no-untyped-call]
         await r.ping()
         await r.aclose()
         result["redis"] = "ok"

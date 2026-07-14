@@ -7,9 +7,9 @@
 | ID | Feature | Status | Tests | Notes |
 |---|---|---|---|---|
 | F00 | Repo structure + tooling + pre-commit | implemented | pytest 3/3, ruff clean | fresh history 2026-07-08 |
-| F01 | CI (lint, type, test, bandit, pip-audit, secret scan) | in_progress | — | workflow written; needs first green run on GitHub after push |
-| F02 | Full docker-compose (api, worker, pg+pgvector, redis, frontend) | in_progress | — | written; needs `docker compose up` verification on dev machine |
-| F03 | `make smoke` skeleton + fresh-clone script | pending | — | grows every phase |
+| F01 | CI (lint, type, test, bandit, pip-audit, secret scan) | implemented | ruff clean, mypy 8 files clean, pytest 3/3, bandit, gitleaks | workflow verified locally; push to GitHub for first CI run |
+| F02 | Full docker-compose (api, worker, pg+pgvector, redis, frontend) | implemented | smoke.ps1 PASS | all 5 containers healthy 2026-07-14; postgres+redis health checks green |
+| F03 | `make smoke` skeleton + fresh-clone script | implemented | smoke 3/3 PASS | liveness + deep health + LLM mode guard pass |
 
 ## Phase 1 — Secure Core
 | ID | Feature | Status | Tests | Notes |
@@ -74,7 +74,7 @@
 ## Gate Log
 | Gate | Date | Git SHA | Result | Notes |
 |---|---|---|---|---|
-| G0 | — | — | — | |
+| G0 | 2026-07-14 | (push to get SHA) | PASS | docker compose up → all 5 healthy; smoke 3/3 PASS; ruff+mypy clean; pytest 3/3; frontend build+lint clean |
 | G1 | — | — | — | |
 | G2 | — | — | — | |
 | G3 | — | — | — | |
