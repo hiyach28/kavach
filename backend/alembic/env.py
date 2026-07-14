@@ -8,23 +8,20 @@ from logging.config import fileConfig
 
 from sqlalchemy.ext.asyncio import create_async_engine
 
+import app.models.audit  # noqa: F401
+import app.models.graph  # noqa: F401
+import app.models.pii  # noqa: F401
+import app.models.user  # noqa: F401
 from alembic import context
+from app.config import settings
+from app.models.base import Base
 
 config = context.config
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
-# Import all models so Alembic autogenerate sees them
-import app.models.audit  # noqa: E402, F401
-import app.models.pii  # noqa: E402, F401
-import app.models.user  # noqa: E402, F401
-import app.models.graph  # noqa: E402, F401
-from app.models.base import Base  # noqa: E402
-
+# Import all models so Alembic autogenerate sees them (imported above)
 target_metadata = Base.metadata
-
-# Pull DATABASE_URL from settings
-from app.config import settings  # noqa: E402
 
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
@@ -40,7 +37,7 @@ def run_migrations_offline() -> None:
         context.run_migrations()
 
 
-def do_run_migrations(connection) -> None:
+def do_run_migrations(connection) -> None:  # type: ignore[no-untyped-def]
     context.configure(connection=connection, target_metadata=target_metadata)
     with context.begin_transaction():
         context.run_migrations()
@@ -61,4 +58,3 @@ if context.is_offline_mode():
     run_migrations_offline()
 else:
     run_migrations_online()
-

@@ -1,7 +1,7 @@
 """v1 API Router."""
 from fastapi import APIRouter
 
-from app.api.v1 import auth, pii, cases
+from app.api.v1 import auth, cases, pii
 
 api_router = APIRouter()
 

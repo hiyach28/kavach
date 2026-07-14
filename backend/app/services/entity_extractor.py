@@ -16,26 +16,38 @@ from dataclasses import dataclass
 from datetime import UTC, datetime
 
 from sqlalchemy import select, update
-from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.models.graph import CaseEntityLink, Entity, EntityType
 
-
 # ── Regex patterns (ordered by priority / specificity) ──────────────────────
 # These mirror the de-identification patterns but are purpose-built for
 # *extraction and normalisation*, not masking.
+_UPI_SUFFIXES_PAT = (
+    r"upi|paytm|gpay|phonepe|ybl|okhdfcbank|okaxis|oksbi|okicici"
+    r"|apl|axl|ibl|hdfcbank|sbi|pnb|boi|cnrb|unionbank|bandhanbank"
+    r"|kotak|indus|airtel|jio"
+)
 _PATTERNS: list[tuple[EntityType, re.Pattern[str]]] = [
     # UPI before EMAIL so "name@upi" doesn't become EMAIL
-    (EntityType.UPI,    re.compile(r"\b[a-zA-Z0-9.\-_]{2,256}@(?:upi|paytm|gpay|phonepe|ybl|okhdfcbank|okaxis|oksbi|okicici|apl|axl|ibl|hdfcbank|sbi|pnb|boi|cnrb|unionbank|bandhanbank|kotak|indus|airtel|jio)\b", re.IGNORECASE)),
-    (EntityType.EMAIL,  re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", re.IGNORECASE)),
-    (EntityType.AADHAAR,re.compile(r"\b\d{4}[\s\-]?\d{4}[\s\-]?\d{4}\b")),
-    (EntityType.PAN,    re.compile(r"\b[A-Z]{5}[0-9]{4}[A-Z]\b")),
-    (EntityType.IFSC,   re.compile(r"\b[A-Z]{4}0[A-Z0-9]{6}\b")),
-    (EntityType.PHONE,  re.compile(r"(?:\+91[\s\-]?)?[6789]\d{9}\b")),
+    (
+        EntityType.UPI,
+        re.compile(
+            r"\b[a-zA-Z0-9.\-_]{2,256}@(?:" + _UPI_SUFFIXES_PAT + r")\b",
+            re.IGNORECASE,
+        ),
+    ),
+    (
+        EntityType.EMAIL,
+        re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", re.IGNORECASE),
+    ),
+    (EntityType.AADHAAR, re.compile(r"\b\d{4}[\s\-]?\d{4}[\s\-]?\d{4}\b")),
+    (EntityType.PAN,     re.compile(r"\b[A-Z]{5}[0-9]{4}[A-Z]\b")),
+    (EntityType.IFSC,    re.compile(r"\b[A-Z]{4}0[A-Z0-9]{6}\b")),
+    (EntityType.PHONE,   re.compile(r"(?:\+91[\s\-]?)?[6789]\d{9}\b")),
     # URL before HANDLE to avoid partial matches
-    (EntityType.URL,    re.compile(r"https?://[^\s]+")),
-    (EntityType.HANDLE, re.compile(r"@[a-zA-Z0-9_]{3,32}\b")),
+    (EntityType.URL,     re.compile(r"https?://[^\s]+")),
+    (EntityType.HANDLE,  re.compile(r"@[a-zA-Z0-9_]{3,32}\b")),
 ]
 
 # Known UPI suffixes for normalisation

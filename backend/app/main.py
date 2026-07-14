@@ -1,4 +1,5 @@
 import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -8,18 +9,18 @@ from app.api.v1.router import api_router
 from app.config import settings
 from app.core.errors import KavachException, kavach_exception_handler, unhandled_exception_handler
 from app.core.middleware import RequestMiddleware, limiter, rate_limit_exceeded_handler
+from app.core.redis import close_redis_pool, init_redis_pool
 
 logger = logging.getLogger("kavach")
 
-from contextlib import asynccontextmanager
-from app.core.redis import init_redis_pool, close_redis_pool
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # type: ignore[no-untyped-def]
     """Application lifespan events."""
     await init_redis_pool()
     yield
     await close_redis_pool()
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,

@@ -112,18 +112,25 @@ async def top_k_similar(
     Returns list of (case_id, score) sorted by similarity descending.
     """
     vec_literal = "[" + ",".join(str(f) for f in embedding) + "]"
-    exclude_clause = "AND id != :excl" if exclude_case_id else ""
-    sql = text(f"""
-        SELECT id, 1 - (embedding <=> :vec::vector) AS score
-        FROM cases
-        WHERE embedding IS NOT NULL
-        {exclude_clause}
-        ORDER BY embedding <=> :vec::vector
-        LIMIT :k
-    """)
     params: dict[str, Any] = {"vec": vec_literal, "k": k}
+
     if exclude_case_id:
         params["excl"] = str(exclude_case_id)
+        sql = text(
+            "SELECT id, 1 - (embedding <=> :vec::vector) AS score"
+            " FROM cases"
+            " WHERE embedding IS NOT NULL AND id != :excl"
+            " ORDER BY embedding <=> :vec::vector"
+            " LIMIT :k"
+        )
+    else:
+        sql = text(
+            "SELECT id, 1 - (embedding <=> :vec::vector) AS score"
+            " FROM cases"
+            " WHERE embedding IS NOT NULL"
+            " ORDER BY embedding <=> :vec::vector"
+            " LIMIT :k"
+        )
 
     rows = (await db.execute(sql, params)).fetchall()
     return [(uuid.UUID(str(r[0])), float(r[1])) for r in rows]

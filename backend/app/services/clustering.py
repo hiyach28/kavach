@@ -22,7 +22,6 @@ import uuid
 from collections import defaultdict
 
 import networkx as nx
-
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -78,7 +77,10 @@ def _build_graph(
     case_entity_edges: list[tuple[uuid.UUID, uuid.UUID]],
     semantic_edges: list[tuple[uuid.UUID, uuid.UUID, float]],
 ) -> nx.Graph:
-    """Build case-projection graph: two cases are connected if they share entity or are semantically similar."""
+    """Build case-projection graph.
+
+    Two cases are connected if they share an entity or are semantically similar.
+    """
     G = nx.Graph()
     G.add_nodes_from(str(c) for c in case_ids)
 
@@ -88,7 +90,7 @@ def _build_graph(
         ent_to_cases[ent_id].append(case_id)
 
     # Infrastructure edges
-    for ent_id, cases in ent_to_cases.items():
+    for _, cases in ent_to_cases.items():
         for i, a in enumerate(cases):
             for b in cases[i + 1:]:
                 if str(a) in G and str(b) in G:

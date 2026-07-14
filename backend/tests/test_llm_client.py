@@ -5,12 +5,11 @@ from app.models.graph import FraudType, RiskLevel
 from app.services.llm_client import (
     Verdict,
     VerdictValidationError,
-    classify,
-    validate_verdict,
     _mock_classify,
     _rules_only_classify,
+    classify,
+    validate_verdict,
 )
-
 
 # ── Validation tests ─────────────────────────────────────────────────────────
 

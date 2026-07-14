@@ -12,7 +12,7 @@ import hashlib
 import json
 import logging
 import re
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
@@ -67,12 +67,32 @@ def validate_verdict(verdict: Verdict, masked_text: str) -> None:
 
 # Keywords → fraud type mapping (longest wins)
 _RULES: list[tuple[list[str], FraudType, RiskLevel]] = [
-    (["arrest", "cbi", "narcotics", "customs", "fia", "money launder"], FraudType.digital_arrest, RiskLevel.danger),
-    (["invest", "return", "profit", "trading", "crypto", "roi"], FraudType.investment_fraud, RiskLevel.danger),
-    (["job", "work from home", "earn", "vacancy", "salary"], FraudType.job_fraud, RiskLevel.suspicious),
-    (["refund", "kyc", "bank", "support", "customer care"], FraudType.customer_support, RiskLevel.suspicious),
+    (
+        ["arrest", "cbi", "narcotics", "customs", "fia", "money launder"],
+        FraudType.digital_arrest,
+        RiskLevel.danger,
+    ),
+    (
+        ["invest", "return", "profit", "trading", "crypto", "roi"],
+        FraudType.investment_fraud,
+        RiskLevel.danger,
+    ),
+    (
+        ["job", "work from home", "earn", "vacancy", "salary"],
+        FraudType.job_fraud,
+        RiskLevel.suspicious,
+    ),
+    (
+        ["refund", "kyc", "bank", "support", "customer care"],
+        FraudType.customer_support,
+        RiskLevel.suspicious,
+    ),
     (["nude", "video", "blackmail", "intimate"], FraudType.sextortion, RiskLevel.danger),
-    (["order", "delivery", "product", "shop", "ebay", "amazon"], FraudType.ecommerce, RiskLevel.suspicious),
+    (
+        ["order", "delivery", "product", "shop", "ebay", "amazon"],
+        FraudType.ecommerce,
+        RiskLevel.suspicious,
+    ),
 ]
 
 
@@ -147,7 +167,8 @@ Text:
 
 Respond ONLY with valid JSON matching this schema exactly (no markdown, no explanation):
 {{
-  "fraud_type": "<one of: digital_arrest|job_fraud|investment_fraud|customer_support|sextortion|ecommerce|other>",
+  "fraud_type": "<one of: digital_arrest|job_fraud|investment_fraud|"
+               "customer_support|sextortion|ecommerce|other>",
   "risk": "<one of: danger|suspicious|likely_safe|unknown>",
   "confidence": <float 0.0-1.0>,
   "evidence": ["<verbatim substring from text>", ...]

@@ -1,10 +1,8 @@
 """Unit tests for embeddings (F23) and clustering (F24) — pure unit, no DB."""
-import pytest
-
-from app.services.embeddings import embed, _mock_embed
-from app.services.clustering import _build_graph, _louvain_partition
 import uuid
 
+from app.services.clustering import _build_graph, _louvain_partition
+from app.services.embeddings import _mock_embed, embed
 
 # ── Embedding tests ──────────────────────────────────────────────────────────
 
@@ -22,7 +20,6 @@ def test_mock_embed_is_deterministic() -> None:
 def test_mock_embed_different_texts_differ() -> None:
     v1 = _mock_embed("invest in crypto now 200% returns")
     v2 = _mock_embed("customs officer arrested send money")
-    # Should not be identical
     assert v1 != v2
 
 
@@ -31,9 +28,10 @@ def test_mock_embed_values_in_range() -> None:
     assert all(-1.0 <= f <= 1.0 for f in vec)
 
 
-def test_embed_in_mock_mode(monkeypatch) -> None:
-    monkeypatch.setattr("app.services.embeddings.settings.LLM_MODE", "mock")
-    monkeypatch.setattr("app.services.embeddings.settings.EMBED_MODE", "")
+def test_embed_in_mock_mode(monkeypatch: object) -> None:
+    import app.services.embeddings as emb_mod
+    monkeypatch.setattr(emb_mod.settings, "LLM_MODE", "mock")  # type: ignore[attr-defined]
+    monkeypatch.setattr(emb_mod.settings, "EMBED_MODE", "")    # type: ignore[attr-defined]
     vec = embed("any text")
     assert len(vec) == 768
 
@@ -77,7 +75,6 @@ def test_build_graph_semantic_edge_connects_cases() -> None:
 
 def test_louvain_groups_connected_cases() -> None:
     """Three cases sharing entities should land in the same community."""
-    import networkx as nx
     c1, c2, c3 = uuid.uuid4(), uuid.uuid4(), uuid.uuid4()
     e1 = uuid.uuid4()
     G = _build_graph(
@@ -87,7 +84,6 @@ def test_louvain_groups_connected_cases() -> None:
         semantic_edges=[],
     )
     partition = _louvain_partition(G)
-    # All three should be in the same community
     assert partition[str(c1)] == partition[str(c2)] == partition[str(c3)]
 
 
@@ -102,9 +98,6 @@ def test_louvain_isolates_unconnected_cases() -> None:
         semantic_edges=[],
     )
     partition = _louvain_partition(G)
-    # Cluster A
     assert partition[str(c1)] == partition[str(c2)]
-    # Cluster B
     assert partition[str(c3)] == partition[str(c4)]
-    # Different clusters
     assert partition[str(c1)] != partition[str(c3)]

@@ -20,7 +20,7 @@ from sqlalchemy import update
 from app.config import settings
 from app.core.database import AsyncSessionLocal
 from app.models.graph import Case, CaseStatus, SemanticLink
-from app.services import llm_client, entity_extractor, embeddings, clustering
+from app.services import clustering, embeddings, entity_extractor, llm_client
 
 logger = logging.getLogger("kavach.worker")
 
@@ -152,7 +152,7 @@ async def process_case(
                     )
                     await err_db.commit()
             except Exception:
-                pass  # Don't mask the original exception
+                logger.exception("process_case %s: could not write failed status", case_id)
             raise
 
 
