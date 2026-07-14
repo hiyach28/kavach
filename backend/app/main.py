@@ -2,12 +2,31 @@ import logging
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from slowapi.errors import RateLimitExceeded
 
+from app.api.v1.router import api_router
 from app.config import settings
+from app.core.errors import KavachException, kavach_exception_handler, unhandled_exception_handler
+from app.core.middleware import RequestMiddleware, limiter, rate_limit_exceeded_handler
 
 logger = logging.getLogger("kavach")
 
-app = FastAPI(title="KAVACH API", version="2.0.0")
+app = FastAPI(
+    title=settings.PROJECT_NAME,
+    openapi_url=f"{settings.API_V1_STR}/openapi.json",
+    version="2.0.0",
+)
+
+# ── Phase 1: Middleware & Exception Handlers ────────────────────────────────
+app.state.limiter = limiter
+app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
+app.add_exception_handler(KavachException, kavach_exception_handler)
+app.add_exception_handler(Exception, unhandled_exception_handler)
+
+app.add_middleware(RequestMiddleware)
+
+# ── API Routers ─────────────────────────────────────────────────────────────
+app.include_router(api_router, prefix=settings.API_V1_STR)
 
 app.add_middleware(
     CORSMiddleware,

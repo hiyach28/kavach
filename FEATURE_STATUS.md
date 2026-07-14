@@ -14,12 +14,12 @@
 ## Phase 1 — Secure Core
 | ID | Feature | Status | Tests | Notes |
 |---|---|---|---|---|
-| F10 | Auth & sessions | pending | — | |
-| F11 | RBAC + jurisdiction scoping | pending | — | authz matrix first |
-| F12 | PII vault (AES-GCM envelope) | pending | — | |
-| F13 | De-identification v2 | pending | — | 300-string fixture |
-| F14 | Hash-chained audit log + verify.py | pending | — | |
-| F15 | API hardening (rate/caps/headers/envelope/pagination) | pending | — | |
+| F10 | Auth & sessions | implemented | pytest, smoke | JWT login/refresh |
+| F11 | RBAC + jurisdiction scoping | implemented | pytest, smoke | authz matrix |
+| F12 | PII vault (AES-GCM envelope) | implemented | pytest, smoke | |
+| F13 | De-identification v2 | implemented | pytest, smoke | spaCy + regex |
+| F14 | Hash-chained audit log + verify.py | implemented | pytest, smoke | |
+| F15 | API hardening (rate/caps/headers/envelope/pagination) | implemented | pytest, smoke | |
 
 ## Phase 2 — Intelligence Pipeline
 | ID | Feature | Status | Tests | Notes |
@@ -75,7 +75,7 @@
 | Gate | Date | Git SHA | Result | Notes |
 |---|---|---|---|---|
 | G0 | 2026-07-14 | (push to get SHA) | PASS | docker compose up → all 5 healthy; smoke 3/3 PASS; ruff+mypy clean; pytest 3/3; frontend build+lint clean |
-| G1 | — | — | — | |
+| G1 | 2026-07-14 | (push to get SHA) | PASS | all phase 1 implemented; smoke 6/6 PASS |
 | G2 | — | — | — | |
 | G3 | — | — | — | |
 | G4 | — | — | — | |

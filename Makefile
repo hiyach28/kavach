@@ -1,10 +1,13 @@
-.PHONY: up down test lint smoke seed-demo eval
+.PHONY: up down test lint smoke seed-demo eval migrate
 
 up:
-	docker compose up -d --build
+	docker compose up -d
 
 down:
 	docker compose down
+
+migrate:
+	docker compose run --rm migrator
 
 test:
 	cd backend && python -m pytest

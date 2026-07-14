@@ -8,6 +8,8 @@ class Settings(BaseSettings):
 
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
 
+    PROJECT_NAME: str = "KAVACH v2 API"
+    API_V1_STR: str = "/v1"
     ENV: Literal["dev", "test", "prod"] = "dev"
 
     # LLM policy — mock is the default everywhere (docs/06 §3)

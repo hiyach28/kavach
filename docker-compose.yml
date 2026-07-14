@@ -20,6 +20,16 @@ services:
       interval: 5s
       retries: 10
 
+  migrator:
+    build: ./backend
+    command: alembic upgrade head
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql+psycopg://kavach:kavach@postgres:5432/kavach
+    depends_on:
+      postgres: { condition: service_healthy }
+    restart: "no"
+
   backend:
     build: ./backend
     env_file: .env
@@ -30,6 +40,7 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
+      migrator: { condition: service_completed_successfully }
 
   worker:
     build: ./backend
@@ -41,6 +52,7 @@ services:
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }
+      migrator: { condition: service_completed_successfully }
 
   frontend:
     build: ./frontend
