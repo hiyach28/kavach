@@ -19,11 +19,11 @@ _pwd_context = CryptContext(schemes=["argon2"], deprecated="auto")
 
 
 def hash_password(plain: str) -> str:
-    return _pwd_context.hash(plain)
+    return str(_pwd_context.hash(plain))
 
 
 def verify_password(plain: str, hashed: str) -> bool:
-    return _pwd_context.verify(plain, hashed)
+    return bool(_pwd_context.verify(plain, hashed))
 
 
 # ── SHA-256 canonical hash (used for graph entity keys + PII tokens) ────────
@@ -47,7 +47,7 @@ def create_access_token(sub: str, role: str, district_scope: list[str] | None = 
         "exp": datetime.now(UTC) + _ACCESS_EXPIRE,
         "jti": secrets.token_hex(16),
     }
-    return jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM)
+    return str(jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM))
 
 
 def create_refresh_token(sub: str) -> str:
@@ -57,12 +57,12 @@ def create_refresh_token(sub: str) -> str:
         "exp": datetime.now(UTC) + _REFRESH_EXPIRE,
         "jti": secrets.token_hex(16),
     }
-    return jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM)
+    return str(jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM))
 
 
 def decode_token(token: str) -> dict[str, Any]:
     """Decode and validate a JWT. Raises JWTError on any failure."""
-    return dict(jwt.decode(token, settings.JWT_SECRET, algorithms=[_ALGORITHM]))  # type: ignore[no-any-return]
+    return dict(jwt.decode(token, settings.JWT_SECRET, algorithms=[_ALGORITHM]))
 
 
 def token_jti(token: str) -> str | None:

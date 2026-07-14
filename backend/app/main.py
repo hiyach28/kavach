@@ -19,8 +19,8 @@ app = FastAPI(
 
 # ── Phase 1: Middleware & Exception Handlers ────────────────────────────────
 app.state.limiter = limiter
-app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)
-app.add_exception_handler(KavachException, kavach_exception_handler)
+app.add_exception_handler(RateLimitExceeded, rate_limit_exceeded_handler)  # type: ignore[arg-type]
+app.add_exception_handler(KavachException, kavach_exception_handler)  # type: ignore[arg-type]
 app.add_exception_handler(Exception, unhandled_exception_handler)
 
 app.add_middleware(RequestMiddleware)

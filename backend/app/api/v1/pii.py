@@ -1,5 +1,5 @@
 """PII Vault endpoints (F12)."""
-from typing import Annotated
+from typing import Annotated, Any
 
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel, constr
@@ -24,12 +24,12 @@ async def decrypt_pii(
     req: DecryptRequest,
     user: CurrentUser,
     db: Annotated[AsyncSession, Depends(get_db)],
-) -> dict:
+) -> dict[str, Any]:
     """
     Decrypt a PII token to plaintext.
     Requires 'officer' or 'admin' role. Mandatory justification logged to audit chain.
     """
-    master_key = settings.KAVACH_MASTER_KEY.encode("utf-8")
+    master_key = settings.PII_MASTER_KEY.encode("utf-8")
     
     plaintext = await pii_service.decrypt_token(req.token, db, master_key)
     if not plaintext:

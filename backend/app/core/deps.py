@@ -21,9 +21,10 @@ _bearer = HTTPBearer(auto_error=False)
 # Role hierarchy — higher index = more privilege
 _ROLE_ORDER = ["citizen", "analyst", "officer", "admin"]
 
+from typing import cast
 
-async def _get_redis() -> aioredis.Redis:  # type: ignore[type-arg]
-    return aioredis.from_url(settings.REDIS_URL)  # type: ignore[no-untyped-call]
+async def _get_redis() -> aioredis.Redis:
+    return cast(aioredis.Redis, aioredis.from_url(settings.REDIS_URL))  # type: ignore[no-untyped-call]
 
 
 async def get_current_user(

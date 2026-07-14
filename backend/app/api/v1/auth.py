@@ -1,5 +1,5 @@
 """Auth endpoints (F10)."""
-from typing import Annotated
+from typing import Annotated, Any
 
 import redis.asyncio as aioredis
 from fastapi import APIRouter, Depends, Request
@@ -27,8 +27,8 @@ class RefreshRequest(BaseModel):
 async def login(
     req: LoginRequest,
     db: Annotated[AsyncSession, Depends(get_db)],
-    r: Annotated[aioredis.Redis, Depends(_get_redis)],  # type: ignore[type-arg]
-) -> dict:
+    r: Annotated[aioredis.Redis, Depends(_get_redis)],
+) -> dict[str, Any]:
     """Login with email/password. Returns access and refresh tokens."""
     tokens = await auth_service.login(req.email, req.password, db, r)
     return ok(tokens)
@@ -38,8 +38,8 @@ async def login(
 async def refresh(
     req: RefreshRequest,
     db: Annotated[AsyncSession, Depends(get_db)],
-    r: Annotated[aioredis.Redis, Depends(_get_redis)],  # type: ignore[type-arg]
-) -> dict:
+    r: Annotated[aioredis.Redis, Depends(_get_redis)],
+) -> dict[str, Any]:
     """Refresh access token."""
     tokens = await auth_service.refresh(req.refresh_token, db, r)
     return ok(tokens)
@@ -48,9 +48,9 @@ async def refresh(
 @router.post("/logout")
 async def logout(
     request: Request,
-    r: Annotated[aioredis.Redis, Depends(_get_redis)],  # type: ignore[type-arg]
+    r: Annotated[aioredis.Redis, Depends(_get_redis)],
     user: CurrentUser,
-) -> dict:
+) -> dict[str, Any]:
     """Logout current user by denylisting their token."""
     # We need the raw token to denylist it
     auth_header = request.headers.get("Authorization")

@@ -26,7 +26,7 @@ async def login(
     email: str,
     password: str,
     db: AsyncSession,
-    r: aioredis.Redis,  # type: ignore[type-arg]
+    r: aioredis.Redis,
 ) -> dict[str, str]:
     """Verify credentials, enforce lockout, return tokens."""
     result = await db.execute(select(User).where(User.email == email))
@@ -63,7 +63,7 @@ async def login(
 async def refresh(
     refresh_token: str,
     db: AsyncSession,
-    r: aioredis.Redis,  # type: ignore[type-arg]
+    r: aioredis.Redis,
 ) -> dict[str, str]:
     """Rotate access token if refresh token is valid."""
     try:
@@ -99,7 +99,7 @@ async def refresh(
     }
 
 
-async def logout(token: str, r: aioredis.Redis) -> None:  # type: ignore[type-arg]
+async def logout(token: str, r: aioredis.Redis) -> None:
     """Denylist the token. TTL is remaining lifetime."""
     jti = token_jti(token)
     if not jti:

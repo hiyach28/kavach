@@ -34,7 +34,7 @@ def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded) -> Res
 
 # ── Trace ID + security headers middleware ───────────────────────────────────
 class RequestMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request: Request, call_next: Any) -> Response:  # type: ignore[override]
+    async def dispatch(self, request: Request, call_next: Any) -> Response:
         tid = request.headers.get("X-Request-ID") or str(uuid.uuid4())
         set_trace_id(tid)
 
