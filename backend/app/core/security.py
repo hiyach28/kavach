@@ -47,7 +47,7 @@ def create_access_token(sub: str, role: str, district_scope: list[str] | None = 
         "exp": datetime.now(UTC) + _ACCESS_EXPIRE,
         "jti": secrets.token_hex(16),
     }
-    return str(jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM))
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM)  # type: ignore[no-any-return]
 
 
 def create_refresh_token(sub: str) -> str:
@@ -57,7 +57,7 @@ def create_refresh_token(sub: str) -> str:
         "exp": datetime.now(UTC) + _REFRESH_EXPIRE,
         "jti": secrets.token_hex(16),
     }
-    return str(jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM))
+    return jwt.encode(payload, settings.JWT_SECRET, algorithm=_ALGORITHM)  # type: ignore[no-any-return]
 
 
 def decode_token(token: str) -> dict[str, Any]:

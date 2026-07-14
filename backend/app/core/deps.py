@@ -1,7 +1,7 @@
 """FastAPI dependencies: authentication, RBAC, district scoping (F10, F11)."""
 from __future__ import annotations
 
-from typing import Annotated
+from typing import Annotated, cast
 
 import redis.asyncio as aioredis
 from fastapi import Depends
@@ -21,7 +21,8 @@ _bearer = HTTPBearer(auto_error=False)
 # Role hierarchy — higher index = more privilege
 _ROLE_ORDER = ["citizen", "analyst", "officer", "admin"]
 
-from typing import cast
+
+
 
 async def _get_redis() -> aioredis.Redis:
     return cast(aioredis.Redis, aioredis.from_url(settings.REDIS_URL))  # type: ignore[no-untyped-call]

@@ -28,7 +28,7 @@ class DeidResult(TypedDict):
 # Longest-match-first principle implies we process in a specific order if there's overlap.
 _PATTERNS = {
     # 1. URL (http/https/t.me/wa.me)
-    "URL": re.compile(r"https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+|t\.me/[a-zA-Z0-9_]+|wa\.me/[0-9]+"),
+    "URL": re.compile(r"https?://(?:[-\w./]|(?:%[\da-fA-F]{2}))+|t\.me/[a-zA-Z0-9_]+|wa\.me/[0-9]+"),
     # 2. Email
     "EMAIL": re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"),
     # 3. Aadhaar (12 digits, optional spaces/hyphens)
@@ -38,7 +38,7 @@ _PATTERNS = {
     # 5. UPI ID
     "UPI": re.compile(r"\b[a-zA-Z0-9.\-_]{2,256}@[a-zA-Z]{2,64}\b"),
     # 6. Phone numbers (India focus)
-    "PHONE": re.compile(r"\b(?:\+91[\-\s]?)?[6789]\d{9}\b"),
+    "PHONE": re.compile(r"(?:\+91[\-\s]?)?\b[6789]\d{9}\b"),
     # 7. IFSC
     "IFSC": re.compile(r"\b[A-Z]{4}0[A-Z0-9]{6}\b"),
     # 8. Social Handles (@username)
