@@ -89,3 +89,10 @@ def get_district_filter(user: User) -> list[str] | None:
     if user.role in ("officer", "admin"):
         return None  # unrestricted
     return user.district_scope or []
+
+
+def get_pii_vault_key() -> bytes:
+    """Return the 32-byte master key for PII vault."""
+    key = settings.PII_MASTER_KEY.encode("utf-8")
+    return key.ljust(32, b'\0')[:32]
+

@@ -15,3 +15,6 @@ argon2-cffi~=23.1
 slowapi~=0.1        # rate limiting — Redis-backed, thin FastAPI wrapper (F15)
 spacy~=3.8          # NER for name de-identification en_core_web_sm (F13)
 passlib[argon2]~=1.7  # argon2 convenience wrapper for password hashing (F10)
+pgvector~=0.3.6
+
+pgvector~=0.3.6

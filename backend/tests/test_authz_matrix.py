@@ -28,6 +28,16 @@ MATRIX = {
             "admin": 422,
             "unauthed": 401,
         }
+    },
+    "/v1/cases/": {
+        "method": "POST",
+        "roles": {
+            "citizen": 422, # Validation error on missing body -> auth passed
+            "analyst": 422,
+            "officer": 422,
+            "admin": 422,
+            "unauthed": 401,
+        }
     }
 }
 

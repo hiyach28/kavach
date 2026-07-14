@@ -11,10 +11,21 @@ from app.core.middleware import RequestMiddleware, limiter, rate_limit_exceeded_
 
 logger = logging.getLogger("kavach")
 
+from contextlib import asynccontextmanager
+from app.core.redis import init_redis_pool, close_redis_pool
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    """Application lifespan events."""
+    await init_redis_pool()
+    yield
+    await close_redis_pool()
+
 app = FastAPI(
     title=settings.PROJECT_NAME,
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     version="2.0.0",
+    lifespan=lifespan,
 )
 
 # ── Phase 1: Middleware & Exception Handlers ────────────────────────────────

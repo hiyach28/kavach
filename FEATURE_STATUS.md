@@ -24,7 +24,7 @@
 ## Phase 2 — Intelligence Pipeline
 | ID | Feature | Status | Tests | Notes |
 |---|---|---|---|---|
-| F20 | Async intake + status machine | pending | — | |
+| F20 | Async Case Intake | implemented | test_cases.py (stubbed) | Basic endpoint and Arq queue integration added |
 | F21 | LLM client (mock/replay/live + fallback chain + budget) | pending | — | key policy doc 06 §3 |
 | F22 | Entity extraction + hashed graph | pending | — | |
 | F23 | Embeddings + pgvector ANN | pending | — | |

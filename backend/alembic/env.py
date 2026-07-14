@@ -18,6 +18,7 @@ if config.config_file_name is not None:
 import app.models.audit  # noqa: E402, F401
 import app.models.pii  # noqa: E402, F401
 import app.models.user  # noqa: E402, F401
+import app.models.graph  # noqa: E402, F401
 from app.models.base import Base  # noqa: E402
 
 target_metadata = Base.metadata
