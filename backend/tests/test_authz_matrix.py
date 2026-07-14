@@ -5,7 +5,10 @@ import pytest
 # "public" means no token needed.
 MATRIX = {
     "/v1/auth/login": {"method": "POST", "public": 200},
-    "/v1/auth/refresh": {"method": "POST", "public": 422}, # 422 because body is required, but it's public in terms of Bearer token
+    "/v1/auth/refresh": {
+        "method": "POST",
+        "public": 422,  # 422 because body is required, but it's public in terms of Bearer token
+    },
     "/v1/auth/logout": {
         "method": "POST",
         "roles": {

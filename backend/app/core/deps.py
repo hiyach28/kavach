@@ -36,8 +36,8 @@ async def get_current_user(
     token = creds.credentials
     try:
         claims = decode_token(token)
-    except JWTError:
-        raise AuthError("Invalid or expired token")
+    except JWTError as err:
+        raise AuthError("Invalid or expired token") from err
 
     if claims.get("type") != "access":
         raise AuthError("Expected access token")

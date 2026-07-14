@@ -68,8 +68,8 @@ async def refresh(
     """Rotate access token if refresh token is valid."""
     try:
         claims = decode_token(refresh_token)
-    except Exception:
-        raise AuthError("Invalid or expired refresh token")
+    except Exception as err:
+        raise AuthError("Invalid or expired refresh token") from err
 
     if claims.get("type") != "refresh":
         raise AuthError("Expected refresh token")
@@ -84,8 +84,8 @@ async def refresh(
     
     try:
         user_id = uuid.UUID(user_id_str)
-    except ValueError:
-        raise AuthError("Invalid token subject format")
+    except ValueError as err:
+        raise AuthError("Invalid token subject format") from err
 
     result = await db.execute(select(User).where(User.id == user_id))
     user = result.scalar_one_or_none()

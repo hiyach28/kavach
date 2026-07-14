@@ -32,7 +32,10 @@ async def main() -> None:
     for row in rows:
         # Check link
         if row.prev_hash != expected_prev:
-            print(f"❌ LINK BROKEN at seq {row.seq}: expected prev_hash {expected_prev}, got {row.prev_hash}")
+            print(
+                f"❌ LINK BROKEN at seq {row.seq}: "
+                f"expected prev_hash {expected_prev}, got {row.prev_hash}"
+            )
             sys.exit(1)
 
         # Check payload tamper
@@ -40,7 +43,10 @@ async def main() -> None:
         recomputed_this = sha256_hex(this_hash_input)
         
         if row.this_hash != recomputed_this:
-            print(f"❌ TAMPER DETECTED at seq {row.seq}: expected this_hash {row.this_hash}, recomputed {recomputed_this}")
+            print(
+                f"❌ TAMPER DETECTED at seq {row.seq}: "
+                f"expected this_hash {row.this_hash}, recomputed {recomputed_this}"
+            )
             sys.exit(1)
 
         expected_prev = row.this_hash

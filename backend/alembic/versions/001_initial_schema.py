@@ -83,7 +83,9 @@ def upgrade() -> None:
     op.create_table(
         "pii_vault",
         sa.Column("id", sa.UUID(), server_default=sa.text("gen_random_uuid()"), primary_key=True),
-        sa.Column("case_id", sa.UUID(), sa.ForeignKey("cases.id", ondelete="CASCADE"), nullable=True),
+        sa.Column(
+            "case_id", sa.UUID(), sa.ForeignKey("cases.id", ondelete="CASCADE"), nullable=True
+        ),
         sa.Column("token", sa.String(64), nullable=False),        # SHA-256 hex of original
         sa.Column("ciphertext", sa.LargeBinary(), nullable=False),  # AES-GCM encrypted
         sa.Column("dek_wrapped", sa.LargeBinary(), nullable=False),  # AES-KW wrapped DEK

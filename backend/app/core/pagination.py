@@ -19,7 +19,9 @@ class PaginationParams:
     def __init__(
         self,
         page: int = Query(default=1, ge=1, description="Page number (1-indexed)"),
-        limit: int = Query(default=20, ge=1, le=MAX_PAGE_SIZE, description="Items per page (max 100)"),
+        limit: int = Query(
+            default=20, ge=1, le=MAX_PAGE_SIZE, description="Items per page (max 100)"
+        ),
     ) -> None:
         self.page = page
         self.limit = limit

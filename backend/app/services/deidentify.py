@@ -10,7 +10,9 @@ try:
 except OSError:
     # Fallback if not downloaded (e.g. in tests without the docker image)
     import subprocess
-    subprocess.run(["python", "-m", "spacy", "download", "en_core_web_sm"], check=True)
+    import sys
+    
+    subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"], check=True)
     _nlp = spacy.load("en_core_web_sm")
 
 class DeidResult(TypedDict):
