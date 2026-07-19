@@ -24,8 +24,7 @@ import argparse
 import json
 import logging
 import sys
-from collections import Counter
-from dataclasses import dataclass, field, asdict
+from dataclasses import dataclass, asdict
 from datetime import UTC, datetime
 from pathlib import Path
 from typing import Any
@@ -35,9 +34,7 @@ BACKEND_DIR = Path(__file__).resolve().parent.parent
 if str(BACKEND_DIR) not in sys.path:
     sys.path.insert(0, str(BACKEND_DIR))
 
-from app.models.graph import FraudType, RiskLevel  # noqa: E402
 from app.services.llm_client import classify  # noqa: E402
-from app.services.embeddings import embed as embed_fn  # noqa: E402
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 logger = logging.getLogger("benchmark")
