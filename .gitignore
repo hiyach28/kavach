@@ -19,6 +19,7 @@ dist/
 *.sqlite*
 data/external/*
 !data/external/.gitkeep
+data/benchmark/eval_runs.jsonl
 # os/editor
 .DS_Store
 Thumbs.db

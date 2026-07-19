@@ -30,10 +30,10 @@
 | F22 | Entity extraction + hashed graph | implemented | test_entity_extractor.py (12 tests) | normalise→SHA-256→upsert; report_count atomic increment |
 | F23 | Embeddings + pgvector ANN | implemented | test_embeddings_and_clustering.py | mock=deterministic hash; top_k_similar via pgvector <=> |
 | F24 | Incremental clustering | implemented | test_embeddings_and_clustering.py (10 tests) | Louvain; stable-ID reconcile; 2k-node cap; deferred path |
-| F25 | Takedown brief engine | pending | — | |
-| F26 | Batch import + dataset fetch/prep scripts | pending | — | doc 05 §1 |
-| F27 | Synthetic seed generator (demo/test/load profiles) | pending | — | ground-truth manifest |
-| F28 | Benchmark v1 (200 cases) + `make eval` | pending | — | doc 05 §1.3 |
+| F25 | Takedown brief engine | implemented | test_takedown_brief.py | campaign→case aggregation; risk computation; entity summaries; cached in campaigns.takedown_brief JSONB |
+| F26 | Batch import + dataset fetch/prep scripts | implemented | — | CSV/JSON batch import script; fetch_datasets.sh; admin bulk import API |
+| F27 | Synthetic seed generator (demo/test/load profiles) | implemented | — | 3 profiles (demo=50, test=200, load=5000+); ground-truth manifest; campaign-aware seeding |
+| F28 | Benchmark v1 (200 cases) + `make eval` | implemented | test_benchmark.py | 200 labeled cases across 6 fraud types; precision/recall/f1/fp eval harness; eval_runs.jsonl tracking |
 
 ## Phase 3 — Shield
 | ID | Feature | Status | Tests | Notes |
@@ -77,7 +77,7 @@
 |---|---|---|---|---|
 | G0 | 2026-07-14 | (push to get SHA) | PASS | docker compose up → all 5 healthy; smoke 3/3 PASS; ruff+mypy clean; pytest 3/3; frontend build+lint clean |
 | G1 | 2026-07-14 | (push to get SHA) | PASS | all phase 1 implemented; smoke 6/6 PASS |
-| G2 | — | — | — | |
+| G2 | 2026-07-19 | (commit to get SHA) | PENDING | all Phase 2 features implemented; needs DB seed + full integration test to finalise | |
 | G3 | — | — | — | |
 | G4 | — | — | — | |
 | G5 | — | — | — | |

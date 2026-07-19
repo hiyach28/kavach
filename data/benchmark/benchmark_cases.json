@@ -1,0 +1,1604 @@
+{
+  "cases": [
+    {
+      "id": "BM-0000",
+      "text": "Got a call that my Aadhaar was used to open a fake account with 939 rupees in illegal transactions. The person from 7654314592 asked me to transfer funds to user4507@gpay.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0001",
+      "text": "FIA called from 8899904165 saying a bank account in my name is involved in 317 rupees money laundering. They demanded payment via user1536@gpay.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bhopal",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0002",
+      "text": "A senior police officer called from 8899928893 about a narcotics case. They said I need to pay ₹10963 via pay9655@phonepe for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bangalore",
+      "language": "en"
+    },
+    {
+      "id": "BM-0003",
+      "text": "A senior police officer called from 7651044118 about a narcotics case. They said I need to pay 2917 rupees via user1520@ybl for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "chandigarh",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0004",
+      "text": "A person identifying as a judge called from 7766560217 about a non-bailable warrant for 2501 rupees fraud. They asked to settle via acct2046@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bhubaneswar",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0005",
+      "text": "FIA called from 8799925203 saying a bank account in my name is involved in Rs 174346 money laundering. They demanded payment via acct1140@paytm.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "guwahati",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0006",
+      "text": "A senior police officer called from 8899936434 about a narcotics case. They said I need to pay 1816 rupees via pay5978@gpay for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bhopal",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0007",
+      "text": "Got a call that my Aadhaar was used to open a fake account with ₹30794 in illegal transactions. The person from 8799983227 asked me to transfer funds to user8752@gpay.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "hyderabad",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0008",
+      "text": "A person identifying as a judge called from 7612307331 about a non-bailable warrant for Rs 106162 fraud. They asked to settle via user526@phonepe.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bhubaneswar",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0009",
+      "text": "Got a call that my Aadhaar was used to open a fake account with Rs 38452 in illegal transactions. The person from 9812385909 asked me to transfer funds to pay6483@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "jaipur",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0010",
+      "text": "Someone claiming to be from the Narcotics Control Bureau called from 7766576622. They said I am a suspect in a 1233 rupees drug case and need to pay via pay9561@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0011",
+      "text": "A person identifying as a judge called from 7612314371 about a non-bailable warrant for ₹4663 fraud. They asked to settle via user2622@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0012",
+      "text": "A senior police officer called from 9899972512 about a narcotics case. They said I need to pay Rs 197838 via user1877@upi for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "en"
+    },
+    {
+      "id": "BM-0013",
+      "text": "A senior police officer called from 8765000425 about a narcotics case. They said I need to pay 971 rupees via acct4316@upi for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "guwahati",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0014",
+      "text": "Cyber crime department called from 8799926071. They said my PAN card was used in illegal activities worth 104 rupees and asked me to transfer to user6127@gpay.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0015",
+      "text": "Someone claiming to be from the Narcotics Control Bureau called from 9988747576. They said I am a suspect in a Rs 64143 drug case and need to pay via pay3924@paytm.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "guwahati",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0016",
+      "text": "A person identifying as a judge called from 7651069822 about a non-bailable warrant for 2271 rupees fraud. They asked to settle via user2104@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "en"
+    },
+    {
+      "id": "BM-0017",
+      "text": "Got a call that my Aadhaar was used to open a fake account with ₹44519 in illegal transactions. The person from 7699970686 asked me to transfer funds to acct3296@phonepe.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0018",
+      "text": "FIA called from 9812329451 saying a bank account in my name is involved in 1985 rupees money laundering. They demanded payment via user5540@paytm.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "mumbai",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0019",
+      "text": "FIA called from 7766582719 saying a bank account in my name is involved in 680 rupees money laundering. They demanded payment via user3751@paytm.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "te"
+    },
+    {
+      "id": "BM-0020",
+      "text": "FIA called from 9812370678 saying a bank account in my name is involved in ₹16425 money laundering. They demanded payment via user9356@upi.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0021",
+      "text": "A person from customs called at 7654356498 saying my Aadhaar was used for money laundering of 543 rupees. They threatened arrest unless I paid via pay6940@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "mumbai",
+      "language": "te"
+    },
+    {
+      "id": "BM-0022",
+      "text": "Customs department called about a parcel with illegal items in my name. The caller from 7766544473 demanded Rs 50862 sent via user4074@gpay to avoid arrest.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bangalore",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0023",
+      "text": "A person from customs called at 8765032742 saying my Aadhaar was used for money laundering of Rs 26666. They threatened arrest unless I paid via user7261@upi.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bhubaneswar",
+      "language": "en"
+    },
+    {
+      "id": "BM-0024",
+      "text": "I received a call from 9875453269 saying I have a parcel containing drugs at Mumbai airport and CBI is investigating. They demanded ₹4342 via pay7887@gpay for settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0025",
+      "text": "FIA called from 7699959638 saying a bank account in my name is involved in Rs 174505 money laundering. They demanded payment via pay6931@upi.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "en"
+    },
+    {
+      "id": "BM-0026",
+      "text": "A person identifying as a judge called from 9876575914 about a non-bailable warrant for Rs 197077 fraud. They asked to settle via acct8884@paytm.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0027",
+      "text": "A person from customs called at 7699969615 saying my Aadhaar was used for money laundering of 661 rupees. They threatened arrest unless I paid via user932@upi.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "en"
+    },
+    {
+      "id": "BM-0028",
+      "text": "A person identifying as a judge called from 8899915713 about a non-bailable warrant for ₹3104 fraud. They asked to settle via acct4034@upi.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "lucknow",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0029",
+      "text": "A senior police officer called from 8765434179 about a narcotics case. They said I need to pay 1172 rupees via user5148@gpay for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0030",
+      "text": "Got a call that my Aadhaar was used to open a fake account with Rs 163833 in illegal transactions. The person from 7699998548 asked me to transfer funds to user153@ybl.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "hyderabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0031",
+      "text": "Got a call that my Aadhaar was used to open a fake account with ₹19176 in illegal transactions. The person from 9899917361 asked me to transfer funds to pay1128@gpay.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "bhopal",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0032",
+      "text": "A senior police officer called from 8799985717 about a narcotics case. They said I need to pay Rs 79480 via acct129@upi for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0033",
+      "text": "A senior police officer called from 7766572512 about a narcotics case. They said I need to pay Rs 159552 via user4463@phonepe for out of court settlement.",
+      "expected_fraud_type": "digital_arrest",
+      "expected_risk": "danger",
+      "district": "jaipur",
+      "language": "te"
+    },
+    {
+      "id": "BM-0034",
+      "text": "A recruitment agency called from 9899906658 about a government job. Paid Rs 12557 as application fee via user6940@phonepe. Found out it was fake later.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "bangalore",
+      "language": "te"
+    },
+    {
+      "id": "BM-0035",
+      "text": "Applied for work from home job on Telegram. They asked for 1321 rupees registration fee via pay9190@paytm. Caller number 8712392493. After payment they blocked me.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "guwahati",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0036",
+      "text": "A company offered a data entry job with high salary. They charged Rs 11965 for training materials via user7042@gpay. The caller from 8799972420 is now unreachable.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "hyderabad",
+      "language": "en"
+    },
+    {
+      "id": "BM-0037",
+      "text": "Job consultant from 7654313473 offered a high-paying Dubai job. Paid Rs 163702 for visa processing via pay9174@ybl. Now the number is off.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "en"
+    },
+    {
+      "id": "BM-0038",
+      "text": "Job consultant from 7699954040 offered a high-paying Dubai job. Paid ₹44403 for visa processing via user2939@phonepe. Now the number is off.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0039",
+      "text": "Received an email about a work from home opportunity. Paid Rs 121665 deposit via pay3645@gpay as promised by caller at 8899905075. Never heard back.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "mumbai",
+      "language": "en"
+    },
+    {
+      "id": "BM-0040",
+      "text": "Heard about a work from home typing job. Paid ₹42540 as security deposit via pay1138@phonepe to 8899943025. They kept asking for more money.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0041",
+      "text": "A company offered a data entry job with high salary. They charged ₹7604 for training materials via user9513@phonepe. The caller from 9988734237 is now unreachable.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0042",
+      "text": "Got a call from 8899979457 about a job at a reputed company. They asked Rs 152149 for background verification via acct1895@ybl. The job never materialized.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "mumbai",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0043",
+      "text": "A company offered a data entry job with high salary. They charged 2804 rupees for training materials via acct3229@phonepe. The caller from 7699970575 is now unreachable.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0044",
+      "text": "Job consultant from 7766539363 offered a high-paying Dubai job. Paid 2522 rupees for visa processing via acct5068@ybl. Now the number is off.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "hyderabad",
+      "language": "te"
+    },
+    {
+      "id": "BM-0045",
+      "text": "Applied for work from home job on Telegram. They asked for 3426 rupees registration fee via acct2852@upi. Caller number 7654349695. After payment they blocked me.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "chennai",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0046",
+      "text": "Received an email about a work from home opportunity. Paid 3722 rupees deposit via acct9940@phonepe as promised by caller at 9812356346. Never heard back.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "jaipur",
+      "language": "te"
+    },
+    {
+      "id": "BM-0047",
+      "text": "Received an email about a work from home opportunity. Paid Rs 136122 deposit via user1390@phonepe as promised by caller at 7651096463. Never heard back.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0048",
+      "text": "Got a call from 9812326100 about a job at a reputed company. They asked ₹31638 for background verification via user401@paytm. The job never materialized.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "bhubaneswar",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0049",
+      "text": "Applied for work from home job on Telegram. They asked for 1308 rupees registration fee via acct6292@ybl. Caller number 9812394155. After payment they blocked me.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "bhubaneswar",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0050",
+      "text": "Got a message about a part-time data entry job with salary of Rs 122778. Paid Rs 122778 as registration via user2882@upi. The person from 7651055724 then demanded more money.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "ahmedabad",
+      "language": "en"
+    },
+    {
+      "id": "BM-0051",
+      "text": "Heard about a work from home typing job. Paid 3725 rupees as security deposit via acct8703@upi to 7651060901. They kept asking for more money.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "pune",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0052",
+      "text": "A recruitment agency called from 8765020861 about a government job. Paid 2125 rupees as application fee via acct7778@ybl. Found out it was fake later.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0053",
+      "text": "A recruitment agency called from 8765082149 about a government job. Paid Rs 21311 as application fee via user4500@ybl. Found out it was fake later.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0054",
+      "text": "Received an email about a work from home opportunity. Paid 1351 rupees deposit via user2268@gpay as promised by caller at 7699970798. Never heard back.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "delhi",
+      "language": "te"
+    },
+    {
+      "id": "BM-0055",
+      "text": "A company promised a high paying job after a training program. Paid ₹14055 for the training via acct7634@ybl. The caller from 8899943369 disappeared.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0056",
+      "text": "Heard about a work from home typing job. Paid ₹20069 as security deposit via pay7815@paytm to 7612375456. They kept asking for more money.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0057",
+      "text": "Got a call from 7651079069 about a job at a reputed company. They asked Rs 72548 for background verification via user8000@gpay. The job never materialized.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "te"
+    },
+    {
+      "id": "BM-0058",
+      "text": "A company promised a high paying job after a training program. Paid 3327 rupees for the training via pay2092@upi. The caller from 7766521632 disappeared.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0059",
+      "text": "A company offered a data entry job with high salary. They charged ₹3795 for training materials via pay2224@ybl. The caller from 9988784246 is now unreachable.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "hyderabad",
+      "language": "te"
+    },
+    {
+      "id": "BM-0060",
+      "text": "Heard about a work from home typing job. Paid Rs 67131 as security deposit via pay4559@ybl to 8765444236. They kept asking for more money.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "mumbai",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0061",
+      "text": "Job consultant from 9812385215 offered a high-paying Dubai job. Paid 266 rupees for visa processing via user660@paytm. Now the number is off.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "hyderabad",
+      "language": "en"
+    },
+    {
+      "id": "BM-0062",
+      "text": "Job consultant from 8765087747 offered a high-paying Dubai job. Paid ₹46340 for visa processing via user9241@gpay. Now the number is off.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "lucknow",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0063",
+      "text": "A company promised a high paying job after a training program. Paid ₹38424 for the training via user2684@phonepe. The caller from 7766594156 disappeared.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "te"
+    },
+    {
+      "id": "BM-0064",
+      "text": "A recruitment agency called from 8899993718 about a government job. Paid Rs 182040 as application fee via user1246@upi. Found out it was fake later.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "guwahati",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0065",
+      "text": "Heard about a work from home typing job. Paid Rs 140655 as security deposit via acct673@phonepe to 7651015866. They kept asking for more money.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0066",
+      "text": "Job consultant from 9876555057 offered a high-paying Dubai job. Paid 3866 rupees for visa processing via pay1730@ybl. Now the number is off.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "pune",
+      "language": "en"
+    },
+    {
+      "id": "BM-0067",
+      "text": "A company promised a high paying job after a training program. Paid ₹32186 for the training via acct4426@upi. The caller from 7766568386 disappeared.",
+      "expected_fraud_type": "job_fraud",
+      "expected_risk": "suspicious",
+      "district": "chennai",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0068",
+      "text": "Someone called from 7612332177 about an IPO investment opportunity. I transferred 3906 rupees via user4570@ybl. It was a complete scam.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "te"
+    },
+    {
+      "id": "BM-0069",
+      "text": "A crypto investment group convinced me to invest ₹14401 via pay5326@gpay. The admin from 8765403761 showed fake returns then disappeared.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0070",
+      "text": "Got a call from 7766536211 about a real estate investment with guaranteed returns. Paid 2077 rupees via acct167@upi. Now I cannot contact them.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0071",
+      "text": "An investment scheme promised monthly income of ₹1630. I paid the principal via acct7801@ybl to the caller from 7651031499. They stopped answering.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "en"
+    },
+    {
+      "id": "BM-0072",
+      "text": "An online trading academy charged ₹35294 for courses via acct6047@ybl. The mentor from 9899987026 gave wrong advice and I lost my investment.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "kolkata",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0073",
+      "text": "A trading mentor on Telegram from 7766559473 convinced me to invest ₹8407 in crypto via pay5024@phonepe. The platform stopped working.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "bhopal",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0074",
+      "text": "Someone called from 7651090461 about an IPO investment opportunity. I transferred 2365 rupees via user3139@gpay. It was a complete scam.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chandigarh",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0075",
+      "text": "A WhatsApp group promised 200% returns in 3 days. I invested ₹24150 via user3181@phonepe as guided by the admin from 8799937093. They blocked me after.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "bhopal",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0076",
+      "text": "A forex trading platform was promoted by 9875435954. I deposited 1134 rupees via user894@upi. When I tried to withdraw, they asked for more money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0077",
+      "text": "A forex trading platform was promoted by 8799937268. I deposited ₹12582 via pay7844@ybl. When I tried to withdraw, they asked for more money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0078",
+      "text": "A trading mentor on Telegram from 8899964454 convinced me to invest ₹10277 in crypto via user9454@paytm. The platform stopped working.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "hyderabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0079",
+      "text": "A forex trading platform was promoted by 8712354548. I deposited ₹34747 via acct9767@upi. When I tried to withdraw, they asked for more money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0080",
+      "text": "An investment scheme promised monthly income of 1802 rupees. I paid the principal via acct987@upi to the caller from 8899940026. They stopped answering.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0081",
+      "text": "Someone called from 9875431439 about an IPO investment opportunity. I transferred ₹675 via user9044@paytm. It was a complete scam.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0082",
+      "text": "Someone called from 9876530340 about an IPO investment opportunity. I transferred ₹45548 via pay4633@ybl. It was a complete scam.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "en"
+    },
+    {
+      "id": "BM-0083",
+      "text": "Someone from 8899915043 offered exclusive stock tips for a Rs 70633 membership. I paid via acct3684@gpay. The tips were fake and I lost money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chandigarh",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0084",
+      "text": "Got a call from 8799998167 about a real estate investment with guaranteed returns. Paid 2591 rupees via acct4729@ybl. Now I cannot contact them.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0085",
+      "text": "A government approved investment plan was offered by 8712364722. I invested 2740 rupees via pay1318@upi. Got one month interest then they vanished.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "mumbai",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0086",
+      "text": "Someone from 9812388381 offered exclusive stock tips for a Rs 177234 membership. I paid via acct9620@paytm. The tips were fake and I lost money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0087",
+      "text": "A forex trading platform was promoted by 7654357963. I deposited Rs 115264 via pay2974@upi. When I tried to withdraw, they asked for more money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "kolkata",
+      "language": "te"
+    },
+    {
+      "id": "BM-0088",
+      "text": "Got a call from 8765442081 about a real estate investment with guaranteed returns. Paid ₹27477 via acct1714@gpay. Now I cannot contact them.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "guwahati",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0089",
+      "text": "A WhatsApp group promised 200% returns in 3 days. I invested 3411 rupees via user5154@phonepe as guided by the admin from 9876559614. They blocked me after.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0090",
+      "text": "A forex trading platform was promoted by 8765054165. I deposited 4183 rupees via user3074@upi. When I tried to withdraw, they asked for more money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "chandigarh",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0091",
+      "text": "A WhatsApp group promised 200% returns in 3 days. I invested Rs 115849 via acct2147@phonepe as guided by the admin from 9812335003. They blocked me after.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0092",
+      "text": "A trading mentor on Telegram from 7651031365 convinced me to invest ₹1396 in crypto via acct2595@phonepe. The platform stopped working.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "hyderabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0093",
+      "text": "A government approved investment plan was offered by 8765015396. I invested 4268 rupees via acct2523@ybl. Got one month interest then they vanished.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "te"
+    },
+    {
+      "id": "BM-0094",
+      "text": "Someone from 8765031946 offered exclusive stock tips for a 4263 rupees membership. I paid via pay9032@gpay. The tips were fake and I lost money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "guwahati",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0095",
+      "text": "Someone called from 9899954387 about an IPO investment opportunity. I transferred 2545 rupees via pay8319@phonepe. It was a complete scam.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "te"
+    },
+    {
+      "id": "BM-0096",
+      "text": "Got a call from 7612319476 about a real estate investment with guaranteed returns. Paid 4621 rupees via pay8825@ybl. Now I cannot contact them.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0097",
+      "text": "A crypto investment group convinced me to invest Rs 101393 via acct3913@upi. The admin from 7612324727 showed fake returns then disappeared.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "bhopal",
+      "language": "te"
+    },
+    {
+      "id": "BM-0098",
+      "text": "A crypto investment group convinced me to invest 4214 rupees via pay2493@ybl. The admin from 7766549968 showed fake returns then disappeared.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "guwahati",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0099",
+      "text": "Someone from 7612357711 offered exclusive stock tips for a ₹47846 membership. I paid via user8618@ybl. The tips were fake and I lost money.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "te"
+    },
+    {
+      "id": "BM-0100",
+      "text": "A crypto investment group convinced me to invest ₹44694 via pay6513@paytm. The admin from 7651034737 showed fake returns then disappeared.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "te"
+    },
+    {
+      "id": "BM-0101",
+      "text": "A trading mentor on Telegram from 7612370912 convinced me to invest Rs 166455 in crypto via user1122@gpay. The platform stopped working.",
+      "expected_fraud_type": "investment_fraud",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0102",
+      "text": "Amazon customer support called from 7651083066 about KYC update. They asked me to pay Rs 44611 via acct1647@ybl as verification fee.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0103",
+      "text": "Electricity department called from 9899946984 about failed bill payment of 3475 rupees. Directed me to pay via link to pay7057@gpay. It was fake.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "bangalore",
+      "language": "en"
+    },
+    {
+      "id": "BM-0104",
+      "text": "IRCTC customer support called from 9988779887 about failed ticket booking. They asked me to pay ₹9879 again via pay3946@ybl promising refund.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "ahmedabad",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0105",
+      "text": "A food delivery platform called from 7654301231 about a refund. They asked me to pay ₹5340 via pay4713@upi as verification for the refund.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chennai",
+      "language": "te"
+    },
+    {
+      "id": "BM-0106",
+      "text": "Water department called from 7766532780 about pending bill of Rs 101845. I was asked to pay via pay4950@gpay to avoid disconnection.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "lucknow",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0107",
+      "text": "A food delivery platform called from 8799938780 about a refund. They asked me to pay Rs 173550 via acct4838@paytm as verification for the refund.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "guwahati",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0108",
+      "text": "Telecom regulator called from 7699979482 about KYC non-compliance. They asked me to transfer Rs 61324 to acct8139@phonepe for reverification.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "lucknow",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0109",
+      "text": "A broadband provider called from 7654399035 about a refund of ₹42858. They asked me to pay a ₹42858 processing fee via acct2241@paytm first.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "mumbai",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0110",
+      "text": "Telecom regulator called from 8765495991 about KYC non-compliance. They asked me to transfer Rs 86647 to user1477@phonepe for reverification.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "bangalore",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0111",
+      "text": "A person claiming to be from my insurance company called from 7699947953. They said my policy will lapse unless I pay ₹17340 via acct8222@phonepe.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0112",
+      "text": "Amazon customer support called from 8765009869 about KYC update. They asked me to pay ₹24471 via user3697@ybl as verification fee.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chennai",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0113",
+      "text": "Telecom regulator called from 9988759609 about KYC non-compliance. They asked me to transfer Rs 100883 to pay4296@upi for reverification.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "ahmedabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0114",
+      "text": "IRCTC customer support called from 8799973584 about failed ticket booking. They asked me to pay 3903 rupees again via pay9996@gpay promising refund.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "te"
+    },
+    {
+      "id": "BM-0115",
+      "text": "Credit card company called from 9988718320 about an upgrade. They asked for Rs 130138 as processing fee via user610@phonepe. The upgrade never happened.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "bangalore",
+      "language": "te"
+    },
+    {
+      "id": "BM-0116",
+      "text": "Bank customer service called from 8765048629 saying my account will be frozen. They asked me to send ₹49145 to acct8851@ybl as test transaction.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "guwahati",
+      "language": "te"
+    },
+    {
+      "id": "BM-0117",
+      "text": "A person claiming to be from my insurance company called from 8799953492. They said my policy will lapse unless I pay Rs 57955 via pay537@phonepe.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "delhi",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0118",
+      "text": "Bank customer service called from 8712384518 saying my account will be frozen. They asked me to send ₹12939 to pay993@ybl as test transaction.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "en"
+    },
+    {
+      "id": "BM-0119",
+      "text": "Telecom regulator called from 7654383819 about KYC non-compliance. They asked me to transfer 1131 rupees to acct350@paytm for reverification.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "delhi",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0120",
+      "text": "Electricity department called from 9812376858 about failed bill payment of ₹39558. Directed me to pay via link to user3818@phonepe. It was fake.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "bangalore",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0121",
+      "text": "A person claiming to be from my insurance company called from 9899922871. They said my policy will lapse unless I pay 2049 rupees via user423@gpay.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "mumbai",
+      "language": "en"
+    },
+    {
+      "id": "BM-0122",
+      "text": "A broadband provider called from 9899906868 about a refund of ₹49367. They asked me to pay a ₹49367 processing fee via user6898@upi first.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0123",
+      "text": "Credit card company called from 8712377812 about an upgrade. They asked for 455 rupees as processing fee via user7406@upi. The upgrade never happened.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chennai",
+      "language": "te"
+    },
+    {
+      "id": "BM-0124",
+      "text": "A broadband provider called from 7654304082 about a refund of ₹45464. They asked me to pay a ₹45464 processing fee via user7848@ybl first.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "delhi",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0125",
+      "text": "A person claiming to be from my insurance company called from 8765479730. They said my policy will lapse unless I pay 4895 rupees via user1077@gpay.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "pune",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0126",
+      "text": "Credit card company called from 8712338652 about an upgrade. They asked for 1037 rupees as processing fee via pay8283@upi. The upgrade never happened.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "en"
+    },
+    {
+      "id": "BM-0127",
+      "text": "Bank customer service called from 8899959186 saying my account will be frozen. They asked me to send 3507 rupees to user6780@phonepe as test transaction.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "te"
+    },
+    {
+      "id": "BM-0128",
+      "text": "Bank customer service called from 8765487177 saying my account will be frozen. They asked me to send Rs 181046 to pay6133@gpay as test transaction.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "delhi",
+      "language": "te"
+    },
+    {
+      "id": "BM-0129",
+      "text": "Credit card company called from 9988797594 about an upgrade. They asked for 4904 rupees as processing fee via acct6106@gpay. The upgrade never happened.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0130",
+      "text": "Bank customer service called from 8899946346 saying my account will be frozen. They asked me to send ₹39848 to acct6930@paytm as test transaction.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "lucknow",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0131",
+      "text": "Bank customer service called from 9812320280 saying my account will be frozen. They asked me to send ₹23445 to acct7901@gpay as test transaction.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0132",
+      "text": "A food delivery platform called from 8799929643 about a refund. They asked me to pay Rs 161844 via pay9191@upi as verification for the refund.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "bhubaneswar",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0133",
+      "text": "A food delivery platform called from 9876523647 about a refund. They asked me to pay Rs 93018 via pay5063@phonepe as verification for the refund.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "te"
+    },
+    {
+      "id": "BM-0134",
+      "text": "Water department called from 9988718595 about pending bill of ₹35265. I was asked to pay via acct503@paytm to avoid disconnection.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "ahmedabad",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0135",
+      "text": "Electricity department called from 9875448503 about failed bill payment of Rs 157296. Directed me to pay via link to pay5315@upi. It was fake.",
+      "expected_fraud_type": "customer_support",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0136",
+      "text": "I received a blackmail email and a call from 9876588338. They claim to have compromising photos and want 4078 rupees via user4459@ybl.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0137",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want 2420 rupees via acct1865@phonepe or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0138",
+      "text": "Got a call from 7654340425 saying my phone is hacked and they have video of me. Demanded Rs 158109 via user3613@ybl to delete it.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "hyderabad",
+      "language": "en"
+    },
+    {
+      "id": "BM-0139",
+      "text": "A stranger on Facebook video called and recorded me. Now they demand Rs 3026 via pay5376@paytm from 7651033491 or they will share the video.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0140",
+      "text": "A girl on Instagram video called me and recorded me. She called from 7766530161 demanding ₹26522 via acct9155@phonepe or she will leak the video.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0141",
+      "text": "Someone from a dating app recorded our video call. They are blackmailing me for ₹46997 via acct7034@upi and calling from 7612341033.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0142",
+      "text": "A person on Telegram video called me and recorded it. They called from 8765422527 demanding Rs 24102 via acct7539@phonepe as blackmail.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "lucknow",
+      "language": "te"
+    },
+    {
+      "id": "BM-0143",
+      "text": "A fake profile on a dating site recorded our conversation. They are demanding Rs 59083 via pay5084@phonepe from 8712310308 to keep quiet.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0144",
+      "text": "Someone from a dating app recorded our video call. They are blackmailing me for Rs 191678 via user5725@phonepe and calling from 8712366840.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "bangalore",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0145",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want ₹41653 via acct2505@paytm or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "chandigarh",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0146",
+      "text": "I received a blackmail email and a call from 8765089277. They claim to have compromising photos and want ₹29320 via acct5296@phonepe.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "patna",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0147",
+      "text": "I received a blackmail email and a call from 7651036002. They claim to have compromising photos and want ₹5362 via acct921@phonepe.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "mumbai",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0148",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want ₹33731 via user1480@upi or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "jaipur",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0149",
+      "text": "A girl on Instagram video called me and recorded me. She called from 8765074928 demanding Rs 159598 via acct3085@phonepe or she will leak the video.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0150",
+      "text": "I received a blackmail email and a call from 7651045015. They claim to have compromising photos and want Rs 170378 via acct1382@upi.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0151",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want ₹25889 via user5963@phonepe or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "mumbai",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0152",
+      "text": "Someone from a dating app recorded our video call. They are blackmailing me for ₹17014 via user9142@ybl and calling from 9988743213.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "lucknow",
+      "language": "en"
+    },
+    {
+      "id": "BM-0153",
+      "text": "A fake profile on a dating site recorded our conversation. They are demanding ₹46954 via pay6422@gpay from 7699945851 to keep quiet.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0154",
+      "text": "Someone on Snapchat sent explicit content then recorded my reaction. They are threatening to leak it unless I pay 3568 rupees via acct8625@paytm.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "mumbai",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0155",
+      "text": "Someone from a dating app recorded our video call. They are blackmailing me for Rs 51333 via user5599@ybl and calling from 9899923627.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0156",
+      "text": "A person on Telegram video called me and recorded it. They called from 8712370748 demanding 1173 rupees via acct8627@paytm as blackmail.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "bangalore",
+      "language": "en"
+    },
+    {
+      "id": "BM-0157",
+      "text": "Met someone on a matrimonial site. They recorded the video call and are blackmailing me for 3084 rupees via acct2713@ybl. They call from 9875490812.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0158",
+      "text": "Met someone on a matrimonial site. They recorded the video call and are blackmailing me for ₹16174 via acct7356@gpay. They call from 9899998617.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "kolkata",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0159",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want Rs 139270 via pay6257@upi or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "bangalore",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0160",
+      "text": "Got a call from 9876584040 saying my phone is hacked and they have video of me. Demanded Rs 27893 via pay6082@upi to delete it.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "en"
+    },
+    {
+      "id": "BM-0161",
+      "text": "A girl on Instagram video called me and recorded me. She called from 9899958893 demanding ₹15051 via acct2415@ybl or she will leak the video.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "pune",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0162",
+      "text": "Someone on Snapchat sent explicit content then recorded my reaction. They are threatening to leak it unless I pay Rs 22392 via pay3863@ybl.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "bhubaneswar",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0163",
+      "text": "A stranger on Facebook video called and recorded me. Now they demand ₹3010 via acct5494@gpay from 7612393677 or they will share the video.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "chandigarh",
+      "language": "te"
+    },
+    {
+      "id": "BM-0164",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want 1324 rupees via user1299@paytm or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "jaipur",
+      "language": "te"
+    },
+    {
+      "id": "BM-0165",
+      "text": "Someone I met on a chat app video called without warning and recorded me. They want 3539 rupees via user4935@paytm or they will leak it to my family.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "ahmedabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0166",
+      "text": "A stranger on Facebook video called and recorded me. Now they demand Rs 166663 via acct8783@paytm from 9988765513 or they will share the video.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "chennai",
+      "language": "te"
+    },
+    {
+      "id": "BM-0167",
+      "text": "Someone on Snapchat sent explicit content then recorded my reaction. They are threatening to leak it unless I pay 801 rupees via pay3942@upi.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "delhi",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0168",
+      "text": "A person on Telegram video called me and recorded it. They called from 8712366496 demanding 456 rupees via acct9080@paytm as blackmail.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "kolkata",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0169",
+      "text": "Someone on Snapchat sent explicit content then recorded my reaction. They are threatening to leak it unless I pay 949 rupees via pay1107@phonepe.",
+      "expected_fraud_type": "sextortion",
+      "expected_risk": "danger",
+      "district": "bangalore",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0170",
+      "text": "Bought from an Instagram shop for Rs 183292 via pay2869@ybl. The seller number 8765471567 is now switched off.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "te"
+    },
+    {
+      "id": "BM-0171",
+      "text": "A seller on Instagram claimed to sell electronics. I paid 2640 rupees via user718@gpay. They sent a defective product and blocked me.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "guwahati",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0172",
+      "text": "Bought from an Instagram shop for ₹3632 via user3132@phonepe. The seller number 8765033202 is now switched off.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "chandigarh",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0173",
+      "text": "Got a call from 8899952431 about a free trial offer. I paid 4164 rupees for shipping via acct7205@ybl. Nothing was delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0174",
+      "text": "Won a lucky draw prize of 1578 rupees. They asked me to pay 1578 rupees as processing fee via acct6956@paytm. The caller from 9899910828 vanished after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0175",
+      "text": "Got a call from 9988742981 about a free trial offer. I paid Rs 117894 for shipping via acct4844@phonepe. Nothing was delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "te"
+    },
+    {
+      "id": "BM-0176",
+      "text": "A seller on Instagram claimed to sell electronics. I paid 714 rupees via pay7127@phonepe. They sent a defective product and blocked me.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0177",
+      "text": "Someone from 7651098290 offered a laptop at 60% discount. Paid Rs 38428 as advance via acct2622@paytm. Product never delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "delhi",
+      "language": "en"
+    },
+    {
+      "id": "BM-0178",
+      "text": "Got a call from 7651084562 about a free trial offer. I paid 1356 rupees for shipping via pay5934@ybl. Nothing was delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0179",
+      "text": "Won a lucky draw prize of 2675 rupees. They asked me to pay 2675 rupees as processing fee via acct2256@upi. The caller from 8765010077 vanished after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "hyderabad",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0180",
+      "text": "Won a lucky draw prize of ₹37309. They asked me to pay ₹37309 as processing fee via user8177@upi. The caller from 9876596426 vanished after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "te"
+    },
+    {
+      "id": "BM-0181",
+      "text": "Someone from 9812380199 offered a laptop at 60% discount. Paid ₹9395 as advance via pay8048@gpay. Product never delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhubaneswar",
+      "language": "te"
+    },
+    {
+      "id": "BM-0182",
+      "text": "Someone from 9988789381 offered a laptop at 60% discount. Paid ₹36031 as advance via pay5693@paytm. Product never delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "en"
+    },
+    {
+      "id": "BM-0183",
+      "text": "Ordered a phone from a Facebook ad. Paid ₹9601 via acct3674@paytm. The seller from 7651047381 stopped answering after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0184",
+      "text": "A seller on Instagram claimed to sell electronics. I paid ₹6150 via pay9039@gpay. They sent a defective product and blocked me.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhopal",
+      "language": "te"
+    },
+    {
+      "id": "BM-0185",
+      "text": "Got a call from 8712353843 about a free trial offer. I paid ₹21276 for shipping via pay9420@paytm. Nothing was delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0186",
+      "text": "Bought from an Instagram shop for Rs 34825 via acct9631@gpay. The seller number 8765416821 is now switched off.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "jaipur",
+      "language": "en"
+    },
+    {
+      "id": "BM-0187",
+      "text": "Won a lucky draw prize of Rs 91707. They asked me to pay Rs 91707 as processing fee via user5287@gpay. The caller from 9899921581 vanished after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "hyderabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0188",
+      "text": "Someone from 9899916406 offered a laptop at 60% discount. Paid 4217 rupees as advance via acct4962@upi. Product never delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "lucknow",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0189",
+      "text": "Ordered a phone from a Facebook ad. Paid Rs 148749 via acct9915@phonepe. The seller from 9875422439 stopped answering after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "patna",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0190",
+      "text": "A friend on WhatsApp sent a message about a clearance sale. I ordered and paid ₹42376 via user9374@ybl. The seller 9899985344 cheated me.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "chennai",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0191",
+      "text": "Got a call from 8765032096 about a free trial offer. I paid Rs 119893 for shipping via acct6654@phonepe. Nothing was delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "pune",
+      "language": "te"
+    },
+    {
+      "id": "BM-0192",
+      "text": "Ordered clothes from a Facebook page. Paid 2715 rupees via pay9940@gpay. The page and the number 8765026741 are both gone.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "pune",
+      "language": "en"
+    },
+    {
+      "id": "BM-0193",
+      "text": "Won a lucky draw prize of Rs 84654. They asked me to pay Rs 84654 as processing fee via acct9203@paytm. The caller from 7651048567 vanished after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "ahmedabad",
+      "language": "en"
+    },
+    {
+      "id": "BM-0194",
+      "text": "Ordered clothes from a Facebook page. Paid Rs 162317 via user4755@ybl. The page and the number 9875412689 are both gone.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhubaneswar",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0195",
+      "text": "Got a call from 7766540988 about a free trial offer. I paid ₹31093 for shipping via user2611@ybl. Nothing was delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "mumbai",
+      "language": "hi"
+    },
+    {
+      "id": "BM-0196",
+      "text": "Won a lucky draw prize of Rs 153920. They asked me to pay Rs 153920 as processing fee via pay3945@gpay. The caller from 8899966249 vanished after payment.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "ahmedabad",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0197",
+      "text": "Someone from 7699985755 offered a laptop at 60% discount. Paid ₹1035 as advance via acct7711@phonepe. Product never delivered.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "bhubaneswar",
+      "language": "ta"
+    },
+    {
+      "id": "BM-0198",
+      "text": "A fake OLX buyer sent a payment link. I entered my UPI PIN and lost 4771 rupees. The person called from 7766547943.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "kolkata",
+      "language": "bn"
+    },
+    {
+      "id": "BM-0199",
+      "text": "Bought from an Instagram shop for Rs 145141 via pay8262@ybl. The seller number 9899909637 is now switched off.",
+      "expected_fraud_type": "ecommerce",
+      "expected_risk": "suspicious",
+      "district": "pune",
+      "language": "ta"
+    }
+  ]
+}
