@@ -1,4 +1,5 @@
 """Audit chain service (Phase 1) — F14."""
+
 from __future__ import annotations
 
 import json

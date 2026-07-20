@@ -1,4 +1,5 @@
 """Campaigns API — takedown briefs (F25) and campaign listing."""
+
 from __future__ import annotations
 
 import uuid
@@ -25,7 +26,10 @@ async def list_campaigns(
 ) -> dict[str, Any]:
     """List known campaigns with summary statistics."""
     campaigns = await td.list_campaigns(
-        db, limit=limit, offset=offset, min_cases=min_cases,
+        db,
+        limit=limit,
+        offset=offset,
+        min_cases=min_cases,
     )
     return ok({"campaigns": campaigns, "total": len(campaigns)})
 
@@ -44,11 +48,11 @@ async def get_takedown_brief(
     try:
         cid = uuid.UUID(campaign_id)
     except ValueError:
-        raise NotFoundError(f"Invalid campaign ID: {campaign_id}")
+        raise NotFoundError(f"Invalid campaign ID: {campaign_id}") from None
 
     try:
         brief = await td.compute_takedown_brief(cid, db, force_refresh=force_refresh)
     except ValueError as exc:
-        raise NotFoundError(str(exc))
+        raise NotFoundError(str(exc)) from exc
 
     return ok({"brief": brief})

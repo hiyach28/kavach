@@ -1,4 +1,5 @@
 """Redis and arq configuration for async worker queue."""
+
 from typing import Any
 
 from arq import create_pool

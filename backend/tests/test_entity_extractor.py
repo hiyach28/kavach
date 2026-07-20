@@ -1,4 +1,5 @@
 """Unit tests for Entity Extractor (F22) — pure unit, no DB."""
+
 import pytest
 
 from app.models.graph import EntityType
@@ -9,6 +10,7 @@ from app.services.entity_extractor import (
 )
 
 # ── Normalisation tests ──────────────────────────────────────────────────────
+
 
 def test_normalise_phone_strips_prefix() -> None:
     assert _normalise(EntityType.PHONE, "+91 9876543210") == "9876543210"
@@ -31,6 +33,7 @@ def test_normalise_aadhaar_strips_separators() -> None:
 
 
 # ── Extraction tests ─────────────────────────────────────────────────────────
+
 
 def test_extract_phone_number() -> None:
     entities = extract_entities("call me on 9876543210 now")

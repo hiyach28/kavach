@@ -7,11 +7,11 @@ Tiers (each with its own latency budget):
 
 Cache: verdicts cached per entity-hash with TTL (configurable via env).
 """
+
 from __future__ import annotations
 
 import logging
-import uuid
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 from sqlalchemy import select, text
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -24,25 +24,27 @@ logger = logging.getLogger("kavach.shield")
 _VERDICT_BANDS = ("danger", "suspicious", "likely_safe", "unknown")
 
 # Tier thresholds
-_TIER2_SIM_THRESHOLD = 0.75       # ANN similarity to trigger tier-2 verdict
-_TIER1_MIN_REPORT_COUNT = 3       # report_count threshold for tier-1 danger
-_CACHE_TTL_SECONDS = 300          # 5-minute cache for entity verdicts
+_TIER2_SIM_THRESHOLD = 0.75  # ANN similarity to trigger tier-2 verdict
+_TIER1_MIN_REPORT_COUNT = 3  # report_count threshold for tier-1 danger
+_CACHE_TTL_SECONDS = 300  # 5-minute cache for entity verdicts
 
 
 # ── Result type ─────────────────────────────────────────────────────────────────
 
+
 @dataclass
 class ShieldResult:
-    verdict: str                     # danger | suspicious | likely_safe | unknown
-    tier_resolved: int               # 1 | 2 | 3
-    explanation: str                 # plain-language reason
-    report_count: int = 0            # from entity lookup
+    verdict: str  # danger | suspicious | likely_safe | unknown
+    tier_resolved: int  # 1 | 2 | 3
+    explanation: str  # plain-language reason
+    report_count: int = 0  # from entity lookup
     entity_matched: str | None = None
     fraud_type: str | None = None
     language: str = "en"
 
 
 # ── Tier 1: Entity hash lookup ──────────────────────────────────────────────────
+
 
 async def _tier1_entity_lookup(
     entity_value: str | None,
@@ -58,8 +60,7 @@ async def _tier1_entity_lookup(
         return None
 
     # Normalise and hash the entity the same way as the entity extractor
-    from app.services.entity_extractor import _sha256 as hash_val
-    from app.models.graph import Entity, CaseEntityLink
+    from app.models.graph import CaseEntityLink, Entity
 
     # Try the raw value as a loose match first (it may already be a hash)
     value_hash = entity_value.strip()
@@ -68,19 +69,17 @@ async def _tier1_entity_lookup(
         # It's not a hash — try to hash it like the entity extractor would
         # We'll just SHA-256 it generically and search
         import hashlib
+
         value_hash = hashlib.sha256(value_hash.encode()).hexdigest()
 
     # Look up entity by value_hash
-    result = await db.execute(
-        select(Entity).where(Entity.value_hash == value_hash)
-    )
+    result = await db.execute(select(Entity).where(Entity.value_hash == value_hash))
     entity = result.scalar_one_or_none()
     if entity is None:
         return None
 
     if entity.report_count >= _TIER1_MIN_REPORT_COUNT:
         # Check if this entity is linked to a campaign (makes it more serious)
-        from app.models.graph import Campaign
         link_result = await db.execute(
             select(CaseEntityLink).where(CaseEntityLink.entity_id == entity.id)
         )
@@ -100,8 +99,7 @@ async def _tier1_entity_lookup(
             verdict=verdict,
             tier_resolved=1,
             explanation=(
-                f"This contact has been reported {entity.report_count} time(s) "
-                f"in our system."
+                f"This contact has been reported {entity.report_count} time(s) in our system."
             ),
             report_count=entity.report_count,
             entity_matched=entity.value_hash,
@@ -121,6 +119,7 @@ async def _tier1_entity_lookup(
 
 # ── Tier 2: Script-pattern ANN ──────────────────────────────────────────────────
 
+
 async def _tier2_script_pattern(
     text: str,
     db: AsyncSession,
@@ -133,17 +132,19 @@ async def _tier2_script_pattern(
     vec = embeddings.embed(text)
     vec_literal = "[" + ",".join(str(f) for f in vec) + "]"
 
-    rows = (await db.execute(
-        text(
-            "SELECT label, fraud_type, verdict, language, "
-            " 1 - (embedding <=> :vec::vector) AS score"
-            " FROM scam_scripts"
-            " WHERE embedding IS NOT NULL"
-            " ORDER BY embedding <=> :vec::vector"
-            " LIMIT 5"
-        ),
-        {"vec": vec_literal},
-    )).fetchall()
+    rows = (
+        await db.execute(
+            text(
+                "SELECT label, fraud_type, verdict, language, "
+                " 1 - (embedding <=> :vec::vector) AS score"
+                " FROM scam_scripts"
+                " WHERE embedding IS NOT NULL"
+                " ORDER BY embedding <=> :vec::vector"
+                " LIMIT 5"
+            ),
+            {"vec": vec_literal},
+        )
+    ).fetchall()
 
     if not rows:
         return None
@@ -154,8 +155,7 @@ async def _tier2_script_pattern(
             verdict=str(rows[0][2]),
             tier_resolved=2,
             explanation=(
-                f"This message matches known scam scripts "
-                f"(similarity: {best_score:.0%})."
+                f"This message matches known scam scripts (similarity: {best_score:.0%})."
             ),
             fraud_type=str(rows[0][1]),
             language=str(rows[0][3]) if rows[0][3] else "en",
@@ -166,6 +166,7 @@ async def _tier2_script_pattern(
 
 
 # ── Tier 3: LLM fallback ────────────────────────────────────────────────────────
+
 
 def _tier3_llm_fallback(text: str) -> ShieldResult:
     """
@@ -183,13 +184,17 @@ def _tier3_llm_fallback(text: str) -> ShieldResult:
     if verdict.evidence:
         evidence_text = f" Red flags: {', '.join(verdict.evidence[:3])}."
 
+    degraded_note = ""
+    if verdict.degraded:
+        degraded_note = " (Note: analysis is preliminary — verified by rules-only fallback)"
+
     return ShieldResult(
         verdict=shield_verdict,
         tier_resolved=3,
         explanation=(
             f"Our analysis suggests this is {shield_verdict.replace('_', ' ')} fraud."
             f"{evidence_text}"
-            f"{' (Note: analysis is preliminary — verified by rules-only fallback)' if verdict.degraded else ''}"
+            f"{degraded_note}"
         ),
         fraud_type=verdict.fraud_type.value,
         language="en",
@@ -198,6 +203,7 @@ def _tier3_llm_fallback(text: str) -> ShieldResult:
 
 
 # ── Public interface ────────────────────────────────────────────────────────────
+
 
 async def check(
     text: str,

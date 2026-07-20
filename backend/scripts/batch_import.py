@@ -21,6 +21,7 @@ CSV columns (auto-detected from header):
 JSON format:
     [{"text": "...", "district": "...", "language": "..."}]
 """
+
 from __future__ import annotations
 
 import argparse
@@ -60,7 +61,10 @@ def parse_csv(path: Path) -> list[dict[str, Any]]:
                 normalised[key] = (v or "").strip()
 
             record: dict[str, Any] = {
-                "text": normalised.get("text", normalised.get("complaint", normalised.get("description", ""))),
+                "text": normalised.get(
+                    "text",
+                    normalised.get("complaint", normalised.get("description", "")),
+                ),
                 "district": normalised.get("district", ""),
                 "language": normalised.get("language", "hi"),
             }
@@ -145,7 +149,10 @@ async def import_records(
                     # 2. Vault PII
                     if deid_result["extracted"]:
                         await store_and_tokenize(
-                            deid_result["extracted"], case_id, db, pii_key,
+                            deid_result["extracted"],
+                            case_id,
+                            db,
+                            pii_key,
                         )
 
                     # 3. Insert case record (raw text is NEVER stored — only masked)
@@ -158,12 +165,16 @@ async def import_records(
                     if "fraud_type" in record and record["fraud_type"]:
                         # Allow pre-classified imports to skip LLM step
                         from app.models.graph import FraudType
+
                         try:
                             new_case.fraud_type = FraudType(record["fraud_type"])
                             new_case.status = CaseStatus.extracting
                         except ValueError:
-                            logger.warning("  Unknown fraud_type '%s' for record %d, will auto-classify",
-                                           record["fraud_type"], i + j)
+                            logger.warning(
+                                "  Unknown fraud_type '%s' for record %d, will auto-classify",
+                                record["fraud_type"],
+                                i + j,
+                            )
 
                     db.add(new_case)
 
@@ -182,8 +193,12 @@ async def import_records(
                     errors += 1
 
             await db.flush()
-            logger.info("  Batch %d/%d: %d records processed",
-                        i // batch_size + 1, (total - 1) // batch_size + 1, len(batch))
+            logger.info(
+                "  Batch %d/%d: %d records processed",
+                i // batch_size + 1,
+                (total - 1) // batch_size + 1,
+                len(batch),
+            )
 
         await db.commit()
 
@@ -191,17 +206,28 @@ async def import_records(
         await close_redis_pool()
 
     logger.info("Import complete: %d inserted, %d errors / %d total", inserted, errors, total)
-    return {"total": total, "inserted": inserted, "errors": errors, "skipped": skipped, "dry_run": False}
+    return {
+        "total": total,
+        "inserted": inserted,
+        "errors": errors,
+        "skipped": skipped,
+        "dry_run": False,
+    }
 
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="KAVACH batch case importer")
     parser.add_argument("file", type=str, help="Path to CSV or JSON file")
-    parser.add_argument("--format", choices=["csv", "json", "auto"], default="auto",
-                        help="File format (auto-detects from extension)")
+    parser.add_argument(
+        "--format",
+        choices=["csv", "json", "auto"],
+        default="auto",
+        help="File format (auto-detects from extension)",
+    )
     parser.add_argument("--dry-run", action="store_true", help="Validate without importing")
-    parser.add_argument("--enqueue", action="store_true",
-                        help="Enqueue worker jobs after import (requires Redis)")
+    parser.add_argument(
+        "--enqueue", action="store_true", help="Enqueue worker jobs after import (requires Redis)"
+    )
     parser.add_argument("--batch-size", type=int, default=50, help="DB batch size (default: 50)")
     args = parser.parse_args()
 
@@ -217,7 +243,9 @@ def main() -> None:
         elif path.suffix.lower() == ".json":
             fmt = "json"
         else:
-            logger.error("Could not detect format from extension. Use --format csv or --format json")
+            logger.error(
+                "Could not detect format from extension. Use --format csv or --format json"
+            )
             sys.exit(1)
 
     logger.info("Loading %s file: %s", fmt.upper(), path)
@@ -228,12 +256,14 @@ def main() -> None:
         sys.exit(1)
 
     logger.info("Found %d records to import", len(records))
-    summary = asyncio.run(import_records(
-        records,
-        dry_run=args.dry_run,
-        batch_size=args.batch_size,
-        enqueue=args.enqueue,
-    ))
+    summary = asyncio.run(
+        import_records(
+            records,
+            dry_run=args.dry_run,
+            batch_size=args.batch_size,
+            enqueue=args.enqueue,
+        )
+    )
 
     if summary["errors"]:
         logger.warning("Import completed with %d errors.", summary["errors"])

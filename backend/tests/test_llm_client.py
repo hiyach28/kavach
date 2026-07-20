@@ -1,4 +1,5 @@
 """Unit tests for LLM client (F21) — LLM_MODE=mock only, no network calls."""
+
 import pytest
 
 from app.models.graph import FraudType, RiskLevel
@@ -12,6 +13,7 @@ from app.services.llm_client import (
 )
 
 # ── Validation tests ─────────────────────────────────────────────────────────
+
 
 def test_validate_confidence_out_of_range() -> None:
     v = Verdict(FraudType.other, RiskLevel.unknown, confidence=1.5, evidence=[])
@@ -39,6 +41,7 @@ def test_validate_passes_with_valid_verdict() -> None:
 
 # ── Rules classifier tests ───────────────────────────────────────────────────
 
+
 def test_rules_only_digital_arrest() -> None:
     v = _rules_only_classify("the CBI officer called and said you are under arrest")
     assert v.fraud_type == FraudType.digital_arrest
@@ -64,10 +67,11 @@ def test_rules_only_other() -> None:
 
 # ── Mock classify (mock mode, no network) ────────────────────────────────────
 
+
 def test_mock_classify_returns_verdict() -> None:
     v = _mock_classify("you have been arrested for money laundering please pay")
     assert isinstance(v, Verdict)
-    assert v.degraded is False   # mock pretends to be a real LLM
+    assert v.degraded is False  # mock pretends to be a real LLM
 
 
 def test_classify_in_mock_mode(monkeypatch) -> None:

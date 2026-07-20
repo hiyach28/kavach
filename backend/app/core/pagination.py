@@ -1,4 +1,5 @@
 """Pagination utilities — mandatory on all list endpoints (F15)."""
+
 from __future__ import annotations
 
 from typing import Any, TypeVar

@@ -4,6 +4,7 @@ Verify Audit Chain Script (Phase 1, F14).
 Checks the integrity of the audit_chain table sequentially.
 Exits with 0 if intact, 1 if tampered.
 """
+
 import asyncio
 import sys
 
@@ -18,7 +19,7 @@ from app.models.audit import AuditChain
 async def main() -> None:
     # Use sync-like loop to fetch all rows ordered by seq
     engine = create_async_engine(settings.DATABASE_URL)
-    
+
     async with engine.connect() as conn:
         result = await conn.execute(select(AuditChain).order_by(AuditChain.seq.asc()))
         rows = result.fetchall()
@@ -28,7 +29,7 @@ async def main() -> None:
         sys.exit(0)
 
     expected_prev = "GENESIS"
-    
+
     for row in rows:
         # Check link
         if row.prev_hash != expected_prev:
@@ -41,7 +42,7 @@ async def main() -> None:
         # Check payload tamper
         this_hash_input = f"{row.prev_hash}{row.payload_hash}{row.ts.isoformat()}"
         recomputed_this = sha256_hex(this_hash_input)
-        
+
         if row.this_hash != recomputed_this:
             print(
                 f"❌ TAMPER DETECTED at seq {row.seq}: "

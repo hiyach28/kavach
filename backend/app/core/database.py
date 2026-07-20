@@ -1,4 +1,5 @@
 """SQLAlchemy async session factory and engine management."""
+
 from __future__ import annotations
 
 from collections.abc import AsyncGenerator

@@ -4,8 +4,8 @@ Tables:
   - shield_checks:  telemetry/log for every check (F30, F34)
   - scam_scripts:   known scam-script centroids for ANN pattern matching (F30 tier 2)
 """
+
 import uuid
-from datetime import UTC, datetime
 
 import sqlalchemy as sa
 from pgvector.sqlalchemy import Vector
@@ -21,12 +21,17 @@ class ShieldCheck(Base, TimestampMixin):
     __tablename__ = "shield_checks"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4,
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
     )
     # What was checked — raw text is NOT stored; entity hash(es) only
     entity_hashes: Mapped[list[str] | None] = mapped_column(JSONB, nullable=True)
     # Verdict bands (anti-probing: raw scores never exposed to citizens)
-    verdict: Mapped[str] = mapped_column(sa.String, nullable=False)  # danger|suspicious|l likely_safe|unknown
+    verdict: Mapped[str] = mapped_column(
+        sa.String,
+        nullable=False,
+    )  # danger|suspicious|likely_safe|unknown
     tier_resolved: Mapped[int] = mapped_column(sa.Integer, nullable=False)  # 1|2|3
     latency_ms: Mapped[int] = mapped_column(sa.Integer, nullable=False)
     # Channel (pwa, whatsapp, api)
@@ -49,7 +54,9 @@ class ScamScript(Base, TimestampMixin):
     __tablename__ = "scam_scripts"
 
     id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4,
+        UUID(as_uuid=True),
+        primary_key=True,
+        default=uuid.uuid4,
     )
     label: Mapped[str] = mapped_column(sa.String, nullable=False)
     fraud_type: Mapped[str] = mapped_column(sa.String, nullable=False)

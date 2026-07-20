@@ -1,4 +1,5 @@
 """Audit Chain model (Phase 1)."""
+
 import uuid
 from datetime import UTC, datetime
 
@@ -15,9 +16,7 @@ class AuditChain(Base):
     seq: Mapped[int] = mapped_column(BigInteger, Identity(always=True), primary_key=True)
     event_type: Mapped[str] = mapped_column(String(64), nullable=False)
     actor_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), nullable=True)
-    case_id: Mapped[uuid.UUID | None] = mapped_column(
-        UUID(as_uuid=True), index=True, nullable=True
-    )
+    case_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True), index=True, nullable=True)
     payload_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     prev_hash: Mapped[str] = mapped_column(String(64), nullable=False)
     this_hash: Mapped[str] = mapped_column(String(64), nullable=False)

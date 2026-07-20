@@ -2,20 +2,18 @@
 
 Tests must be pure unit tests with no dependencies (no DB, no network).
 """
-from __future__ import annotations
 
-import pytest
+from __future__ import annotations
 
 from app.services.language import (
     SUPPORTED_LANGUAGES,
-    LangCode,
     VerdictCard,
     detect_language,
     render_verdict,
 )
 
-
 # ── Language detection ──────────────────────────────────────────────────────────
+
 
 class TestDetectLanguage:
     """detect_language() should correctly identify scripts and languages."""
@@ -74,6 +72,7 @@ class TestDetectLanguage:
 
 # ── Verdict template rendering ──────────────────────────────────────────────────
 
+
 class TestRenderVerdict:
     """render_verdict() should produce correctly localised cards."""
 
@@ -115,7 +114,7 @@ class TestRenderVerdict:
     def test_unknown_language_falls_back_to_english(self):
         """Unsupported language should fall back to English."""
         card = render_verdict("danger", "test", 1, "fr")  # type: ignore[arg-type]
-        assert card.language == "en"   # fallback to en
+        assert card.language == "en"  # fallback to en
 
     def test_unknown_verdict_band_falls_back_to_english(self):
         """Unknown verdict band should fall back to English version."""
@@ -148,6 +147,7 @@ class TestRenderVerdict:
 
 
 # ── Language detection edge cases ───────────────────────────────────────────────
+
 
 class TestLanguageEdgeCases:
     def test_null_text(self):

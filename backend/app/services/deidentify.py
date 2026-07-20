@@ -1,4 +1,5 @@
 """De-identification v2 (Regex + spaCy NER) — Phase 1 (F13)."""
+
 import re
 from typing import TypedDict
 
@@ -11,9 +12,10 @@ except OSError:
     # Fallback if not downloaded (e.g. in tests without the docker image)
     import subprocess
     import sys
-    
+
     subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"], check=True)
     _nlp = spacy.load("en_core_web_sm")
+
 
 class DeidResult(TypedDict):
     masked_text: str
@@ -28,7 +30,9 @@ class DeidResult(TypedDict):
 # Longest-match-first principle implies we process in a specific order if there's overlap.
 _PATTERNS = {
     # 1. URL (http/https/t.me/wa.me)
-    "URL": re.compile(r"https?://(?:[-\w./]|(?:%[\da-fA-F]{2}))+|t\.me/[a-zA-Z0-9_]+|wa\.me/[0-9]+"),
+    "URL": re.compile(
+        r"https?://(?:[-\w./]|(?:%[\da-fA-F]{2}))+|t\.me/[a-zA-Z0-9_]+|wa\.me/[0-9]+"
+    ),
     # 2. Email
     "EMAIL": re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+"),
     # 3. Aadhaar (12 digits, optional spaces/hyphens)
@@ -68,7 +72,7 @@ def deidentify(text: str) -> DeidResult:
 
     # 2. Apply spaCy NER for PERSON
     doc = _nlp(masked)
-    
+
     # We must replace from end to start to avoid shifting indices
     # We only care about PERSON entities that aren't already masked (e.g. didn't match a regex)
     # Also ignore generic entities that are just "[EMAIL]" from our regex step
@@ -80,14 +84,14 @@ def deidentify(text: str) -> DeidResult:
 
     # Sort descending by start index
     ents_to_mask.sort(key=lambda e: e.start_char, reverse=True)
-    
+
     for ent in ents_to_mask:
-        masked = masked[:ent.start_char] + "[NAME]" + masked[ent.end_char:]
+        masked = masked[: ent.start_char] + "[NAME]" + masked[ent.end_char :]
 
     # The token_map will be populated by the caller (PII service)
     # We just return the extracted strings
     return {
         "masked_text": masked,
         "token_map": {},  # Placeholder
-        "extracted": list(extracted_set)
+        "extracted": list(extracted_set),
     }

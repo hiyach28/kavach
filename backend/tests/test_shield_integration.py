@@ -11,24 +11,24 @@ These tests verify:
   - Flywheel consented → entity creation
   - Shield check logging to shield_checks table
 """
+
 from __future__ import annotations
 
-import uuid
-
 import pytest
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 from sqlalchemy import select
 
+from app.config import settings
 from app.main import app
 from app.models.graph import Entity, EntityType
 from app.models.shield import ShieldCheck
 from app.services import shield as shield_svc
-from app.config import settings
 
 settings.LLM_MODE = "mock"
 
 
 # ── Fixtures ────────────────────────────────────────────────────────────────────
+
 
 @pytest.fixture
 def client():
@@ -50,6 +50,7 @@ async def seed_known_bad_entity(db_session):
 
 
 # ── Tier 1: Entity lookup ───────────────────────────────────────────────────────
+
 
 class TestTier1EntityLookup:
     async def test_known_bad_entity_returns_danger(self, db_session, seed_known_bad_entity):
@@ -75,6 +76,7 @@ class TestTier1EntityLookup:
 
 
 # ── Tier 2: Script pattern ──────────────────────────────────────────────────────
+
 
 class TestTier2ScriptPattern:
     async def test_no_scripts_returns_none(self, db_session):
@@ -113,6 +115,7 @@ class TestTier2ScriptPattern:
 
 # ── Full cascade ────────────────────────────────────────────────────────────────
 
+
 class TestShieldCheckCascade:
     async def test_tier1_resolves_first(self, db_session, seed_known_bad_entity):
         """Known-bad entity resolves at tier 1."""
@@ -127,6 +130,7 @@ class TestShieldCheckCascade:
 
 
 # ── API endpoint ────────────────────────────────────────────────────────────────
+
 
 class TestShieldAPI:
     async def test_check_authenticated(self, client, auth_headers):
@@ -171,16 +175,24 @@ class TestShieldAPI:
 
 # ── Flywheel ────────────────────────────────────────────────────────────────────
 
+
 class TestShieldFlywheel:
     async def test_consent_creates_entity(self, db_session):
         """Consented check creates graph entity."""
         from app.api.v1.shield import _feed_flywheel
         from app.services.shield import ShieldResult
 
-        result = ShieldResult(verdict="suspicious", tier_resolved=1, explanation="test", report_count=2)
+        result = ShieldResult(
+            verdict="suspicious",
+            tier_resolved=1,
+            explanation="test",
+            report_count=2,
+        )
         await _feed_flywheel(["hash_consent_1"], result, db_session)
 
-        entities = (await db_session.execute(
-            select(Entity).where(Entity.value_hash == "hash_consent_1")
-        )).scalars().all()
+        entities = (
+            (await db_session.execute(select(Entity).where(Entity.value_hash == "hash_consent_1")))
+            .scalars()
+            .all()
+        )
         assert len(entities) == 1

@@ -1,4 +1,5 @@
 """Session guard: tests must NEVER run in live LLM mode (docs/06 §3)."""
+
 import pytest
 
 from app.config import settings

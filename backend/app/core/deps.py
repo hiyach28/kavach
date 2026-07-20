@@ -1,4 +1,5 @@
 """FastAPI dependencies: authentication, RBAC, district scoping (F10, F11)."""
+
 from __future__ import annotations
 
 from typing import Annotated, cast
@@ -20,8 +21,6 @@ _bearer = HTTPBearer(auto_error=False)
 
 # Role hierarchy — higher index = more privilege
 _ROLE_ORDER = ["citizen", "analyst", "officer", "admin"]
-
-
 
 
 async def _get_redis() -> aioredis.Redis:
@@ -66,10 +65,12 @@ CurrentUser = Annotated[User, Depends(get_current_user)]
 
 def require_role(*roles: str):  # type: ignore[no-untyped-def]
     """Dependency factory: restrict endpoint to specific roles."""
+
     async def _check(user: CurrentUser) -> User:
         if user.role not in roles:
             raise ForbiddenError(f"Requires role: {' or '.join(roles)}")
         return user
+
     return _check
 
 
@@ -81,6 +82,7 @@ def require_min_role(min_role: str):  # type: ignore[no-untyped-def]
         if _ROLE_ORDER.index(user.role) < min_idx:
             raise ForbiddenError(f"Requires at least {min_role} role")
         return user
+
     return _check
 
 
@@ -94,5 +96,4 @@ def get_district_filter(user: User) -> list[str] | None:
 def get_pii_vault_key() -> bytes:
     """Return the 32-byte master key for PII vault."""
     key = settings.PII_MASTER_KEY.encode("utf-8")
-    return key.ljust(32, b'\0')[:32]
-
+    return key.ljust(32, b"\0")[:32]

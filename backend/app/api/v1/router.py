@@ -1,4 +1,5 @@
 """v1 API Router."""
+
 from fastapi import APIRouter
 
 from app.api.v1 import admin, auth, campaigns, cases, pii, shield

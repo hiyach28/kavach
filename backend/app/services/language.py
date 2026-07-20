@@ -6,6 +6,7 @@ Never uses free LLM generation for citizen-facing text (consistency + safety).
 
 Launch languages: hi (Hindi), en (English), ta (Tamil), te (Telugu), bn (Bengali).
 """
+
 from __future__ import annotations
 
 import re
@@ -19,20 +20,57 @@ SUPPORTED_LANGUAGES: list[LangCode] = ["hi", "en", "ta", "te", "bn"]
 # ── Language detection via Unicode ranges ──────────────────────────────────────
 # Priority-ordered: more specific scripts checked first.
 _LANG_SIGNATURES: list[tuple[LangCode, list[tuple[int, int]]]] = [
-    ("hi", [(0x0900, 0x097F)]),   # Devanagari
-    ("bn", [(0x0980, 0x09FF)]),   # Bengali
-    ("ta", [(0x0B80, 0x0BFF)]),   # Tamil
-    ("te", [(0x0C00, 0x0C7F)]),   # Telugu
+    ("hi", [(0x0900, 0x097F)]),  # Devanagari
+    ("bn", [(0x0980, 0x09FF)]),  # Bengali
+    ("ta", [(0x0B80, 0x0BFF)]),  # Tamil
+    ("te", [(0x0C00, 0x0C7F)]),  # Telugu
 ]
 
 # Latin-based → check keywords to distinguish Hindi-Urdu romanized vs English
 _HINDI_KEYWORDS = {
-    "kya", "hai", "aap", "apka", "apko", "karo", "kare", "nahi", "raha",
-    "rahi", "sir", "ji", "bahut", "mera", "meri", "mujhe", "tum", "tumhara",
-    "yeh", "vo", "aur", "kaise", "kahan", "kab", "kitna", "thoda",
-    "police", "cbi", "arrest", "drugs", "narcotics", "customs",
-    "number", "account", "upi", "transaction", "otp", "bank",
-    "panic", "mummy", "papa", "beta", "beti",
+    "kya",
+    "hai",
+    "aap",
+    "apka",
+    "apko",
+    "karo",
+    "kare",
+    "nahi",
+    "raha",
+    "rahi",
+    "sir",
+    "ji",
+    "bahut",
+    "mera",
+    "meri",
+    "mujhe",
+    "tum",
+    "tumhara",
+    "yeh",
+    "vo",
+    "aur",
+    "kaise",
+    "kahan",
+    "kab",
+    "kitna",
+    "thoda",
+    "police",
+    "cbi",
+    "arrest",
+    "drugs",
+    "narcotics",
+    "customs",
+    "number",
+    "account",
+    "upi",
+    "transaction",
+    "otp",
+    "bank",
+    "panic",
+    "mummy",
+    "papa",
+    "beta",
+    "beti",
 }
 
 
@@ -174,7 +212,9 @@ _VERDICT_TEMPLATES: dict[LangCode, dict[str, dict[str, str]]] = {
                 "**{report_count} உறுதிப்படுத்தப்பட்ட மோசடி புகார்(களுடன்)** இணைக்கப்பட்டுள்ளது. "
                 "பணம் அனுப்ப வேண்டாம், OTP-களைப் பகிர வேண்டாம், அல்லது எந்த அறிவுறுத்தல்களையும் பின்பற்ற வேண்டாம்."
             ),
-            "cta": "இந்த தொடர்பை உடனடியாகத் தடுக்கவும் மற்றும் cybercrime.gov.in அல்லது 1930 இல் புகாரளிக்கவும்.",
+            "cta": (
+                "இந்த தொடர்பை உடனடியாகத் தடுக்கவும் மற்றும் cybercrime.gov.in அல்லது 1930 இல் புகாரளிக்கவும்."
+            ),
         },
         "suspicious": {
             "title": "⚠️ இது சந்தேகத்திற்குரியதாகத் தெரிகிறது",
@@ -198,7 +238,8 @@ _VERDICT_TEMPLATES: dict[LangCode, dict[str, dict[str, str]]] = {
             "title": "ℹ️ எந்த பதிவும் இல்லை",
             "body": (
                 "எங்கள் அமைப்பில் **{entity}** ஐ மோசடியுடன் இணைக்கும் எந்த பதிவும் எங்களிடம் இல்லை. "
-                "இது பாதுகாப்பானது என்று இது உத்தரவாதம் அளிக்கவில்லை — மோசடி செய்பவர்கள் தொடர்ந்து தந்திரங்களை மாற்றுகிறார்கள்."
+                "இது பாதுகாப்பானது என்று இது உத்தரவாதம் அளிக்கவில்லை"
+                " — மோசடி செய்பவர்கள் தொடர்ந்து தந்திரங்களை மாற்றுகிறார்கள்."
             ),
             "cta": "விழிப்புடன் இருங்கள். சந்தேகத்திற்குரிய தொடர்புகளை 1930 இல் புகாரளிக்கவும்.",
         },
@@ -283,6 +324,7 @@ _VERDICT_TEMPLATES: dict[LangCode, dict[str, dict[str, str]]] = {
 @dataclass(frozen=True)
 class VerdictCard:
     """A rendered verdict card in the detected language."""
+
     language: LangCode
     title: str
     body: str
@@ -290,8 +332,8 @@ class VerdictCard:
 
 
 def render_verdict(
-    verdict_band: str,          # danger | suspicious | likely_safe | unknown
-    entity: str,                # the checked phone/UPI/URL
+    verdict_band: str,  # danger | suspicious | likely_safe | unknown
+    entity: str,  # the checked phone/UPI/URL
     report_count: int,
     language: LangCode = "en",
 ) -> VerdictCard:
@@ -309,7 +351,8 @@ def render_verdict(
     # Fallback to 'unknown' band if the requested band doesn't exist
     if verdict_band not in lang_templates:
         # First try English, then fall back to the first available band
-        band_templates = _VERDICT_TEMPLATES["en"].get(verdict_band, _VERDICT_TEMPLATES["en"]["unknown"])
+        en_templates = _VERDICT_TEMPLATES["en"]
+        band_templates = en_templates.get(verdict_band, en_templates["unknown"])
     else:
         band_templates = lang_templates[verdict_band]
 

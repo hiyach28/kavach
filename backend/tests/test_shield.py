@@ -5,27 +5,27 @@ These tests do NOT require Postgres. Run with:
 
 Integration tests (requiring Docker compose) are in test_shield_integration.py.
 """
+
 from __future__ import annotations
 
-import uuid
-
 import pytest
-from httpx import AsyncClient, ASGITransport
+from httpx import ASGITransport, AsyncClient
 
+from app.config import settings
 from app.main import app
 from app.services import shield as shield_svc
 from app.services.live_companion import (
     STAGE_KEYWORDS,
     ScamScoreResult,
-    score_transcript,
     StageState,
+    score_transcript,
 )
-from app.config import settings
 
-settings.LLM_MODE = "mock"   # ensure mock mode for tests
+settings.LLM_MODE = "mock"  # ensure mock mode for tests
 
 
 # ── Fixtures ────────────────────────────────────────────────────────────────────
+
 
 @pytest.fixture
 def client():
@@ -35,6 +35,7 @@ def client():
 
 
 # ── Tier 1: Entity lookup (unit tests without DB) ──────────────────────────────
+
 
 class TestTier1EntityLookup:
     """Tests that don't need a real database."""
@@ -51,6 +52,7 @@ class TestTier1EntityLookup:
 
 
 # ── Tier 3: LLM Fallback (pure unit, no DB) ─────────────────────────────────────
+
 
 class TestTier3LLMFallback:
     def test_llm_fallback_returns_verdict(self):
@@ -77,6 +79,7 @@ class TestTier3LLMFallback:
 
 # ── Full cascade edge cases ─────────────────────────────────────────────────────
 
+
 class TestShieldCheckCascade:
     @pytest.mark.asyncio
     async def test_empty_input_returns_unknown(self):
@@ -91,6 +94,7 @@ class TestShieldCheckCascade:
 
 # ── Live Call Companion scoring (F33) — pure unit tests ─────────────────────────
 
+
 class TestLiveCompanionScoring:
     """Offline-testable keyword-pattern stage detection (F33 AC)."""
 
@@ -102,9 +106,7 @@ class TestLiveCompanionScoring:
 
     def test_impersonation_detected(self):
         """Impersonation keywords should trigger caution."""
-        result = score_transcript(
-            "Hello this is DSP inspector calling from CBI headquarters"
-        )
+        result = score_transcript("Hello this is DSP inspector calling from CBI headquarters")
         assert result.current_stage in ("caution", "listening")
 
     def test_threat_keywords_trigger(self):
@@ -116,10 +118,7 @@ class TestLiveCompanionScoring:
 
     def test_payment_escalates_to_danger(self):
         """Payment demand should escalate to danger."""
-        stages = {
-            name: StageState(name=name)
-            for name in STAGE_KEYWORDS
-        }
+        stages = {name: StageState(name=name) for name in STAGE_KEYWORDS}
         stages["impersonation"].score = 0.6
         stages["impersonation"].triggered = True
         stages["threat"].score = 0.5
@@ -141,7 +140,7 @@ class TestLiveCompanionScoring:
 
         stages = None
         final_stage = "listening"
-        for expected_stage, text in transcript_parts:
+        for _expected_stage, text in transcript_parts:
             result = score_transcript(text, stages)
             stages = result.stages
             final_stage = result.current_stage
@@ -150,13 +149,10 @@ class TestLiveCompanionScoring:
 
     def test_stage_state_maintained_across_calls(self):
         """Score state should accumulate across transcript chunks."""
-        stages = {
-            name: StageState(name=name)
-            for name in STAGE_KEYWORDS
-        }
+        stages = {name: StageState(name=name) for name in STAGE_KEYWORDS}
 
-        r1 = score_transcript("hello sir this is DSP police inspector calling", stages)
-        r2 = score_transcript("you have a non bailable warrant arrest case filed", stages)
+        score_transcript("hello sir this is DSP police inspector calling", stages)
+        score_transcript("you have a non bailable warrant arrest case filed", stages)
         r3 = score_transcript("send money through UPI right now immediately", stages)
 
         assert stages["impersonation"].keyword_hits > 0
@@ -180,7 +176,6 @@ class TestLiveCompanionScoring:
         """Client-side keyword patterns should match."""
         # These patterns are used in the PWA JS fallback
         payment_patterns = ["pay", "send", "money", "upi", "otp", "transfer", "immediately"]
-        authority_patterns = ["police", "cbi", "arrest", "court", "warrant", "case", "fir"]
 
         for pattern in payment_patterns:
             result = score_transcript(f"please {pattern} now")

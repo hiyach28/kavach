@@ -5,6 +5,7 @@ Rate limits (F15):
   - Terminal endpoints: 120 req/min per authenticated user
   - Applied via slowapi decorators on individual routes.
 """
+
 from __future__ import annotations
 
 import uuid
@@ -25,6 +26,7 @@ def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded) -> Res
     from fastapi.responses import JSONResponse
 
     from app.core.errors import err
+
     return JSONResponse(
         status_code=429,
         content=err("RATE_LIMITED", "Too many requests — slow down"),

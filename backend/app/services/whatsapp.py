@@ -1,6 +1,7 @@
 """WhatsApp channel stub — webhook-ready interface (Phase 3).
 
-Per roadmap: "stub behind an interface (webhook-ready); demo via PWA — don't burn days on Meta business verification."
+Per roadmap: "stub behind an interface (webhook-ready);
+demo via PWA — don't burn days on Meta business verification."
 
 In production, a concrete implementation would:
   1. Verify webhook callback from Meta
@@ -11,6 +12,7 @@ In production, a concrete implementation would:
 The stub logs incoming webhook payloads and returns the expected
 handshake response so the integration point is validated.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -24,6 +26,7 @@ logger = logging.getLogger("kavach.whatsapp")
 @dataclass
 class WhatsAppMessage:
     """Normalised incoming WhatsApp message."""
+
     from_number: str
     body: str
     message_id: str

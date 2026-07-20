@@ -1,4 +1,5 @@
 """Authentication service (Phase 1)."""
+
 from __future__ import annotations
 
 import uuid
@@ -81,7 +82,7 @@ async def refresh(
     user_id_str = claims.get("sub")
     if not user_id_str:
         raise AuthError("Invalid token subject")
-    
+
     try:
         user_id = uuid.UUID(user_id_str)
     except ValueError as err:
