@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta name="theme-color" content="#00f5d4">
+  <meta name="description" content="KAVACH Shield — Check if a message, phone number, or UPI ID is linked to fraud.">
+  <link rel="manifest" href="/manifest.json">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <title>KAVACH Shield</title>
+  <style>
+    /* ── Reset & Variables ─────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0a0a1a;
+      --surface: #12122a;
+      --surface2: #1a1a3a;
+      --primary: #00f5d4;
+      --primary-dim: rgba(0,245,212,0.15);
+      --danger: #ff3366;
+      --danger-bg: rgba(255,51,102,0.12);
+      --amber: #ffaa33;
+      --amber-bg: rgba(255,170,51,0.12);
+      --safe: #33ff99;
+      --safe-bg: rgba(51,255,153,0.1);
+      --muted: #6b7280;
+      --text: #e5e7eb;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+    html { font-size: 16px; }
+    body {
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Layout ─────────────────────────────────────────────── */
+    header {
+      background: var(--surface);
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    header .logo {
+      width: 32px; height: 32px;
+      background: var(--primary);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 18px;
+      color: var(--bg);
+      flex-shrink: 0;
+    }
+    header h1 { font-size: 18px; font-weight: 600; flex: 1; }
+    header .badge {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 20px;
+      background: var(--primary-dim);
+      color: var(--primary);
+    }
+
+    main { flex: 1; padding: 20px; max-width: 480px; width: 100%; margin: 0 auto; }
+
+    /* ── Input section ──────────────────────────────────────── */
+    .input-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 16px;
+    }
+    .input-card label {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      margin-bottom: 8px;
+      color: var(--muted);
+    }
+    .input-card textarea {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--bg);
+      color: var(--text);
+      font-size: 16px;
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+      line-height: 1.5;
+      transition: border-color 0.2s;
+    }
+    .input-card textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-dim);
+    }
+
+    .quick-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    .quick-btn {
+      padding: 8px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.1);
+      background: var(--surface2);
+      color: var(--muted);
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .quick-btn:active { background: var(--primary-dim); color: var(--primary); }
+
+    .btn-primary {
+      width: 100%;
+      padding: 16px;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--primary);
+      color: var(--bg);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 16px;
+      transition: opacity 0.2s;
+    }
+    .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary:not(:disabled):active { opacity: 0.85; }
+
+    .consent-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .consent-row input[type="checkbox"] {
+      width: 18px; height: 18px;
+      accent-color: var(--primary);
+    }
+
+    /* ── Verdict Card ────────────────────────────────────────── */
+    .verdict-card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-top: 16px;
+      display: none;
+      animation: slideUp 0.3s ease;
+    }
+    .verdict-card.visible { display: block; }
+    .verdict-card.danger { border-color: var(--danger); }
+    .verdict-card.suspicious { border-color: var(--amber); }
+    .verdict-card.likely_safe { border-color: var(--safe); }
+    .verdict-card.unknown { border-color: var(--muted); }
+
+    .verdict-title { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .danger .verdict-title { color: var(--danger); }
+    .suspicious .verdict-title { color: var(--amber); }
+    .likely_safe .verdict-title { color: var(--safe); }
+    .unknown .verdict-title { color: var(--muted); }
+
+    .verdict-body { font-size: 15px; line-height: 1.7; margin-bottom: 12px; opacity: 0.9; }
+    .verdict-body strong { color: var(--text); }
+
+    .verdict-cta {
+      padding: 12px 16px;
+      background: var(--surface2);
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      border-left: 3px solid var(--primary);
+    }
+
+    .verdict-meta {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 12px;
+      text-align: right;
+    }
+
+    /* ── Live Call Companion ─────────────────────────────────── */
+    .live-section {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-top: 16px;
+    }
+    .live-section h2 { font-size: 16px; margin-bottom: 8px; }
+    .live-section p { font-size: 14px; color: var(--muted); margin-bottom: 12px; }
+
+    .btn-live {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid var(--danger);
+      border-radius: var(--radius-sm);
+      background: transparent;
+      color: var(--danger);
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-live.active {
+      background: var(--danger);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+    .btn-live:disabled { opacity: 0.4; cursor: not-allowed; }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 0 rgba(255,51,102,0.4); }
+      50% { box-shadow: 0 0 0 12px rgba(255,51,102,0); }
+    }
+
+    .live-status {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 14px;
+      display: none;
+    }
+    .live-status.listening { display: block; background: var(--surface2); color: var(--muted); }
+    .live-status.caution { display: block; background: var(--amber-bg); color: var(--amber); }
+    .live-status.danger { display: block; background: var(--danger-bg); color: var(--danger); animation: flashRed 0.5s; }
+    @keyframes flashRed {
+      0%,100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+    .live-advice { font-size: 13px; margin-top: 8px; opacity: 0.85; }
+
+    /* ── Loading ─────────────────────────────────────────────── */
+    .spinner {
+      display: inline-block;
+      width: 20px; height: 20px;
+      border: 2px solid var(--surface2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.6s linear infinite;
+      vertical-align: middle;
+      margin-right: 8px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Error ───────────────────────────────────────────────── */
+    .error-card {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger);
+      border-radius: var(--radius);
+      padding: 16px;
+      margin-top: 16px;
+      font-size: 14px;
+      display: none;
+    }
+    .error-card.visible { display: block; }
+
+    /* ── Offline ─────────────────────────────────────────────── */
+    .offline-banner {
+      background: var(--amber-bg);
+      color: var(--amber);
+      text-align: center;
+      padding: 8px;
+      font-size: 13px;
+      display: none;
+    }
+    .offline-banner.visible { display: block; }
+
+    footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">K</div>
+    <h1>KAVACH Shield</h1>
+    <span class="badge">Citizen</span>
+  </header>
+
+  <div class="offline-banner" id="offlineBanner">📡 No connection — showing cached results</div>
+
+  <main>
+    <!-- Input Card -->
+    <div class="input-card">
+      <label for="checkInput">Paste a message, phone number, or UPI ID</label>
+      <textarea id="checkInput" placeholder="e.g. 'CBI officer calling about a parcel with drugs...' or '9876543210'" rows="4"></textarea>
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="fillSample('upi')">🔢 Sample UPI</button>
+        <button class="quick-btn" onclick="fillSample('phone')">📞 Sample Number</button>
+        <button class="quick-btn" onclick="fillSample('scam')">📝 Sample Message</button>
+      </div>
+      <div class="consent-row">
+        <input type="checkbox" id="consentIntel" checked>
+        <label for="consentIntel">Help others: anonymously share this check to improve fraud detection</label>
+      </div>
+      <button class="btn-primary" id="checkBtn" onclick="checkShield()">
+        <span id="btnText">🔍 Check Now</span>
+        <span id="btnLoading" style="display:none"><span class="spinner"></span>Checking...</span>
+      </button>
+    </div>
+
+    <!-- Verdict Card -->
+    <div class="verdict-card" id="verdictCard">
+      <div class="verdict-title" id="verdictTitle"></div>
+      <div class="verdict-body" id="verdictBody"></div>
+      <div class="verdict-cta" id="verdictCta"></div>
+      <div class="verdict-meta" id="verdictMeta"></div>
+    </div>
+
+    <!-- Error -->
+    <div class="error-card" id="errorCard"></div>
+
+    <!-- Live Call Companion -->
+    <div class="live-section">
+      <h2>📞 Live Call Companion</h2>
+      <p>On a suspicious call? Tap below — KAVACH will listen and warn you in real time.</p>
+      <button class="btn-live" id="liveBtn" onclick="toggleLiveCompanion()">🎙️ I'm on a suspicious call</button>
+      <div class="live-status" id="liveStatus">
+        <strong id="liveStatusLabel">Listening...</strong>
+        <div class="live-advice" id="liveAdvice"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <p>Report scams to 1930 • <a href="https://cybercrime.gov.in" target="_blank" style="color:var(--primary)">cybercrime.gov.in</a></p>
+    <p style="margin-top:4px">KAVACH v2 — ET AI Hackathon 2026</p>
+  </footer>
+
+  <script>
+    /* ── Configuration ──────────────────────────────────────── */
+    const API_BASE = window.location.origin + '/v1';
+    const WS_BASE = 'wss://' + window.location.host + '/v1';
+    // Fallback to http/ws for local dev
+    if (window.location.protocol === 'http:') {
+      // Keep as-is, the proxy handles it
+    }
+
+    let liveSocket = null;
+    let liveActive = false;
+
+    /* ── Service Worker Registration ────────────────────────── */
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').catch(() => {
+        /* SW registration non-blocking */
+      });
+    }
+
+    /* ── Connection Detection ───────────────────────────────── */
+    function updateOnlineStatus() {
+      const banner = document.getElementById('offlineBanner');
+      banner.classList.toggle('visible', !navigator.onLine);
+    }
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+
+    /* ── Share Target (WhatsApp forward) ────────────────────── */
+    const params = new URLSearchParams(window.location.search);
+    const sharedText = params.get('text');
+    if (sharedText) {
+      document.getElementById('checkInput').value = sharedText;
+      checkShield();
+      // Clean URL
+      window.history.replaceState({}, '', '/');
+    }
+
+    /* ── Sample Data ────────────────────────────────────────── */
+    function fillSample(type) {
+      const samples = {
+        upi: 'friend@paytm\n\nThey said: "Send ₹5000 for insurance verification or your policy will be cancelled"',
+        phone: '9876543210\n\nCalled saying they\'re from CBI and I have a non-bailable warrant for drugs found at Mumbai customs in my name. Told me not to tell family.',
+        scam: 'Sir, I am DSP Rajesh Kumar from CBI. A parcel has been intercepted at Mumbai airport containing 12 packets of MDMA drugs registered in your Aadhaar. You have a non-bailable warrant. For verification, you need to pay ₹50,000 as security deposit via UPI. Don\'t tell anyone in your family — this is confidential.'
+      };
+      document.getElementById('checkInput').value = samples[type] || '';
+    }
+
+    /* ── Score-to-verdict band mapping ──────────────────────── */
+    const VERDICT_STYLES = {
+      danger: ['danger', '🚨'],
+      suspicious: ['suspicious', '⚠️'],
+      likely_safe: ['likely_safe', '✅'],
+      unknown: ['unknown', 'ℹ️']
+    };
+
+    /* ── Shield Check API ───────────────────────────────────── */
+    async function checkShield() {
+      const text = document.getElementById('checkInput').value.trim();
+      if (!text) {
+        showError('Please enter a message, phone number, or UPI ID to check.');
+        return;
+      }
+
+      const btn = document.getElementById('checkBtn');
+      const btnText = document.getElementById('btnText');
+      const btnLoading = document.getElementById('btnLoading');
+      btn.disabled = true;
+      btnText.style.display = 'none';
+      btnLoading.style.display = 'inline';
+      hideError();
+
+      // Determine if input looks like an entity
+      const isPhone = /^[\d\+\-\s]{7,15}$/.test(text.split('\\n')[0].trim());
+      const isUpi = /@/.test(text.split('\\n')[0].trim());
+
+      const entity = (isPhone || isUpi) ? text.split('\\n')[0].trim() : null;
+      const consent = document.getElementById('consentIntel').checked;
+
+      try {
+        const resp = await fetch(API_BASE + '/shield/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ text, entity, channel: 'pwa', consent_for_intel: consent })
+        });
+
+        if (!resp.ok) {
+          if (resp.status === 429) throw new Error('Too many requests — please wait a moment.');
+          if (resp.status === 401) throw new Error('Authentication required. Please log in.');
+          throw new Error('Server error — please try again.');
+        }
+
+        const json = await resp.json();
+        if (!json.success) throw new Error(json.error?.message || 'Check failed');
+
+        const data = json.data;
+        showVerdict(data);
+      } catch (err) {
+        // Check for cached results offline
+        if (!navigator.onLine) {
+          showVerdict({
+            verdict: 'unknown',
+            title: '📡 You\'re offline',
+            explanation: 'Please connect to the internet to check this contact.',
+            cta: 'Stay cautious and report suspicious contacts to 1930.',
+            language: 'en',
+            tier_resolved: 0,
+            check_id: 'offline'
+          });
+        } else {
+          showError(err.message);
+        }
+      } finally {
+        btn.disabled = false;
+        btnText.style.display = 'inline';
+        btnLoading.style.display = 'none';
+      }
+    }
+
+    /* ── Show Verdict ───────────────────────────────────────── */
+    function showVerdict(data) {
+      const card = document.getElementById('verdictCard');
+      const style = VERDICT_STYLES[data.verdict] || VERDICT_STYLES.unknown;
+
+      card.className = 'verdict-card visible ' + style[0];
+      document.getElementById('verdictTitle').textContent = data.title || (style[1] + ' ' + data.verdict);
+      document.getElementById('verdictBody').innerHTML = data.explanation || 'No details available.';
+      document.getElementById('verdictCta').textContent = data.cta || '';
+      document.getElementById('verdictMeta').textContent = 'Tier ' + data.tier_resolved + ' • ID: ' + (data.check_id || '').slice(0,8) + '... • Language: ' + (data.language || 'en').toUpperCase();
+
+      card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function showError(msg) {
+      const card = document.getElementById('errorCard');
+      card.textContent = msg;
+      card.classList.add('visible');
+    }
+
+    function hideError() {
+      document.getElementById('errorCard').classList.remove('visible');
+    }
+
+    /* ── Live Call Companion ────────────────────────────────── */
+    function toggleLiveCompanion() {
+      if (liveActive) {
+        stopLiveCompanion();
+      } else {
+        startLiveCompanion();
+      }
+    }
+
+    async function startLiveCompanion() {
+      const btn = document.getElementById('liveBtn');
+      const status = document.getElementById('liveStatus');
+
+      // Check for Web Speech API
+      if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+        showError('Speech recognition is not supported in this browser. Please use Chrome on Android.');
+        return;
+      }
+
+      btn.textContent = '🔴 End Session';
+      btn.classList.add('active');
+      liveActive = true;
+
+      // Set up speech recognition
+      const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+      const recognition = new SpeechRecognition();
+      recognition.continuous = true;
+      recognition.interimResults = true;
+      recognition.lang = 'hi-IN';
+
+      // Status display
+      status.className = 'live-status listening';
+      document.getElementById('liveStatusLabel').textContent = '🎤 Listening... Speak naturally';
+      document.getElementById('liveAdvice').textContent = 'If the caller asks for money or threatens you — that\'s a scam.';
+
+      // Try WebSocket connection
+      try {
+        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        liveSocket = new WebSocket(protocol + '//' + window.location.host + '/v1/shield/live');
+
+        liveSocket.onopen = () => {
+          status.className = 'live-status listening';
+        };
+
+        liveSocket.onmessage = (event) => {
+          try {
+            const msg = JSON.parse(event.data);
+            handleLiveMessage(msg, status);
+          } catch(e) { /* ignore parse errors */ }
+        };
+
+        liveSocket.onerror = () => {
+          // Fallback: operate without server-side scoring
+          status.className = 'live-status listening';
+          document.getElementById('liveAdvice').textContent = '⚠️ Running in offline mode — advice may be limited.';
+        };
+
+        liveSocket.onclose = () => {
+          if (liveActive) {
+            // Try to reconnect
+            setTimeout(startLiveCompanion, 1000);
+          }
+        };
+      } catch(e) {
+        // WebSocket failed — operate client-only
+      }
+
+      // Speech recognition results
+      recognition.onresult = (event) => {
+        let transcript = '';
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+          transcript += event.results[i][0].transcript;
+        }
+        if (transcript && liveSocket && liveSocket.readyState === WebSocket.OPEN) {
+          liveSocket.send(JSON.stringify({
+            type: 'transcript',
+            text: transcript,
+            lang: 'hi',
+            session_id: 'pwa-' + Date.now()
+          }));
+        }
+
+        // Client-side keyword detection (always works, even offline)
+        const lower = transcript.toLowerCase();
+        if (/(pay|send|money|upi|otp|transfer|immediately)/.test(lower)) {
+          status.className = 'live-status danger';
+          document.getElementById('liveStatusLabel').textContent = '🔴 DANGER: Payment Request Detected';
+          document.getElementById('liveAdvice').textContent = 'DO NOT SEND MONEY. This is a scam. Hang up now and report to 1930.';
+        } else if (/(police|cbi|arrest|court|warrant|case|fir)/.test(lower)) {
+          status.className = 'live-status caution';
+          document.getElementById('liveStatusLabel').textContent = '⚠️ Caution: Authority Impersonation Detected';
+          document.getElementById('liveAdvice').textContent = 'Government agencies never call to demand money. Stay calm and verify.';
+        }
+      };
+      recognition.start();
+    }
+
+    function handleLiveMessage(msg, statusEl) {
+      const label = document.getElementById('liveStatusLabel');
+      const advice = document.getElementById('liveAdvice');
+
+      switch (msg.type) {
+        case 'status':
+          statusEl.className = 'live-status ' + msg.stage;
+          if (msg.stage === 'listening') {
+            label.textContent = '🎤 Listening...';
+            advice.textContent = 'If the caller asks for money or threatens you — that\'s a scam.';
+          } else if (msg.stage === 'caution') {
+            label.textContent = '⚠️ Caution: Scam patterns detected';
+          } else if (msg.stage === 'danger') {
+            label.textContent = '🔴 DANGER: This is a scam';
+            advice.textContent = 'HANG UP NOW. Do not send any money. Report to 1930.';
+          }
+          break;
+
+        case 'warning':
+          statusEl.className = 'live-status ' + (msg.level === 'red' ? 'danger' : 'caution');
+          label.textContent = msg.message;
+          if (msg.advice) advice.textContent = msg.advice;
+          break;
+
+        case 'danger_signals':
+          if (msg.signals && msg.signals.length) {
+            advice.textContent = '⚠️ ' + msg.signals.join(', ');
+          }
+          break;
+      }
+    }
+
+    function stopLiveCompanion() {
+      liveActive = false;
+      const btn = document.getElementById('liveBtn');
+      btn.textContent = '🎙️ I\'m on a suspicious call';
+      btn.classList.remove('active');
+      const status = document.getElementById('liveStatus');
+      status.className = 'live-status';
+      status.style.display = 'none';
+
+      if (liveSocket) {
+        liveSocket.close();
+        liveSocket = null;
+      }
+    }
+
+    /* ── Share target detect on page load ───────────────────── */
+    // If the page was opened via share target, the text param is handled above
+  </script>
+</body>
+</html>

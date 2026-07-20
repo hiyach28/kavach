@@ -59,5 +59,10 @@ services:
     ports: ["3000:3000"]
     depends_on: [backend]
 
+  shield-pwa:
+    build: ./shield-pwa
+    ports: ["8080:8080"]
+    depends_on: [backend]
+
 volumes:
   pgdata:
