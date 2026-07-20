@@ -2,6 +2,7 @@
 
 LLM key policy: docs/06 §3 — this module never touches LLM credentials.
 """
+
 from __future__ import annotations
 
 import hashlib

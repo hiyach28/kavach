@@ -1,4 +1,5 @@
 """SQLAlchemy DeclarativeBase and common mixins."""
+
 from datetime import UTC, datetime
 
 from sqlalchemy.ext.asyncio import AsyncAttrs

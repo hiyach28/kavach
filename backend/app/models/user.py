@@ -1,4 +1,5 @@
 """User model (Phase 1)."""
+
 import uuid
 from datetime import UTC, datetime
 
@@ -12,9 +13,7 @@ from app.models.base import Base
 class User(Base):
     __tablename__ = "users"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     email: Mapped[str] = mapped_column(String(254), unique=True, index=True, nullable=False)
     role: Mapped[str] = mapped_column(
         Enum("citizen", "analyst", "officer", "admin", name="user_role"),

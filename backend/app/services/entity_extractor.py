@@ -7,6 +7,7 @@ hashes with SHA-256, then upserts into the `entities` table and creates
 Entities extracted: PHONE, UPI, EMAIL, URL, HANDLE, AADHAAR, PAN, IFSC.
 Normalisation rules ensure the same number in two formats → one entity.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -42,24 +43,44 @@ _PATTERNS: list[tuple[EntityType, re.Pattern[str]]] = [
         re.compile(r"[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+", re.IGNORECASE),
     ),
     (EntityType.AADHAAR, re.compile(r"\b\d{4}[\s\-]?\d{4}[\s\-]?\d{4}\b")),
-    (EntityType.PAN,     re.compile(r"\b[A-Z]{5}[0-9]{4}[A-Z]\b")),
-    (EntityType.IFSC,    re.compile(r"\b[A-Z]{4}0[A-Z0-9]{6}\b")),
-    (EntityType.PHONE,   re.compile(r"(?:\+91[\s\-]?)?[6789]\d{9}\b")),
+    (EntityType.PAN, re.compile(r"\b[A-Z]{5}[0-9]{4}[A-Z]\b")),
+    (EntityType.IFSC, re.compile(r"\b[A-Z]{4}0[A-Z0-9]{6}\b")),
+    (EntityType.PHONE, re.compile(r"(?:\+91[\s\-]?)?[6789]\d{9}\b")),
     # URL before HANDLE to avoid partial matches
-    (EntityType.URL,     re.compile(r"https?://[^\s]+")),
-    (EntityType.HANDLE,  re.compile(r"@[a-zA-Z0-9_]{3,32}\b")),
+    (EntityType.URL, re.compile(r"https?://[^\s]+")),
+    (EntityType.HANDLE, re.compile(r"@[a-zA-Z0-9_]{3,32}\b")),
 ]
 
 # Known UPI suffixes for normalisation
 _UPI_SUFFIXES = {
-    "upi", "paytm", "gpay", "phonepe", "ybl", "okhdfcbank", "okaxis",
-    "oksbi", "okicici", "apl", "axl", "ibl", "hdfcbank", "sbi", "pnb",
-    "boi", "cnrb", "unionbank", "bandhanbank", "kotak", "indus", "airtel",
+    "upi",
+    "paytm",
+    "gpay",
+    "phonepe",
+    "ybl",
+    "okhdfcbank",
+    "okaxis",
+    "oksbi",
+    "okicici",
+    "apl",
+    "axl",
+    "ibl",
+    "hdfcbank",
+    "sbi",
+    "pnb",
+    "boi",
+    "cnrb",
+    "unionbank",
+    "bandhanbank",
+    "kotak",
+    "indus",
+    "airtel",
     "jio",
 }
 
 
 # ── Normalisation ────────────────────────────────────────────────────────────
+
 
 def _normalise(entity_type: EntityType, raw: str) -> str:
     """Return a canonical form of the entity value."""
@@ -86,6 +107,7 @@ def _sha256(value: str) -> str:
 
 
 # ── Extraction ───────────────────────────────────────────────────────────────
+
 
 @dataclass(frozen=True)
 class ExtractedEntity:
@@ -116,6 +138,7 @@ def extract_entities(text: str) -> list[ExtractedEntity]:
 
 # ── DB upsert ────────────────────────────────────────────────────────────────
 
+
 async def upsert_entities(
     case_id: uuid.UUID,
     entities: list[ExtractedEntity],
@@ -133,9 +156,7 @@ async def upsert_entities(
 
     for ent in entities:
         # Try to find existing entity by hash
-        result = await db.execute(
-            select(Entity).where(Entity.value_hash == ent.value_hash)
-        )
+        result = await db.execute(select(Entity).where(Entity.value_hash == ent.value_hash))
         existing = result.scalar_one_or_none()
 
         if existing is None:

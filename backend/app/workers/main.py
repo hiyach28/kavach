@@ -9,6 +9,7 @@ Job: process_case
 Idempotency: each stage checks current status before proceeding, so
 replaying a job after a crash is safe.
 """
+
 from __future__ import annotations
 
 import logging
@@ -24,7 +25,7 @@ from app.services import clustering, embeddings, entity_extractor, llm_client
 
 logger = logging.getLogger("kavach.worker")
 
-_CONFIDENCE_THRESHOLD = 0.5   # below this → needs_manual_review
+_CONFIDENCE_THRESHOLD = 0.5  # below this → needs_manual_review
 
 
 async def process_case(
@@ -89,16 +90,12 @@ async def process_case(
             await db.commit()
 
             # ── 3. LINKING (embed + semantic edges) ─────────────────────────
-            await db.execute(
-                update(Case).where(Case.id == cid).values(status=CaseStatus.linking)
-            )
+            await db.execute(update(Case).where(Case.id == cid).values(status=CaseStatus.linking))
             await db.commit()
 
             vec = embeddings.embed(masked_text)
             # Persist embedding on case row
-            await db.execute(
-                update(Case).where(Case.id == cid).values(embedding=vec)
-            )
+            await db.execute(update(Case).where(Case.id == cid).values(embedding=vec))
             await db.commit()
 
             # Find semantically similar cases and create SemanticLink edges
@@ -108,12 +105,15 @@ async def process_case(
                     # Insert both directions idempotently
                     for a, b in [(cid, sim_case_id), (sim_case_id, cid)]:
                         from sqlalchemy import select as sa_select
-                        existing = (await db.execute(
-                            sa_select(SemanticLink).where(
-                                SemanticLink.a_id == a,
-                                SemanticLink.b_id == b,
+
+                        existing = (
+                            await db.execute(
+                                sa_select(SemanticLink).where(
+                                    SemanticLink.a_id == a,
+                                    SemanticLink.b_id == b,
+                                )
                             )
-                        )).scalar_one_or_none()
+                        ).scalar_one_or_none()
                         if not existing:
                             db.add(SemanticLink(a_id=a, b_id=b, score=score))
             await db.commit()
@@ -131,7 +131,10 @@ async def process_case(
 
             logger.info(
                 "case %s → clustered (campaign=%s, fraud_type=%s, confidence=%.2f)",
-                cid, campaign_id, verdict.fraud_type, verdict.confidence,
+                cid,
+                campaign_id,
+                verdict.fraud_type,
+                verdict.confidence,
             )
             return {
                 "case_id": case_id,
@@ -146,9 +149,7 @@ async def process_case(
             try:
                 async with AsyncSessionLocal() as err_db:
                     await err_db.execute(
-                        update(Case)
-                        .where(Case.id == cid)
-                        .values(status=CaseStatus.failed)
+                        update(Case).where(Case.id == cid).values(status=CaseStatus.failed)
                     )
                     await err_db.commit()
             except Exception:
@@ -157,6 +158,7 @@ async def process_case(
 
 
 # ── Worker settings ─────────────────────────────────────────────────────────
+
 
 async def ping(ctx: dict) -> str:
     """Smoke-test job — always returns 'pong'."""
@@ -167,7 +169,7 @@ class WorkerSettings:
     functions = [ping, process_case]
     redis_settings = RedisSettings.from_dsn(settings.REDIS_URL)
     max_jobs = 10
-    job_timeout = 300        # 5 minutes max per job
+    job_timeout = 300  # 5 minutes max per job
     retry_jobs = True
     max_tries = 3
-    keep_result = 3600       # keep results for 1 hour
+    keep_result = 3600  # keep results for 1 hour

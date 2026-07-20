@@ -15,6 +15,7 @@ Deferred path: if the component has >MAX_COMPONENT_NODES, the job is
 deferred (caller marks case as `clustered` with campaign_id=None and
 schedules a nightly full-recluster).
 """
+
 from __future__ import annotations
 
 import logging
@@ -35,6 +36,7 @@ SEMANTIC_THRESHOLD = 0.75
 
 # ── Graph construction ───────────────────────────────────────────────────────
 
+
 async def _fetch_component(
     seed_case_id: uuid.UUID,
     db: AsyncSession,
@@ -54,18 +56,30 @@ async def _fetch_component(
         visited_cases.add(case_id)
 
         # Entities for this case
-        links = (await db.execute(
-            select(CaseEntityLink.entity_id).where(CaseEntityLink.case_id == case_id)
-        )).scalars().all()
+        links = (
+            (
+                await db.execute(
+                    select(CaseEntityLink.entity_id).where(CaseEntityLink.case_id == case_id)
+                )
+            )
+            .scalars()
+            .all()
+        )
 
         for ent_id in links:
             if ent_id in visited_entities:
                 continue
             visited_entities.add(ent_id)
             # Other cases sharing this entity
-            peer_cases = (await db.execute(
-                select(CaseEntityLink.case_id).where(CaseEntityLink.entity_id == ent_id)
-            )).scalars().all()
+            peer_cases = (
+                (
+                    await db.execute(
+                        select(CaseEntityLink.case_id).where(CaseEntityLink.entity_id == ent_id)
+                    )
+                )
+                .scalars()
+                .all()
+            )
             queue.extend(c for c in peer_cases if c not in visited_cases)
 
     return visited_cases, visited_entities
@@ -92,7 +106,7 @@ def _build_graph(
     # Infrastructure edges
     for _, cases in ent_to_cases.items():
         for i, a in enumerate(cases):
-            for b in cases[i + 1:]:
+            for b in cases[i + 1 :]:
                 if str(a) in G and str(b) in G:
                     G.add_edge(str(a), str(b), weight=1.0, edge_type="infrastructure")
 
@@ -108,10 +122,12 @@ def _louvain_partition(G: nx.Graph) -> dict[str, int]:
     """Run Louvain community detection. Returns {node_str: community_id}."""
     try:
         import community as community_louvain  # type: ignore[import]
+
         return community_louvain.best_partition(G, weight="weight", random_state=42)
     except ImportError:
         # Fallback to networkx greedy modularity
         from networkx.algorithms.community import greedy_modularity_communities
+
         communities = greedy_modularity_communities(G, weight="weight")
         partition: dict[str, int] = {}
         for comm_id, comm in enumerate(communities):
@@ -121,6 +137,7 @@ def _louvain_partition(G: nx.Graph) -> dict[str, int]:
 
 
 # ── Stable-ID reconciliation ─────────────────────────────────────────────────
+
 
 async def _reconcile_campaigns(
     partition: dict[str, int],
@@ -138,12 +155,10 @@ async def _reconcile_campaigns(
 
     # Fetch existing campaign assignments for all case nodes in the partition
     all_case_ids = [uuid.UUID(n) for n in partition.keys()]
-    rows = (await db.execute(
-        select(Case.id, Case.campaign_id).where(Case.id.in_(all_case_ids))
-    )).fetchall()
-    existing_assignments: dict[str, uuid.UUID | None] = {
-        str(r[0]): r[1] for r in rows
-    }
+    rows = (
+        await db.execute(select(Case.id, Case.campaign_id).where(Case.id.in_(all_case_ids)))
+    ).fetchall()
+    existing_assignments: dict[str, uuid.UUID | None] = {str(r[0]): r[1] for r in rows}
 
     # For each community, find best matching existing campaign by overlap
     comm_to_campaign: dict[int, uuid.UUID] = {}
@@ -179,6 +194,7 @@ async def _reconcile_campaigns(
 
 # ── Public interface ─────────────────────────────────────────────────────────
 
+
 async def cluster_case(
     case_id: uuid.UUID,
     db: AsyncSession,
@@ -193,42 +209,46 @@ async def cluster_case(
     if total_nodes > MAX_COMPONENT_NODES:
         logger.warning(
             "component for case %s has %d nodes > %d — deferring to nightly",
-            case_id, total_nodes, MAX_COMPONENT_NODES,
+            case_id,
+            total_nodes,
+            MAX_COMPONENT_NODES,
         )
         return None
 
     if len(case_ids) == 1:
         # Singleton — assign to its own campaign immediately
-        rows = (await db.execute(
-            select(Case.campaign_id).where(Case.id == case_id)
-        )).scalar_one_or_none()
+        rows = (
+            await db.execute(select(Case.campaign_id).where(Case.id == case_id))
+        ).scalar_one_or_none()
         if rows:
             return rows
 
         new_campaign = Campaign()
         db.add(new_campaign)
         await db.flush()
-        await db.execute(
-            update(Case).where(Case.id == case_id).values(campaign_id=new_campaign.id)
-        )
+        await db.execute(update(Case).where(Case.id == case_id).values(campaign_id=new_campaign.id))
         return new_campaign.id
 
     # Fetch all case-entity edges in component
-    ce_links = (await db.execute(
-        select(CaseEntityLink.case_id, CaseEntityLink.entity_id)
-        .where(CaseEntityLink.case_id.in_(case_ids))
-    )).fetchall()
+    ce_links = (
+        await db.execute(
+            select(CaseEntityLink.case_id, CaseEntityLink.entity_id).where(
+                CaseEntityLink.case_id.in_(case_ids)
+            )
+        )
+    ).fetchall()
     case_entity_edges = [(r[0], r[1]) for r in ce_links]
 
     # Fetch semantic edges within component
-    sem_links = (await db.execute(
-        select(SemanticLink.a_id, SemanticLink.b_id, SemanticLink.score)
-        .where(
-            SemanticLink.a_id.in_(case_ids),
-            SemanticLink.b_id.in_(case_ids),
-            SemanticLink.score >= SEMANTIC_THRESHOLD,
+    sem_links = (
+        await db.execute(
+            select(SemanticLink.a_id, SemanticLink.b_id, SemanticLink.score).where(
+                SemanticLink.a_id.in_(case_ids),
+                SemanticLink.b_id.in_(case_ids),
+                SemanticLink.score >= SEMANTIC_THRESHOLD,
+            )
         )
-    )).fetchall()
+    ).fetchall()
     semantic_edges = [(r[0], r[1], float(r[2])) for r in sem_links]
 
     G = _build_graph(case_ids, entity_ids, case_entity_edges, semantic_edges)
@@ -238,11 +258,7 @@ async def cluster_case(
     # Write campaign assignments back
     for comm_id, campaign_uuid in comm_to_campaign.items():
         members = [uuid.UUID(n) for n, c in partition.items() if c == comm_id]
-        await db.execute(
-            update(Case)
-            .where(Case.id.in_(members))
-            .values(campaign_id=campaign_uuid)
-        )
+        await db.execute(update(Case).where(Case.id.in_(members)).values(campaign_id=campaign_uuid))
 
     await db.flush()
     return comm_to_campaign.get(partition.get(str(case_id), -1))

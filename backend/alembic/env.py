@@ -3,6 +3,7 @@
 Uses async psycopg (psycopg3) via SQLAlchemy's run_sync.
 DATABASE_URL is read from app.config.settings so it's always in sync.
 """
+
 import asyncio
 from logging.config import fileConfig
 

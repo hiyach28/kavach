@@ -1,10 +1,12 @@
 """Unit tests for embeddings (F23) and clustering (F24) — pure unit, no DB."""
+
 import uuid
 
 from app.services.clustering import _build_graph, _louvain_partition
 from app.services.embeddings import _mock_embed, embed
 
 # ── Embedding tests ──────────────────────────────────────────────────────────
+
 
 def test_mock_embed_returns_correct_dim() -> None:
     vec = _mock_embed("hello world")
@@ -30,13 +32,15 @@ def test_mock_embed_values_in_range() -> None:
 
 def test_embed_in_mock_mode(monkeypatch: object) -> None:
     import app.services.embeddings as emb_mod
+
     monkeypatch.setattr(emb_mod.settings, "LLM_MODE", "mock")  # type: ignore[attr-defined]
-    monkeypatch.setattr(emb_mod.settings, "EMBED_MODE", "")    # type: ignore[attr-defined]
+    monkeypatch.setattr(emb_mod.settings, "EMBED_MODE", "")  # type: ignore[attr-defined]
     vec = embed("any text")
     assert len(vec) == 768
 
 
 # ── Clustering unit tests ────────────────────────────────────────────────────
+
 
 def test_build_graph_two_cases_share_entity() -> None:
     c1, c2 = uuid.uuid4(), uuid.uuid4()

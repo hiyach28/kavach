@@ -1,4 +1,5 @@
 """Auth endpoints (F10)."""
+
 from typing import Annotated, Any
 
 import redis.asyncio as aioredis

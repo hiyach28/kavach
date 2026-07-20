@@ -1,4 +1,5 @@
 """Unit tests for Takedown Brief Engine (F25) — pure unit, no DB."""
+
 from __future__ import annotations
 
 import uuid
@@ -7,7 +8,7 @@ from unittest.mock import AsyncMock, MagicMock, patch
 
 import pytest
 
-from app.models.graph import Case, Campaign, Entity, EntityType, FraudType, RiskLevel
+from app.models.graph import Campaign, Case, Entity, EntityType, FraudType, RiskLevel
 from app.services.takedown_brief import (
     _compute_overall_risk,
     _entity_type_breakdown,
@@ -16,8 +17,8 @@ from app.services.takedown_brief import (
     list_campaigns,
 )
 
-
 # ── Helper to make a fake case row ─────────────────────────────────────────────
+
 
 def _make_case(
     *,
@@ -55,6 +56,7 @@ def _make_entity(
 
 # ── _compute_overall_risk ──────────────────────────────────────────────────────
 
+
 class TestComputeOverallRisk:
     def test_danger_if_any_danger(self) -> None:
         risks = [RiskLevel.suspicious, RiskLevel.danger, RiskLevel.likely_safe]
@@ -73,6 +75,7 @@ class TestComputeOverallRisk:
 
 
 # ── _get_top_entities ──────────────────────────────────────────────────────────
+
 
 class TestGetTopEntities:
     def test_sorts_by_report_count(self) -> None:
@@ -101,6 +104,7 @@ class TestGetTopEntities:
 
 # ── _entity_type_breakdown ─────────────────────────────────────────────────────
 
+
 class TestEntityTypeBreakdown:
     def test_counts_by_type(self) -> None:
         ents = [
@@ -117,6 +121,7 @@ class TestEntityTypeBreakdown:
 
 
 # ── compute_takedown_brief ─────────────────────────────────────────────────────
+
 
 class TestComputeTakedownBrief:
     @pytest.mark.asyncio
@@ -186,9 +191,23 @@ class TestComputeTakedownBrief:
             # Call 1: fetch campaign
             MagicMock(scalar_one_or_none=MagicMock(return_value=campaign)),
             # Call 2: fetch cases
-            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[case1, case2])))),
+            MagicMock(
+                scalars=MagicMock(
+                    return_value=MagicMock(
+                        all=MagicMock(return_value=[case1, case2]),
+                    ),
+                ),
+            ),
             # Call 3: fetch entities
-            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[phone_entity, upi_entity])))),
+            MagicMock(
+                scalars=MagicMock(
+                    return_value=MagicMock(
+                        all=MagicMock(
+                            return_value=[phone_entity, upi_entity],
+                        ),
+                    ),
+                ),
+            ),
         ]
 
         with patch("app.services.takedown_brief.datetime") as mock_dt:
@@ -206,6 +225,7 @@ class TestComputeTakedownBrief:
 
 
 # ── list_campaigns ─────────────────────────────────────────────────────────────
+
 
 class TestListCampaigns:
     @pytest.mark.asyncio
@@ -251,12 +271,25 @@ class TestListCampaigns:
         # For the two campaigns, we need two execute calls for case counts
         # Actually the side_effect will be called once for each campaign
         db.execute.side_effect = [
-            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[uuid.uuid4() for _ in range(3)])))),
-            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[])))),
+            MagicMock(
+                scalars=MagicMock(
+                    return_value=MagicMock(
+                        all=MagicMock(
+                            return_value=[uuid.uuid4() for _ in range(3)],
+                        ),
+                    ),
+                ),
+            ),
+            MagicMock(
+                scalars=MagicMock(
+                    return_value=MagicMock(all=MagicMock(return_value=[])),
+                ),
+            ),
         ]
 
         results = await list_campaigns(db, min_cases=0)
-        assert len(results) == 1  # camp2 has 0 cases, gets filtered by min_cases=0? No, min_cases=0 means no filter
+        assert len(results) == 1  # camp2 has 0 cases
+        # min_cases=0 means no filter, so both should be returned
         # Since min_cases=0, both should be returned
         assert len(results) == 2
 
@@ -279,8 +312,14 @@ class TestListCampaigns:
         # Actually let me just set side_effect for the two calls
         # The first call is for campaigns, second for case counts
         db.execute.side_effect = [
-            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[camp])))),
-            MagicMock(scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[uuid.uuid4()])))),
+            MagicMock(
+                scalars=MagicMock(return_value=MagicMock(all=MagicMock(return_value=[camp])))
+            ),
+            MagicMock(
+                scalars=MagicMock(
+                    return_value=MagicMock(all=MagicMock(return_value=[uuid.uuid4()]))
+                )
+            ),
         ]
 
         results = await list_campaigns(db, min_cases=2)

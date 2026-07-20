@@ -1,4 +1,5 @@
 """PII Vault service (AES-GCM encryption) — Phase 1 (F12)."""
+
 from __future__ import annotations
 
 import os

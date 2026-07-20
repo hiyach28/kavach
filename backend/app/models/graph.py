@@ -1,4 +1,5 @@
 """SQLAlchemy models for cases, entities, campaigns, and the graph."""
+
 import uuid
 from datetime import UTC, datetime
 from enum import StrEnum
@@ -57,9 +58,7 @@ class Campaign(Base, TimestampMixin):
 
     __tablename__ = "campaigns"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     label: Mapped[str | None] = mapped_column(sa.String, nullable=True)
     velocity: Mapped[float | None] = mapped_column(sa.Float, nullable=True)
     projected_victims: Mapped[int | None] = mapped_column(sa.Integer, nullable=True)
@@ -71,9 +70,7 @@ class Case(Base, TimestampMixin):
 
     __tablename__ = "cases"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     status: Mapped[CaseStatus] = mapped_column(
         sa.Enum(CaseStatus, native_enum=False), default=CaseStatus.queued
     )
@@ -102,9 +99,7 @@ class Entity(Base, TimestampMixin):
 
     __tablename__ = "entities"
 
-    id: Mapped[uuid.UUID] = mapped_column(
-        UUID(as_uuid=True), primary_key=True, default=uuid.uuid4
-    )
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     type: Mapped[EntityType] = mapped_column(sa.Enum(EntityType, native_enum=False))
     value_hash: Mapped[str] = mapped_column(sa.String, index=True)
     first_seen: Mapped[datetime] = mapped_column(

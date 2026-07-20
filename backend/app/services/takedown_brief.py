@@ -10,24 +10,33 @@ Caching policy:
   - No automatic expiry — brief is a point-in-time snapshot; the nightly
     recluster job can recompute it.
 """
+
 from __future__ import annotations
 
 import logging
 import uuid
 from collections import Counter
-from dataclasses import dataclass, field, asdict
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from typing import Any
 
 from sqlalchemy import select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from app.models.graph import Campaign, Case, CaseEntityLink, Entity, EntityType, FraudType, RiskLevel
+from app.models.graph import (
+    Campaign,
+    Case,
+    CaseEntityLink,
+    Entity,
+    FraudType,
+    RiskLevel,
+)
 
 logger = logging.getLogger("kavach.takedown")
 
 
 # ── Data structures ────────────────────────────────────────────────────────────
+
 
 @dataclass
 class EntitySummary:
@@ -86,6 +95,7 @@ class TakedownBrief:
 
 # ── Helpers ────────────────────────────────────────────────────────────────────
 
+
 def _compute_overall_risk(fraud_types: list[FraudType], risks: list[RiskLevel]) -> str:
     """Derive an overall risk label for the campaign.
 
@@ -135,6 +145,7 @@ def _entity_type_breakdown(entities: list[Entity]) -> dict[str, int]:
 
 # ── Public interface ───────────────────────────────────────────────────────────
 
+
 async def compute_takedown_brief(
     campaign_id: uuid.UUID,
     db: AsyncSession,
@@ -147,9 +158,7 @@ async def compute_takedown_brief(
     cached version. Otherwise recomputes from current data and stores it.
     """
     # 1. Fetch the campaign row
-    campaign_result = await db.execute(
-        select(Campaign).where(Campaign.id == campaign_id)
-    )
+    campaign_result = await db.execute(select(Campaign).where(Campaign.id == campaign_id))
     campaign = campaign_result.scalar_one_or_none()
     if campaign is None:
         raise ValueError(f"Campaign {campaign_id} not found")
@@ -159,9 +168,9 @@ async def compute_takedown_brief(
         return dict(campaign.takedown_brief)  # type: ignore[arg-type]
 
     # 3. Fetch linked cases
-    case_rows = (await db.execute(
-        select(Case).where(Case.campaign_id == campaign_id)
-    )).scalars().all()
+    case_rows = (
+        (await db.execute(select(Case).where(Case.campaign_id == campaign_id))).scalars().all()
+    )
 
     if not case_rows:
         empty_brief = TakedownBrief(
@@ -202,7 +211,7 @@ async def compute_takedown_brief(
 
     # Fraud type distribution
     ft_counter: Counter[FraudType] = Counter(fraud_types)
-    total_with_ft = len(fraud_types) or 1
+    len(fraud_types) or 1
     ft_distribution = [
         FraudTypeDistribution(
             type=ft.value,
@@ -214,7 +223,11 @@ async def compute_takedown_brief(
                     if case.fraud_type == ft and case.confidence is not None
                 )
                 / max(
-                    sum(1 for case in case_rows if case.fraud_type == ft and case.confidence is not None),
+                    sum(
+                        1
+                        for case in case_rows
+                        if case.fraud_type == ft and case.confidence is not None
+                    ),
                     1,
                 ),
                 2,
@@ -228,12 +241,18 @@ async def compute_takedown_brief(
 
     # 5. Fetch linked entities through case_entity_links
     if case_ids:
-        entity_rows = (await db.execute(
-            select(Entity)
-            .join(CaseEntityLink, CaseEntityLink.entity_id == Entity.id)
-            .where(CaseEntityLink.case_id.in_(case_ids))
-            .distinct()
-        )).scalars().all()
+        entity_rows = (
+            (
+                await db.execute(
+                    select(Entity)
+                    .join(CaseEntityLink, CaseEntityLink.entity_id == Entity.id)
+                    .where(CaseEntityLink.case_id.in_(case_ids))
+                    .distinct()
+                )
+            )
+            .scalars()
+            .all()
+        )
     else:
         entity_rows = []
 
@@ -266,9 +285,7 @@ async def _store_and_return(
     """Store brief in DB and return as dict."""
     brief_dict = brief.to_dict()
     await db.execute(
-        update(Campaign)
-        .where(Campaign.id == campaign.id)
-        .values(takedown_brief=brief_dict)
+        update(Campaign).where(Campaign.id == campaign.id).values(takedown_brief=brief_dict)
     )
     await db.flush()
     logger.info("stored takedown brief for campaign %s", campaign.id)
@@ -300,10 +317,8 @@ async def list_campaigns(
     for camp in rows:
         # Count cases for this campaign
         case_count = (
-            await db.execute(
-                select(Case.id).where(Case.campaign_id == camp.id)
-            )
-        ).scalars().all()
+            (await db.execute(select(Case.id).where(Case.campaign_id == camp.id))).scalars().all()
+        )
         case_ids = list(case_count)
 
         if len(case_ids) < min_cases:
@@ -314,15 +329,17 @@ async def list_campaigns(
         if camp.takedown_brief:
             overall_risk = camp.takedown_brief.get("overall_risk", "unknown")
 
-        results.append({
-            "id": str(camp.id),
-            "label": camp.label,
-            "total_cases": len(case_ids),
-            "velocity": camp.velocity or 0.0,
-            "projected_victims": camp.projected_victims or 0,
-            "overall_risk": overall_risk,
-            "has_brief": camp.takedown_brief is not None,
-            "created_at": camp.created_at.isoformat() if camp.created_at else "",
-        })
+        results.append(
+            {
+                "id": str(camp.id),
+                "label": camp.label,
+                "total_cases": len(case_ids),
+                "velocity": camp.velocity or 0.0,
+                "projected_victims": camp.projected_victims or 0,
+                "overall_risk": overall_risk,
+                "has_brief": camp.takedown_brief is not None,
+                "created_at": camp.created_at.isoformat() if camp.created_at else "",
+            }
+        )
 
     return results

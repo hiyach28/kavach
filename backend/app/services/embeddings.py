@@ -7,6 +7,7 @@ EMBED_MODE (follows settings.LLM_MODE unless overridden):
 
 top_k_similar() performs ANN search using pgvector <=> cosine distance.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -30,6 +31,7 @@ _REPLAY_DIR = Path(__file__).parent.parent.parent / "tests" / "fixtures" / "embe
 
 # ── Mock embedding ───────────────────────────────────────────────────────────
 
+
 def _mock_embed(text_: str) -> list[float]:
     """
     Deterministic hash-based pseudo-embedding.
@@ -50,6 +52,7 @@ def _mock_embed(text_: str) -> list[float]:
 
 # ── Replay embedding ─────────────────────────────────────────────────────────
 
+
 def _replay_embed(text_: str) -> list[float] | None:
     key = hashlib.sha256(text_.encode()).hexdigest()
     fixture_file = _REPLAY_DIR / f"{key}.json"
@@ -64,10 +67,12 @@ def _replay_embed(text_: str) -> list[float] | None:
 
 # ── Live embedding ───────────────────────────────────────────────────────────
 
+
 def _live_embed(text_: str) -> list[float]:
     settings.assert_live_allowed()
     try:
         import google.generativeai as genai  # type: ignore[import]
+
         genai.configure(api_key=settings.GEMINI_API_KEY)
         result = genai.embed_content(
             model="models/text-embedding-004",
@@ -84,6 +89,7 @@ def _live_embed(text_: str) -> list[float]:
 
 
 # ── Public interface ─────────────────────────────────────────────────────────
+
 
 def embed(text_: str) -> list[float]:
     """Return a 768-dim embedding vector for the given text."""

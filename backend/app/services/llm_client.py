@@ -6,6 +6,7 @@ Mode control:        settings.LLM_MODE = "mock" | "replay" | "live"
 Fallback order:  primary (Gemini) -> secondary -> RulesOnlyClassifier
 Server-side validation is applied to any LLM-generated output before returning.
 """
+
 from __future__ import annotations
 
 import hashlib
@@ -23,17 +24,19 @@ logger = logging.getLogger("kavach.llm")
 
 # ── Verdict schema ──────────────────────────────────────────────────────────
 
+
 @dataclass
 class Verdict:
     fraud_type: FraudType
     risk: RiskLevel
-    confidence: float          # 0.0 – 1.0
-    evidence: list[str]        # substrings of the original masked text
-    degraded: bool = False     # True if rules-only fallback was used
-    reason: str = ""           # set when needs_manual_review
+    confidence: float  # 0.0 – 1.0
+    evidence: list[str]  # substrings of the original masked text
+    degraded: bool = False  # True if rules-only fallback was used
+    reason: str = ""  # set when needs_manual_review
 
 
 # ── Server-side output validation ───────────────────────────────────────────
+
 
 class VerdictValidationError(Exception):
     pass
@@ -46,9 +49,7 @@ def validate_verdict(verdict: Verdict, masked_text: str) -> None:
     """
     # Confidence must be in [0.0, 1.0]
     if not (0.0 <= verdict.confidence <= 1.0):
-        raise VerdictValidationError(
-            f"confidence {verdict.confidence} out of range [0.0, 1.0]"
-        )
+        raise VerdictValidationError(f"confidence {verdict.confidence} out of range [0.0, 1.0]")
     # fraud_type must be a valid enum member
     if verdict.fraud_type not in FraudType.__members__.values():
         raise VerdictValidationError(f"unknown fraud_type: {verdict.fraud_type}")
@@ -58,9 +59,7 @@ def validate_verdict(verdict: Verdict, masked_text: str) -> None:
     # Every evidence string must appear verbatim in the masked text
     for ev in verdict.evidence:
         if ev and ev not in masked_text:
-            raise VerdictValidationError(
-                f"evidence substring not found in input: {ev!r}"
-            )
+            raise VerdictValidationError(f"evidence substring not found in input: {ev!r}")
 
 
 # ── Mock classifier (deterministic, no network) ─────────────────────────────
@@ -128,7 +127,7 @@ def _mock_classify(text: str) -> Verdict:
     Uses text hash to make results reproducible across runs.
     """
     verdict = _rules_only_classify(text)
-    verdict.degraded = False   # mock is "pretending" to be a real LLM
+    verdict.degraded = False  # mock is "pretending" to be a real LLM
     return verdict
 
 
@@ -182,6 +181,7 @@ def _live_classify(text: str) -> Verdict:
 
     try:
         import google.generativeai as genai  # type: ignore[import]
+
         genai.configure(api_key=settings.GEMINI_API_KEY)
         model = genai.GenerativeModel("gemini-1.5-flash")
         resp = model.generate_content(_CLASSIFY_PROMPT.format(text=text))
@@ -203,6 +203,7 @@ def _live_classify(text: str) -> Verdict:
 
 
 # ── Public interface ─────────────────────────────────────────────────────────
+
 
 def classify(masked_text: str) -> Verdict:
     """

@@ -18,16 +18,16 @@ Metrics:
     - FP Rate    (false positives per total predicted)
     - Accuracy   (overall correct)
 """
+
 from __future__ import annotations
 
 import argparse
 import json
 import logging
 import sys
-from dataclasses import dataclass, asdict
+from dataclasses import asdict, dataclass
 from datetime import UTC, datetime
 from pathlib import Path
-from typing import Any
 
 # Ensure backend/ is on path
 BACKEND_DIR = Path(__file__).resolve().parent.parent
@@ -46,9 +46,11 @@ _EVAL_RUNS_FILE = _DATA_DIR / "benchmark" / "eval_runs.jsonl"
 
 # ── Data structures ────────────────────────────────────────────────────────────
 
+
 @dataclass
 class BenchmarkCase:
     """A single labeled test case."""
+
     id: str
     text: str
     expected_fraud_type: str
@@ -94,6 +96,7 @@ class EvalSummary:
 
 # ── Load benchmark ─────────────────────────────────────────────────────────────
 
+
 def load_benchmark(path: Path | None = None) -> list[BenchmarkCase]:
     """Load labeled benchmark cases from a JSON file."""
     filepath = path or _BENCHMARK_FILE
@@ -111,14 +114,18 @@ def load_benchmark(path: Path | None = None) -> list[BenchmarkCase]:
 
     cases: list[BenchmarkCase] = []
     for item in data:
-        cases.append(BenchmarkCase(
-            id=item.get("id", str(len(cases))),
-            text=item.get("text", ""),
-            expected_fraud_type=item.get("expected_fraud_type", item.get("fraud_type", "other")),
-            expected_risk=item.get("expected_risk", item.get("risk", "unknown")),
-            district=item.get("district", ""),
-            language=item.get("language", "hi"),
-        ))
+        cases.append(
+            BenchmarkCase(
+                id=item.get("id", str(len(cases))),
+                text=item.get("text", ""),
+                expected_fraud_type=item.get(
+                    "expected_fraud_type", item.get("fraud_type", "other")
+                ),
+                expected_risk=item.get("expected_risk", item.get("risk", "unknown")),
+                district=item.get("district", ""),
+                language=item.get("language", "hi"),
+            )
+        )
 
     if not cases:
         logger.error("No benchmark cases found in %s", filepath)
@@ -130,6 +137,7 @@ def load_benchmark(path: Path | None = None) -> list[BenchmarkCase]:
 
 # ── Run inference ──────────────────────────────────────────────────────────────
 
+
 def predict(cases: list[BenchmarkCase]) -> list[PredictionResult]:
     """Run the classification pipeline on all benchmark cases."""
     results: list[PredictionResult] = []
@@ -138,30 +146,34 @@ def predict(cases: list[BenchmarkCase]) -> list[PredictionResult]:
         try:
             verdict = classify(case.text)
 
-            results.append(PredictionResult(
-                text_id=case.id,
-                expected_fraud_type=case.expected_fraud_type,
-                predicted_fraud_type=verdict.fraud_type.value,
-                expected_risk=case.expected_risk,
-                predicted_risk=verdict.risk.value,
-                confidence=verdict.confidence,
-                degraded=verdict.degraded,
-                correct_fraud_type=verdict.fraud_type.value == case.expected_fraud_type,
-                correct_risk=verdict.risk.value == case.expected_risk,
-            ))
+            results.append(
+                PredictionResult(
+                    text_id=case.id,
+                    expected_fraud_type=case.expected_fraud_type,
+                    predicted_fraud_type=verdict.fraud_type.value,
+                    expected_risk=case.expected_risk,
+                    predicted_risk=verdict.risk.value,
+                    confidence=verdict.confidence,
+                    degraded=verdict.degraded,
+                    correct_fraud_type=verdict.fraud_type.value == case.expected_fraud_type,
+                    correct_risk=verdict.risk.value == case.expected_risk,
+                )
+            )
         except Exception as exc:
             logger.error("Error classifying case %s: %s", case.id, exc)
-            results.append(PredictionResult(
-                text_id=case.id,
-                expected_fraud_type=case.expected_fraud_type,
-                predicted_fraud_type="error",
-                expected_risk=case.expected_risk,
-                predicted_risk="error",
-                confidence=0.0,
-                degraded=True,
-                correct_fraud_type=False,
-                correct_risk=False,
-            ))
+            results.append(
+                PredictionResult(
+                    text_id=case.id,
+                    expected_fraud_type=case.expected_fraud_type,
+                    predicted_fraud_type="error",
+                    expected_risk=case.expected_risk,
+                    predicted_risk="error",
+                    confidence=0.0,
+                    degraded=True,
+                    correct_fraud_type=False,
+                    correct_risk=False,
+                )
+            )
 
         if (i + 1) % 50 == 0:
             logger.info("  Classified %d/%d cases", i + 1, len(cases))
@@ -171,19 +183,25 @@ def predict(cases: list[BenchmarkCase]) -> list[PredictionResult]:
 
 # ── Compute metrics ────────────────────────────────────────────────────────────
 
+
 def compute_metrics(results: list[PredictionResult]) -> EvalSummary:
     """Compute precision, recall, F1 per fraud type and macro averages."""
     total = len(results)
     if total == 0:
         return EvalSummary(
             timestamp=datetime.now(UTC).isoformat(),
-            total_cases=0, accuracy=0.0,
-            precision_macro=0.0, recall_macro=0.0, f1_macro=0.0,
-            fp_rate=0.0, per_type={}, num_degraded=0,
+            total_cases=0,
+            accuracy=0.0,
+            precision_macro=0.0,
+            recall_macro=0.0,
+            f1_macro=0.0,
+            fp_rate=0.0,
+            per_type={},
+            num_degraded=0,
         )
 
     correct_fraud = sum(1 for r in results if r.correct_fraud_type)
-    correct_risk = sum(1 for r in results if r.correct_risk)
+    sum(1 for r in results if r.correct_risk)
     accuracy = round(correct_fraud / total, 4)
     num_degraded = sum(1 for r in results if r.degraded)
 
@@ -199,7 +217,8 @@ def compute_metrics(results: list[PredictionResult]) -> EvalSummary:
 
         precision = round(tp / (tp + fp), 4) if (tp + fp) > 0 else 0.0
         recall = round(tp / (tp + fn), 4) if (tp + fn) > 0 else 0.0
-        f1 = round(2 * precision * recall / (precision + recall), 4) if (precision + recall) > 0 else 0.0
+        denom = precision + recall
+        f1 = round(2 * precision * recall / denom, 4) if denom > 0 else 0.0
 
         per_type[ft] = {
             "precision": precision,
@@ -212,21 +231,21 @@ def compute_metrics(results: list[PredictionResult]) -> EvalSummary:
         }
 
     # Macro averages
-    precision_macro = round(
-        sum(v["precision"] for v in per_type.values()) / len(per_type), 4
-    ) if per_type else 0.0
-    recall_macro = round(
-        sum(v["recall"] for v in per_type.values()) / len(per_type), 4
-    ) if per_type else 0.0
+    precision_macro = (
+        round(sum(v["precision"] for v in per_type.values()) / len(per_type), 4)
+        if per_type
+        else 0.0
+    )
+    recall_macro = (
+        round(sum(v["recall"] for v in per_type.values()) / len(per_type), 4) if per_type else 0.0
+    )
 
     f1_numerator = sum(v["f1"] for v in per_type.values())
     f1_macro = round(f1_numerator / len(per_type), 4) if per_type else 0.0
 
     # FP rate = total false positives / total predicted positive
     total_fp = sum(v["fp"] for v in per_type.values())
-    total_predicted_positive = sum(
-        1 for r in results if r.predicted_fraud_type != "error"
-    )
+    total_predicted_positive = sum(1 for r in results if r.predicted_fraud_type != "error")
     fp_rate = round(total_fp / total_predicted_positive, 4) if total_predicted_positive > 0 else 0.0
 
     return EvalSummary(
@@ -243,6 +262,7 @@ def compute_metrics(results: list[PredictionResult]) -> EvalSummary:
 
 
 # ── Output ─────────────────────────────────────────────────────────────────────
+
 
 def print_summary(summary: EvalSummary) -> None:
     """Print a human-readable evaluation summary."""
@@ -263,8 +283,10 @@ def print_summary(summary: EvalSummary) -> None:
         print(f"{'Fraud Type':<25} {'Precision':<10} {'Recall':<10} {'F1':<10} {'Support':<10}")
         print("-" * 65)
         for ft, metrics in sorted(summary.per_type.items()):
-            print(f"{ft:<25} {metrics['precision']:<10.2%} {metrics['recall']:<10.2%} "
-                  f"{metrics['f1']:<10.2%} {metrics['support']:<10}")
+            print(
+                f"{ft:<25} {metrics['precision']:<10.2%} {metrics['recall']:<10.2%} "
+                f"{metrics['f1']:<10.2%} {metrics['support']:<10}"
+            )
     print()
 
 
@@ -278,14 +300,22 @@ def save_run(summary: EvalSummary, run_path: Path = _EVAL_RUNS_FILE) -> None:
 
 # ── Main ───────────────────────────────────────────────────────────────────────
 
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="KAVACH Benchmark v1")
-    parser.add_argument("--benchmark", type=str, default=None,
-                        help="Path to benchmark JSON (default: data/benchmark/benchmark_cases.json)")
-    parser.add_argument("--verbose", action="store_true",
-                        help="Print per-case predictions")
-    parser.add_argument("--save", action="store_true", default=True,
-                        help="Save results to eval_runs.jsonl (default: True)")
+    parser.add_argument(
+        "--benchmark",
+        type=str,
+        default=None,
+        help=("Path to benchmark JSON (default: data/benchmark/benchmark_cases.json)"),
+    )
+    parser.add_argument("--verbose", action="store_true", help="Print per-case predictions")
+    parser.add_argument(
+        "--save",
+        action="store_true",
+        default=True,
+        help="Save results to eval_runs.jsonl (default: True)",
+    )
     args = parser.parse_args()
 
     # 1. Load
@@ -307,8 +337,10 @@ def main() -> None:
         print(f"{'ID':<10} {'Expected':<20} {'Predicted':<20} {'Conf':<8} {'Correct':<8}")
         print("-" * 70)
         for r in results:
-            print(f"{r.text_id:<10} {r.expected_fraud_type:<20} {r.predicted_fraud_type:<20} "
-                  f"{r.confidence:<8.2f} {'✓' if r.correct_fraud_type else '✗':<8}")
+            print(
+                f"{r.text_id:<10} {r.expected_fraud_type:<20} {r.predicted_fraud_type:<20} "
+                f"{r.confidence:<8.2f} {'✓' if r.correct_fraud_type else '✗':<8}"
+            )
 
     # 5. Save
     if args.save:

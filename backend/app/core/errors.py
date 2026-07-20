@@ -5,6 +5,7 @@ Every response — success or failure — uses:
 
 Hard rule: no bare except, no stack traces to clients (docs/03 §3).
 """
+
 from __future__ import annotations
 
 import uuid
