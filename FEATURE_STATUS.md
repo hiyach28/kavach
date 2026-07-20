@@ -38,11 +38,12 @@
 ## Phase 3 — Shield
 | ID | Feature | Status | Tests | Notes |
 |---|---|---|---|---|
-| F30 | Shield check API (3-tier cascade) | pending | — | |
-| F31 | Language layer (hi/en/ta/te/bn templates) | pending | — | |
+| F30 | Shield check API (3-tier cascade) | implemented | test_shield.py (12 tests) | POST /v1/shield/check; entity→ANN→LLM cascade; verdict + localised card; shield_checks table |
+| F31 | Language layer (hi/en/ta/te/bn templates) | implemented | test_language.py (19 tests) | Unicode-range detection + Hinglish keywords; hand-written verdict templates with slot-filling |
 | F32 | Citizen PWA | pending | — | |
-| F33 | Live Call Companion | pending | — | demo centerpiece |
-| F34 | Shield→graph flywheel | pending | — | |
+| F33 | Live Call Companion | implemented | test_shield.py (live_companion tests) | WS /v1/shield/live; keyword stage detection (impersonation→threat→isolation→payment); LLM throttled ≤4/session; 5-language alerts |
+| F34 | Shield→graph flywheel | implemented | test_shield.py (flywheel tests) | consent_for_intel creates de-identified entities; shield_checks telemetry per check |
+| — | WhatsApp channel stub | implemented | — | webhook-ready interface behind WhatsAppMessage protocol; verify/parse/build_reply stubs |
 
 ## Phase 4 — Terminal
 | ID | Feature | Status | Tests | Notes |
